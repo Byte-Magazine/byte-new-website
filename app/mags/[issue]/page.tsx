@@ -8,7 +8,7 @@ import { MetaLine } from "@/components/content/meta-line";
 import { Button } from "@/components/ui/button";
 import { getAllIssues, getIssue } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
-import { buildMetadata, issueJsonLd, JsonLd } from "@/lib/seo";
+import { buildMetadata, issueJsonLd, JsonLd, ogImage } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -30,7 +30,7 @@ export async function generateMetadata({
     description:
       issue.description || `${issue.description} نشریه‌ی بایت`.trim(),
     path: issue.url,
-    image: issue.cover,
+    image: ogImage.issue(issue.number),
   });
 }
 

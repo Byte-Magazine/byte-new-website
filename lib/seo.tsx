@@ -7,6 +7,15 @@ export function absoluteUrl(path: string): string {
   return `${SITE.url}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+/** Build-time Open Graph image paths, produced by scripts/generate-og.ts. */
+export const ogImage = {
+  default: () => "/og/default.png",
+  article: (issue: string, slug: string) => `/og/article-${issue}-${slug}.png`,
+  issue: (number: string) => `/og/issue-${number}.png`,
+  blog: (slug: string) => `/og/blog-${slug}.png`,
+  author: (id: string) => `/og/author-${id}.png`,
+};
+
 interface MetadataInput {
   title: string;
   description?: string;
@@ -31,7 +40,7 @@ export function buildMetadata({
 }: MetadataInput): Metadata {
   const url = absoluteUrl(path);
   const resolvedDescription = description?.trim() || SITE.description;
-  const images = [{ url: image ?? "/img/social-card.png" }];
+  const images = [{ url: image ?? ogImage.default() }];
 
   return {
     title,

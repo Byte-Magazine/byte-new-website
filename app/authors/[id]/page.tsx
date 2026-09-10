@@ -8,7 +8,7 @@ import { SocialLinks } from "@/components/cards/person-card";
 import { MetaLine } from "@/components/content/meta-line";
 import { getAllAuthors, getAuthor } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
-import { buildMetadata, JsonLd, personJsonLd } from "@/lib/seo";
+import { buildMetadata, JsonLd, ogImage, personJsonLd } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -29,7 +29,7 @@ export async function generateMetadata({
     title: author.name,
     description: `${author.name}${author.title ? `، ${author.title}` : ""} — ${toPersianDigits(author.articleCount)} مطلب در نشریه‌ی بایت`,
     path: author.url,
-    image: author.image,
+    image: ogImage.author(author.id),
     type: "profile",
   });
 }
@@ -49,7 +49,7 @@ export default async function AuthorPage({
         data={personJsonLd({
           name: author.name,
           url: author.url,
-          image: author.image,
+          image: ogImage.author(author.id),
           jobTitle: author.title,
           sameAs: Object.values(author.socials).filter(Boolean) as string[],
         })}

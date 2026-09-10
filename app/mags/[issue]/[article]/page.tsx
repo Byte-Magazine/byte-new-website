@@ -16,7 +16,7 @@ import {
   getRelatedArticles,
 } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
-import { articleJsonLd, buildMetadata, JsonLd } from "@/lib/seo";
+import { articleJsonLd, buildMetadata, JsonLd, ogImage } from "@/lib/seo";
 import { extractHeadings } from "@/lib/toc";
 
 export const dynamicParams = false;
@@ -41,6 +41,7 @@ export async function generateMetadata({
     title: article.title,
     description: article.description,
     path: article.url,
+    image: ogImage.article(article.issueNumber, article.slug),
     type: "article",
     publishedTime: article.date,
     authors: article.authors.map((a) => a.name),

@@ -7,3 +7,5 @@ out/
 next-env.d.ts
 public/content/
 public/search-index.json
+public/og/
+.cache/

@@ -113,6 +113,40 @@ export function convertAdmonitions(body: string): string {
   return out.join("\n");
 }
 
+/**
+ * Replaces Docusaurus's `require("./path").default` asset references with a
+ * plain path. Webpack resolved these at build time; the new pipeline serves
+ * co-located assets from a public URL instead.
+ */
+export function rewriteAssetRequires(body: string, baseUrl: string): string {
+  return body.replace(
+    /require\(\s*([`'"])\.\/([^`'"]+)\1\s*\)(?:\.default)?/g,
+    (_match, _quote: string, path: string) => `\`${baseUrl}/${path}\``,
+  );
+}
+
+/**
+ * Strips inline mouse-event handlers used purely for hover styling and tags the
+ * element with a class instead.
+ *
+ * A Server Component cannot receive event handler props, and these handlers only
+ * swapped box-shadow and border colour — which CSS does better, and without
+ * JavaScript. The `.link-card` class in globals.css carries the same effect.
+ */
+export function replaceHoverHandlers(body: string): string {
+  const withoutHandlers = body.replace(
+    /\s*on(?:MouseEnter|MouseLeave)=\{\([^)]*\)\s*=>\s*\{[\s\S]*?\}\}/g,
+    "",
+  );
+  if (withoutHandlers === body) return body;
+
+  // Mark anchors that carried the removed hover effect.
+  return withoutHandlers.replace(
+    /<a href=\{link\} target="_blank"(?![^>]*className)/g,
+    '<a href={link} target="_blank" rel="noopener noreferrer" className="link-card"',
+  );
+}
+
 /** Collapses whitespace in a tag while preserving its display casing. */
 export function normalizeTag(tag: string): string {
   return tag.replace(/\s+/g, " ").trim();

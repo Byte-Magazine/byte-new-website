@@ -21,6 +21,8 @@ import {
   normalizeTag,
   parseOrderFromDirname,
   rewriteImagePaths,
+  rewriteAssetRequires,
+  replaceHoverHandlers,
   stripSiteImports,
 } from "./lib/transform";
 import { mergeAuthors, type LegacyPerson, type LegacyStaffSection } from "./lib/people";
@@ -141,11 +143,17 @@ function findMarkdown(dir: string): string[] {
 }
 
 /** Applies the shared body transforms and records any unknown components. */
-function transformBody(body: string, sourceLabel: string): string {
+function transformBody(
+  body: string,
+  sourceLabel: string,
+  assetBaseUrl: string,
+): string {
   let out = stripSiteImports(body);
   out = convertAdmonitions(out);
   out = convertAdmonitionElements(out);
   out = rewriteImagePaths(out);
+  out = rewriteAssetRequires(out, assetBaseUrl);
+  out = replaceHoverHandlers(out);
 
   const unknown = findUnknownJsxTags(out, KNOWN_COMPONENTS);
   if (unknown.length > 0) unknownTags.set(sourceLabel, unknown);
@@ -162,12 +170,38 @@ function writeMdx(
   writeFileSync(target, matter.stringify(body, frontmatter), "utf8");
 }
 
-/** Copies a co-located img/ directory next to a migrated article. */
+/**
+ * Copies every co-located asset directory next to a migrated document.
+ * Articles keep assets in `img/`, but a few use other folder names such as
+ * `icons/`, so any sibling directory is carried over.
+ */
 function copyImages(sourceDir: string, targetDir: string): number {
-  const imgDir = join(sourceDir, "img");
-  if (!existsSync(imgDir)) return 0;
-  cpSync(imgDir, join(targetDir, "img"), { recursive: true });
-  return readdirSync(imgDir).filter((f) => !f.startsWith(".")).length;
+  if (!existsSync(sourceDir)) return 0;
+  let count = 0;
+
+  for (const name of readdirSync(sourceDir)) {
+    if (name.startsWith(".")) continue;
+    const path = join(sourceDir, name);
+    if (!statSync(path).isDirectory()) continue;
+
+    cpSync(path, join(targetDir, name), { recursive: true });
+    count += readdirSync(path).filter((f) => !f.startsWith(".")).length;
+  }
+  return count;
+}
+
+/** First image in any asset directory of a migrated document, as a ./ path. */
+function findFirstImage(dir: string): string | undefined {
+  for (const name of readdirSync(dir).sort()) {
+    const path = join(dir, name);
+    if (!existsSync(path) || !statSync(path).isDirectory()) continue;
+
+    const image = readdirSync(path)
+      .filter((f) => /\.(png|jpe?g|webp|gif)$/i.test(f))
+      .sort()[0];
+    if (image) return `./${name}/${image}`;
+  }
+  return undefined;
 }
 
 function main() {
@@ -266,13 +300,7 @@ function main() {
     imageCount += copied;
 
     // Prefer an explicit cover, else the first co-located image.
-    let cover: string | undefined;
-    if (copied > 0) {
-      const first = readdirSync(join(targetDir, "img"))
-        .filter((f) => /\.(png|jpe?g|webp|gif|svg)$/i.test(f))
-        .sort()[0];
-      if (first) cover = `./img/${first}`;
-    }
+    const cover = copied > 0 ? findFirstImage(targetDir) : undefined;
 
     const frontmatter = articleFrontmatterSchema.parse({
       title: String(parsed.data.title ?? slug),
@@ -288,7 +316,11 @@ function main() {
     writeMdx(
       join(targetDir, "index.mdx"),
       frontmatter,
-      transformBody(parsed.content, `mags/${rel}`),
+      transformBody(
+        parsed.content,
+        `mags/${rel}`,
+        `/content/issues/${issueNumber}/${slug}`,
+      ),
     );
     articleCount++;
   }
@@ -331,7 +363,7 @@ function main() {
     writeMdx(
       join(targetDir, "index.mdx"),
       frontmatter,
-      transformBody(parsed.content, `blog/${rel}`),
+      transformBody(parsed.content, `blog/${rel}`, `/content/blog/${slug}`),
     );
     blogCount++;
   }
@@ -371,7 +403,11 @@ function main() {
       writeMdx(
         join(targetDir, "index.mdx"),
         frontmatter,
-        transformBody(parsed.content, `workshops/${workshopSlug}/${slug}`),
+        transformBody(
+          parsed.content,
+          `workshops/${workshopSlug}/${slug}`,
+          `/content/workshops/${workshopSlug}/${slug}`,
+        ),
       );
       workshopDocs++;
     }

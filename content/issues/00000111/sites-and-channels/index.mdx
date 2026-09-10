@@ -10,6 +10,7 @@ tags:
 date: '2025-11-11'
 issue: '00000111'
 order: 24
+cover: ./icons/cegroup.jpg
 ---
 export const icons = {
     // Brands & Tech
@@ -153,7 +154,7 @@ export const IconRenderer = ({ icon, emoji, color }) => {
 
     // everything else, if icon has extension, render file icons/<name>
     if(icon && icon.includes('.')) {
-        return <img src={require(`./icons/${icon}`).default} alt={icon} style={{ width: '28px', height: '28px', minWidth: '28px', minHeight: '28px', borderRadius: '28px', objectFit: 'contain', flexShrink: 0 }} />;
+        return <img src={`/content/issues/00000111/sites-and-channels/icons/${icon}`} alt={icon} style={{ width: '28px', height: '28px', minWidth: '28px', minHeight: '28px', borderRadius: '28px', objectFit: 'contain', flexShrink: 0 }} />;
     }
     
     // Emoji
@@ -188,7 +189,7 @@ export const SectionTitle = ({ icon, emoji, title, color = '#2563eb' }) => (
 
 export const Card = ({ title, desc, link, icon, emoji, color = '#2563eb' }) => {
     return (
-        <a href={link} target="_blank" style={{
+        <a href={link} target="_blank" rel="noopener noreferrer" className="link-card" style={{
             display: 'block',
             border: '1px solid #b6b9bd80',
             borderRadius: '12px',
@@ -198,14 +199,6 @@ export const Card = ({ title, desc, link, icon, emoji, color = '#2563eb' }) => {
             boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
             transition: 'all 0.2s ease-in-out'
         }}
-           onMouseEnter={(e) => {
-               e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.2)';
-               e.currentTarget.style.borderColor = 'var(--ifm-color-primary-light)';
-           }}
-           onMouseLeave={(e) => {
-               e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
-               e.currentTarget.style.borderColor = '#b6b9bd80';
-           }}
         >
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                 <div style={{

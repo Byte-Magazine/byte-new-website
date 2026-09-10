@@ -5,7 +5,7 @@ Generated: 2026-09-10
 
 - Issues: 8
 - Articles: 94
-- Article images copied: 130
+- Article images copied: 159
 - Blog posts: 2
 - Workshops: 1 (6 docs)
 - Authors: 70

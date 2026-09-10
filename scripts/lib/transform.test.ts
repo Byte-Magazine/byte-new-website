@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
+  replaceHoverHandlers,
+  rewriteAssetRequires,
   convertAdmonitionElements,
   stripSiteImports,
   convertAdmonitions,
@@ -108,6 +110,46 @@ describe("findUnknownJsxTags (local definitions)", () => {
   it("ignores components the file defines itself", () => {
     const body = "export const Grid = ({children}) => <div>{children}</div>;\n\n<Grid>x</Grid>";
     expect(findUnknownJsxTags(body, new Set())).toEqual([]);
+  });
+});
+
+describe("replaceHoverHandlers", () => {
+  it("removes an onMouseEnter handler", () => {
+    const input = `<a href={link} target="_blank" onMouseEnter={(e) => {\n  e.currentTarget.style.color = 'red';\n}}>x</a>`;
+    const out = replaceHoverHandlers(input);
+    expect(out).not.toContain("onMouseEnter");
+  });
+
+  it("tags the anchor with the link-card class", () => {
+    const input = `<a href={link} target="_blank" onMouseLeave={(e) => {\n  e.currentTarget.style.color = '';\n}}>x</a>`;
+    expect(replaceHoverHandlers(input)).toContain('className="link-card"');
+  });
+
+  it("leaves markup without handlers untouched", () => {
+    const input = '<a href="/x">y</a>';
+    expect(replaceHoverHandlers(input)).toBe(input);
+  });
+});
+
+describe("rewriteAssetRequires", () => {
+  const base = "/content/issues/00000111/sites-and-channels";
+
+  it("rewrites a template-literal require to a path", () => {
+    const out = rewriteAssetRequires(
+      "require(`./icons/${icon}`).default",
+      base,
+    );
+    expect(out).toBe("`" + base + "/icons/${icon}`");
+  });
+
+  it("rewrites a plain string require", () => {
+    expect(rewriteAssetRequires('require("./img/a.png")', base)).toBe(
+      "`" + base + "/img/a.png`",
+    );
+  });
+
+  it("leaves unrelated code untouched", () => {
+    expect(rewriteAssetRequires("const x = 1;", base)).toBe("const x = 1;");
   });
 });
 

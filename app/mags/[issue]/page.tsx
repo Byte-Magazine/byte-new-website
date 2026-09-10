@@ -89,8 +89,8 @@ export default async function IssuePage({
         </div>
 
         <div>
-          <p className="font-mono text-sm text-muted-foreground" dir="ltr">
-            {issue.number}
+          <p className="font-mono text-sm text-muted-foreground">
+            <span dir="ltr">{issue.number}</span>
           </p>
           <h1 className="mt-1 text-3xl font-black">{issue.description}</h1>
           <MetaLine

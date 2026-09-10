@@ -381,6 +381,16 @@ function main() {
   log(`- Blog posts: ${blogCount}`);
 
   // ---- Workshops ----------------------------------------------------------
+  // The legacy _category_.json labels are bare slugs; give each workshop a
+  // Persian title and summary for the new site.
+  const WORKSHOP_META: Record<string, { title: string; description: string }> = {
+    git: {
+      title: "کارگاه گیت",
+      description:
+        "آشنایی با گیت از صفر: ساخت مخزن، انشعاب و ادغام، اصلاح خطاها و کار تیمی.",
+    },
+  };
+
   let workshopDocs = 0;
   const workshops: Array<{ slug: string; title: string; description: string }> = [];
   for (const workshopSlug of listDirs(join(LEGACY, "workshops"))) {
@@ -391,7 +401,12 @@ function main() {
       const category = JSON.parse(readFileSync(categoryFile, "utf8"));
       title = category.label ?? workshopSlug;
     }
-    workshops.push({ slug: workshopSlug, title, description: "" });
+    const override = WORKSHOP_META[workshopSlug];
+    workshops.push({
+      slug: workshopSlug,
+      title: override?.title ?? title,
+      description: override?.description ?? "",
+    });
 
     for (const file of findMarkdown(workshopDir)) {
       const docDir = dirname(file);

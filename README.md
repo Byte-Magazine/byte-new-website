@@ -13,9 +13,11 @@ site, preserving every published URL.
 | Framework | Next.js 16 (App Router), `output: "export"` |
 | UI | React 19, TypeScript strict |
 | Styling | Tailwind CSS v4 |
+| Type | Pinar (Persian, variable) + JetBrains Mono, self-hosted |
 | Components | shadcn v4 (`base-lyra`, zinc, RTL) |
 | Motion | `motion` v13 + React Bits |
 | Content | MDX, `gray-matter`, Zod validation |
+| State | zustand (persisted) |
 | Highlighting | Shiki via `rehype-pretty-code` (dual theme) |
 | Math | KaTeX |
 | Testing | Vitest |
@@ -46,18 +48,14 @@ writes the search index, and renders Open Graph images.
 | `pnpm test` | Vitest suite |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint |
-| `pnpm migrate` | one-time import from the legacy Docusaurus repo |
 | `pnpm sync:assets` | copy co-located content images into `public/` |
-| `pnpm build:search` | regenerate `public/search-index.json` |
 | `pnpm generate:og` | regenerate Open Graph images |
-| `pnpm verify:urls` | assert every legacy URL still resolves |
 
 ### Environment
 
 | Variable | Default | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | Base URL for issue and codenameh PDFs |
-| `BYTE_LEGACY_PATH` | `../byte-site` | Legacy repo, used only by `migrate` and `verify:urls` |
 
 Issue PDFs are expected at `<base>/mags/<issue>.pdf`, codenameh at
 `<base>/codenameh/<id>.pdf`.
@@ -69,12 +67,14 @@ search index, reading times, related articles — is computed **once at build
 time**. Nothing is derived in the browser or at request time.
 
 ```
-content/            migrated MDX and JSON; the source of truth
+content/            MDX and typed data; the source of truth
+content/data/       authors, staff, codenameh, workshops as TypeScript
 lib/content/        schema, filesystem reader, and the resolved content graph
 lib/mdx/            remark/rehype pipeline and the global MDX component scope
 components/         ui (shadcn), content, cards, layout, sections, motion
 app/                routes
-scripts/            migration, asset sync, search index, OG images, URL check
+scripts/            asset sync, search index, OG images
+assets/fonts/       static Pinar instances used only to render OG images
 ```
 
 ### The content graph
@@ -156,33 +156,30 @@ The issue's `themeColor` becomes the accent for its own pages.
 
 ### Adding an author
 
-Add an entry to `content/people/authors.json`:
+Add an entry to `content/data/authors.ts`:
 
-```json
+```ts
 {
-  "id": "AuthorId",
-  "name": "نام نویسنده",
-  "title": "کارشناسی ۱۴۰۲",
-  "image": "/img/authors/AuthorId.png",
-  "socials": { "github": "https://github.com/handle" }
+  id: "AuthorId",
+  name: "نام نویسنده",
+  title: "کارشناسی ۱۴۰۲",
+  image: "/img/authors/AuthorId.png",
+  socials: { github: "https://github.com/handle" },
 }
 ```
 
 Reference the `id` from article frontmatter. Their page, article list, and
 counts are generated automatically.
 
-## Migration
+## Content
 
-`scripts/migrate.ts` imported the legacy Docusaurus site. It is idempotent and
-retained for reproducibility, but is **not** part of the build — `content/` is
-the source of truth now.
+Structured data — authors, staff, codenameh, workshops — lives in typed
+TypeScript modules under `content/data/`, so a typo is a compile error rather
+than a runtime surprise. Articles, blog posts, and workshop lessons are MDX
+under `content/`.
 
-It rewrites Docusaurus-isms (`@site`/`@theme` imports, `:::` admonitions,
-`require()` asset references, inline hover handlers), restructures frontmatter,
-normalizes tags, unifies the three separate people sources, and writes
-`migration-report.md` listing everything it could not resolve.
-
-`pnpm verify:urls` checks the exported site against the legacy route list.
+The site was imported from a Docusaurus codebase; those one-time migration
+scripts have been removed now that `content/` is the source of truth.
 
 ## RTL
 

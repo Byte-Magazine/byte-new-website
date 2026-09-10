@@ -4,14 +4,12 @@
  * Static export cannot run dynamic `opengraph-image` routes, so the images are
  * produced at build time with Satori and written to public/og/.
  */
-import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Resvg } from "@resvg/resvg-js";
 import satori from "satori";
-import { decompress } from "wawoff2";
 
 import {
   getAllArticles,
@@ -24,7 +22,6 @@ import { SITE } from "../lib/site";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const OUT_DIR = join(ROOT, "public", "og");
-const CACHE_DIR = join(ROOT, ".cache");
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -37,34 +34,12 @@ const COLORS = {
 };
 
 /**
- * Satori needs a static TTF: the site ships a variable WOFF2, whose `fvar`
- * table Satori's font parser cannot read. Decompress it, then instance a fixed
- * weight with fonttools when available, caching both steps.
+ * Satori needs a static TTF; the app ships a variable WOFF2 whose `fvar` table
+ * Satori's parser cannot read. The instanced weights are committed under
+ * assets/fonts so the build needs no font tooling.
  */
-async function loadFont(weight: 400 | 700): Promise<Buffer> {
-  const instanced = join(CACHE_DIR, `Vazirmatn-${weight}.ttf`);
-  if (existsSync(instanced)) return readFileSync(instanced);
-
-  const variable = join(CACHE_DIR, "Vazirmatn.ttf");
-  if (!existsSync(variable)) {
-    const woff2 = readFileSync(join(ROOT, "public", "fonts", "Vazirmatn.woff2"));
-    mkdirSync(CACHE_DIR, { recursive: true });
-    writeFileSync(variable, Buffer.from(await decompress(woff2)));
-  }
-
-  try {
-    execFileSync(
-      "fonttools",
-      ["varLib.instancer", variable, `wght=${weight}`, "-o", instanced],
-      { stdio: "ignore" },
-    );
-    return readFileSync(instanced);
-  } catch {
-    throw new Error(
-      "Could not instance Vazirmatn. Install fonttools (pip install fonttools) " +
-        "so Open Graph images can be generated.",
-    );
-  }
+function loadFont(weight: 400 | 700): Buffer {
+  return readFileSync(join(ROOT, "assets", "fonts", `Pinar-${weight}.ttf`));
 }
 
 interface CardInput {
@@ -132,7 +107,7 @@ function card({ title, subtitle, meta, accent, badge }: CardInput) {
         justifyContent: "space-between",
         backgroundColor: COLORS.background,
         padding: "68px 72px",
-        fontFamily: "Vazirmatn",
+        fontFamily: "Pinar",
         direction: "rtl",
         borderTop: `10px solid ${accent}`,
       },
@@ -181,8 +156,8 @@ async function render(input: CardInput, file: string, fonts: Fonts) {
     width: WIDTH,
     height: HEIGHT,
     fonts: [
-      { name: "Vazirmatn", data: fonts.regular, weight: 400, style: "normal" },
-      { name: "Vazirmatn", data: fonts.bold, weight: 700, style: "normal" },
+      { name: "Pinar", data: fonts.regular, weight: 400, style: "normal" },
+      { name: "Pinar", data: fonts.bold, weight: 700, style: "normal" },
     ],
   });
 
@@ -284,10 +259,7 @@ function solidAccent(themeColor: string): string {
 
 async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
-  const fonts: Fonts = {
-    regular: await loadFont(400),
-    bold: await loadFont(700),
-  };
+  const fonts: Fonts = { regular: loadFont(400), bold: loadFont(700) };
   let count = 0;
 
   await render(

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
@@ -63,12 +63,6 @@ export function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Close the mobile menu whenever navigation happens, so tapping a link does
-  // not leave the panel covering the page it just opened.
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
-
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4">
@@ -96,7 +90,9 @@ export function Header() {
           <SearchDialog />
           <ThemeToggle />
 
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+          {/* Keyed on the path so any navigation remounts it closed, not just
+              taps on its own links. */}
+          <Sheet key={pathname} open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger
               render={
                 <Button

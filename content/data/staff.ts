@@ -1,4 +1,7 @@
-[
+import type { StaffSection } from "@/lib/content/schema";
+
+/** Editorial staff, in the order they appear on the staff page. */
+export const STAFF_SECTIONS: StaffSection[] = [
   {
     "name": "مدیر مسئول و سردبیر",
     "members": [
@@ -208,4 +211,4 @@
       }
     ]
   }
-]
+];

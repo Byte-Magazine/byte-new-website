@@ -6,6 +6,16 @@ export const SITE = {
     "نشریه‌ی علمی فرهنگی بایت، دانشکده‌ی مهندسی کامپیوتر دانشگاه صنعتی شریف",
   url: "https://byte-mag.ir",
   locale: "fa_IR",
+  email: "bytepublication@gmail.com",
+  joinFormUrl:
+    "https://docs.google.com/forms/d/e/1FAIpQLSfjtbcWu6cLSklvKAXpqJ0P0tm4yis5t9VN_C0PsCptgpDAxQ/viewform",
+  socials: {
+    telegram: "https://t.me/byte_mag",
+    github: "https://github.com/Byte-Magazine",
+    linkedin: "https://www.linkedin.com/company/byte-publication/",
+    x: "https://twitter.com/BytePublication",
+    medium: "https://medium.com/@bytepublication",
+  },
   github: "https://github.com/Byte-Magazine",
   copyright:
     "© نشریه‌ی علمی فرهنگی بایت - دانشکده مهندسی کامپیوتر - دانشگاه صنعتی شریف",

@@ -2,15 +2,16 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
 
+import { AUTHORS } from "@/content/data/authors";
+import { CODENAMEH } from "@/content/data/codenameh";
+import { STAFF_SECTIONS } from "@/content/data/staff";
+import { WORKSHOPS } from "@/content/data/workshops";
+
 import {
   articleFrontmatterSchema,
-  authorSchema,
   blogFrontmatterSchema,
-  codenamehSchema,
   issueMetaSchema,
-  staffSectionSchema,
   workshopFrontmatterSchema,
-  workshopMetaSchema,
   type ArticleFrontmatter,
   type AuthorRecord,
   type BlogFrontmatter,
@@ -105,11 +106,7 @@ export function readBlogPosts(): RawDoc<BlogFrontmatter>[] {
 }
 
 export function readWorkshopMetas(): WorkshopMeta[] {
-  const file = join(CONTENT_DIR, "workshops", "workshops.json");
-  if (!existsSync(file)) return [];
-  return readJson(file, (d) =>
-    (d as unknown[]).map((item) => workshopMetaSchema.parse(item)),
-  );
+  return WORKSHOPS;
 }
 
 export function readWorkshopDocs(): RawDoc<WorkshopFrontmatter>[] {
@@ -130,19 +127,13 @@ export function readWorkshopDocs(): RawDoc<WorkshopFrontmatter>[] {
 }
 
 export function readAuthorRecords(): AuthorRecord[] {
-  return readJson(join(CONTENT_DIR, "people", "authors.json"), (d) =>
-    (d as unknown[]).map((item) => authorSchema.parse(item)),
-  );
+  return AUTHORS;
 }
 
 export function readStaffSections(): StaffSection[] {
-  return readJson(join(CONTENT_DIR, "people", "staff.json"), (d) =>
-    (d as unknown[]).map((item) => staffSectionSchema.parse(item)),
-  );
+  return STAFF_SECTIONS;
 }
 
 export function readCodenameh(): CodenamehEntry[] {
-  return readJson(join(CONTENT_DIR, "codenameh.json"), (d) =>
-    (d as unknown[]).map((item) => codenamehSchema.parse(item)),
-  );
+  return CODENAMEH;
 }

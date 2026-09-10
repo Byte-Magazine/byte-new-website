@@ -29,15 +29,6 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      # Open Graph rendering instances the variable font to a static weight.
-      - name: Install fonttools
-        run: pip install fonttools
-
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm typecheck

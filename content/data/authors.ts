@@ -1,4 +1,10 @@
-[
+import type { AuthorRecord } from "@/lib/content/schema";
+
+/**
+ * Everyone who has written for Byte. Referenced by `id` from article
+ * frontmatter; article counts are derived at build time, never stored here.
+ */
+export const AUTHORS: AuthorRecord[] = [
   {
     "id": "AHMZ",
     "name": "امیرحسین محمدزاده",
@@ -604,4 +610,4 @@
       "github": "https://github.com/yazdanbhd"
     }
   }
-]
+];

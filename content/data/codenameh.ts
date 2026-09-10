@@ -1,4 +1,7 @@
-[
+import type { CodenamehEntry } from "@/lib/content/schema";
+
+/** Codenameh, Byte's predecessor. PDF only; covers live in public/img. */
+export const CODENAMEH: CodenamehEntry[] = [
   {
     "id": "codenameh_1",
     "number": 1,
@@ -116,4 +119,4 @@
     "themeColor": "rgba(182,36,91,0.75)",
     "era": "دورهٔ سوم کدنامه"
   }
-]
+];

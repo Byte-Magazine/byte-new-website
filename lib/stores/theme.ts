@@ -3,10 +3,9 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export type Theme = "light" | "dark" | "system";
+import { THEME_STORAGE_KEY } from "./theme-key";
 
-/** Shared with the blocking script in the document head. */
-export const THEME_STORAGE_KEY = "byte-theme";
+export type Theme = "light" | "dark" | "system";
 
 interface ThemeState {
   theme: Theme;

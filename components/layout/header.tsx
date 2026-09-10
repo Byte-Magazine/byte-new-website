@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
@@ -43,20 +44,30 @@ function NavLink({
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "rounded-md px-2.5 py-1.5 text-sm transition-colors",
+        "relative rounded-md px-2.5 py-1.5 text-sm transition-colors",
         active
-          ? "text-foreground font-semibold"
+          ? "font-semibold text-foreground"
           : "text-muted-foreground hover:text-foreground",
         className,
       )}
     >
       {label}
+      {active ? (
+        <span className="absolute inset-x-2.5 -bottom-0.5 hidden h-px bg-accent lg:block" />
+      ) : null}
     </Link>
   );
 }
 
 export function Header() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close the mobile menu whenever navigation happens, so tapping a link does
+  // not leave the panel covering the page it just opened.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
@@ -85,7 +96,7 @@ export function Header() {
           <SearchDialog />
           <ThemeToggle />
 
-          <Sheet>
+          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger
               render={
                 <Button
@@ -98,18 +109,21 @@ export function Header() {
                 </Button>
               }
             />
-            <SheetContent side="right" className="w-72">
+            {/* The trigger sits at the left end of the RTL header, so the
+                panel slides in from the left to match it. */}
+            <SheetContent side="left" className="w-72">
               <SheetTitle className="sr-only">{SITE.name}</SheetTitle>
-              <div className="flex flex-col gap-1 p-4 pt-10">
+              <nav className="flex flex-col gap-1 p-4 pt-12" aria-label="منو">
                 {[...NAV_ITEMS, ...SECONDARY_NAV_ITEMS].map((item) => (
                   <NavLink
                     key={item.href}
                     {...item}
                     pathname={pathname}
+                    onNavigate={() => setMenuOpen(false)}
                     className="py-2.5 text-base"
                   />
                 ))}
-              </div>
+              </nav>
             </SheetContent>
           </Sheet>
         </div>

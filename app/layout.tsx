@@ -2,10 +2,7 @@ import type { Metadata, Viewport } from "next";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import {
-  ThemeProvider,
-  themeScript,
-} from "@/components/layout/theme-provider";
+import { ThemeScript } from "@/components/layout/theme-script";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { fontVariables } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
@@ -48,22 +45,20 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning className={fontVariables}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <ThemeScript />
       </head>
       <body className="min-h-dvh antialiased">
-        <ThemeProvider>
-          <TooltipProvider>
-            <a
-              href="#main"
-              className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-[100] focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:ring-2 focus:ring-ring"
-            >
-              رفتن به محتوا
-            </a>
-            <Header />
-            <div id="main">{children}</div>
-            <Footer />
-          </TooltipProvider>
-        </ThemeProvider>
+        <TooltipProvider>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-[100] focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:ring-2 focus:ring-ring"
+          >
+            رفتن به محتوا
+          </a>
+          <Header />
+          <div id="main">{children}</div>
+          <Footer />
+        </TooltipProvider>
       </body>
     </html>
   );

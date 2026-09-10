@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Monitor, Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTheme, type Theme } from "./theme-provider";
+import { useThemeStore, type Theme } from "@/lib/stores/theme";
 
 const OPTIONS: Array<{ value: Theme; label: string; icon: typeof Sun }> = [
   { value: "light", label: "روشن", icon: Sun },
@@ -18,7 +19,17 @@ const OPTIONS: Array<{ value: Theme; label: string; icon: typeof Sun }> = [
 ];
 
 export function ThemeToggle() {
-  const { theme, resolvedTheme, setTheme } = useTheme();
+  const theme = useThemeStore((state) => state.theme);
+  const resolvedTheme = useThemeStore((state) => state.resolvedTheme);
+  const setTheme = useThemeStore((state) => state.setTheme);
+  const syncSystem = useThemeStore((state) => state.syncSystem);
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-color-scheme: dark)");
+    query.addEventListener("change", syncSystem);
+    return () => query.removeEventListener("change", syncSystem);
+  }, [syncSystem]);
+
   const Icon = resolvedTheme === "dark" ? Moon : Sun;
 
   return (

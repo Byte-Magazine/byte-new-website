@@ -18,7 +18,13 @@ import {
   getRelatedArticles,
 } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
-import { articleJsonLd, buildMetadata, JsonLd, ogImage } from "@/lib/seo";
+import {
+  articleJsonLd,
+  breadcrumbJsonLd,
+  buildMetadata,
+  JsonLd,
+  ogImage,
+} from "@/lib/seo";
 import { extractHeadings } from "@/lib/toc";
 
 export const dynamicParams = false;
@@ -84,6 +90,14 @@ export default async function ArticlePage({
           tags: article.tags,
           issue: { number: article.issueNumber, url: article.issue.url },
         })}
+      />
+
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "آرشیو بایت", url: "/mags/intro" },
+          { name: `شمارهٔ ${article.issueNumber}`, url: article.issue.url },
+          { name: article.title, url: article.url },
+        ])}
       />
 
       <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">

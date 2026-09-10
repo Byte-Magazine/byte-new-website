@@ -1,64 +1,137 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 
+import { MetaLine } from "@/components/content/meta-line";
 import { BinaryDecrypt } from "@/components/motion/binary-decrypt";
+import { Magnetic } from "@/components/motion/magnetic";
+import { Reveal } from "@/components/motion/reveal";
+import { SplitText } from "@/components/motion/split-text";
+import { TiltCard } from "@/components/motion/tilt-card";
 import { Button } from "@/components/ui/button";
 import type { Issue } from "@/lib/content";
+import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { SITE } from "@/lib/site";
+import Image from "next/image";
 
 /**
- * The hero leads with the publication's own naming scheme: issues are binary
- * numbers, so the newest one resolves bit by bit. That is the single
- * orchestrated motion on the page.
+ * The hero pairs the publication's name with its newest cover.
+ *
+ * Motion is limited to one orchestrated entrance — the title resolving word by
+ * word while the issue number decodes from binary — because that binary naming
+ * is the magazine's own identity, not decoration borrowed from elsewhere.
  */
 export function Hero({ latest }: { latest?: Issue }) {
   return (
     <section className="relative overflow-hidden border-b">
-      {/* Faint grid, the one piece of decoration; masked so it fades out. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.045] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]"
+        className="pointer-events-none absolute inset-0 opacity-[0.05] [mask-image:radial-gradient(120%_90%_at_70%_0%,black,transparent_70%)]"
         style={{
           backgroundImage:
             "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
+          backgroundSize: "58px 58px",
         }}
       />
+      {latest ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-40 start-1/4 size-[34rem] rounded-full opacity-20 blur-[120px]"
+          style={{ background: latest.themeColor }}
+        />
+      ) : null}
 
-      <div className="relative mx-auto max-w-6xl px-4 py-24 md:py-32">
-        <p className="text-sm text-muted-foreground">{SITE.tagline}</p>
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:py-24 lg:grid-cols-[1.15fr_minmax(0,19rem)] lg:gap-14">
+        <div>
+          <Reveal>
+            <p className="text-sm text-muted-foreground">{SITE.tagline}</p>
+          </Reveal>
 
-        <h1 className="mt-5 max-w-3xl text-balance text-4xl font-black leading-[1.45] md:text-6xl md:leading-[1.35]">
-          نشریه‌ی علمی فرهنگی بایت
-        </h1>
+          <h1 className="mt-5 max-w-2xl text-balance text-4xl font-black leading-[1.42] md:text-6xl md:leading-[1.32]">
+            <SplitText text="نشریه‌ی علمی فرهنگی بایت" />
+          </h1>
+
+          <Reveal delay={280}>
+            <p className="mt-6 max-w-xl text-lg leading-9 text-muted-foreground">
+              نوشته‌های دانشجویی دربارهٔ علوم و مهندسی کامپیوتر — از سیستم‌عامل
+              و شبکه تا هوش مصنوعی و تاریخ فناوری.
+            </p>
+          </Reveal>
+
+          <Reveal delay={380}>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              {latest ? (
+                <Magnetic>
+                  <Button
+                    size="lg"
+                    render={
+                      <Link href={latest.url}>
+                        خواندن شمارهٔ {latest.description}
+                        <ArrowLeft className="size-4" />
+                      </Link>
+                    }
+                  />
+                </Magnetic>
+              ) : null}
+              <Button
+                size="lg"
+                variant="outline"
+                render={<Link href="/articles">همهٔ مقاله‌ها</Link>}
+              />
+            </div>
+          </Reveal>
+        </div>
 
         {latest ? (
-          <p className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-muted-foreground">
-            <span>تازه‌ترین شماره</span>
-            <BinaryDecrypt
-              value={latest.number}
-              className="font-mono text-2xl font-bold tracking-[0.15em] md:text-3xl"
-            />
-            <span>{latest.description}</span>
-          </p>
-        ) : null}
-
-        <div className="mt-10 flex flex-wrap gap-3">
-          {latest ? (
-            <Button
-              render={
-                <Link href={latest.url}>
-                  خواندن تازه‌ترین شماره
-                  <ArrowLeft className="size-4" />
+          <Reveal delay={200}>
+            <div style={{ ["--issue-accent" as string]: latest.themeColor }}>
+              <TiltCard>
+                <Link href={latest.url} className="group block">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border shadow-[0_30px_80px_-40px_var(--issue-accent)]">
+                    <Image
+                      src={latest.cover}
+                      alt={`جلد شمارهٔ ${latest.number}`}
+                      fill
+                      priority
+                      unoptimized
+                      sizes="(max-width: 1024px) 70vw, 20rem"
+                      className="object-cover"
+                    />
+                  </div>
                 </Link>
-              }
-            />
-          ) : null}
-          <Button
-            variant="outline"
-            render={<Link href="/articles">همهٔ مقاله‌ها</Link>}
-          />
-        </div>
+              </TiltCard>
+
+              <div className="mt-4 flex items-center justify-between gap-3">
+                <div>
+                  <BinaryDecrypt
+                    value={latest.number}
+                    className="font-mono text-sm font-bold tracking-[0.18em]"
+                  />
+                  <MetaLine
+                    className="mt-0.5 text-xs"
+                    items={[
+                      formatJalali(latest.date),
+                      `${toPersianDigits(latest.articleCount)} مطلب`,
+                    ]}
+                  />
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  render={
+                    <a
+                      href={latest.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Download className="size-4" />
+                      پی‌دی‌اف
+                    </a>
+                  }
+                />
+              </div>
+            </div>
+          </Reveal>
+        ) : null}
       </div>
     </section>
   );

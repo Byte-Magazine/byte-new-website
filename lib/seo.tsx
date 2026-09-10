@@ -175,6 +175,51 @@ export function issueJsonLd(input: {
   };
 }
 
+/** Publisher identity, emitted once on the home page. */
+export function organizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization" as const,
+    name: SITE.name,
+    alternateName: SITE.shortName,
+    url: SITE.url,
+    email: SITE.email,
+    logo: absoluteUrl("/img/logo.svg"),
+    description: SITE.description,
+    sameAs: Object.values(SITE.socials),
+    parentOrganization: {
+      "@type": "CollegeOrUniversity" as const,
+      name: "دانشگاه صنعتی شریف",
+    },
+  };
+}
+
+/** Site-level metadata plus the search action, for the home page. */
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite" as const,
+    name: SITE.name,
+    url: SITE.url,
+    inLanguage: "fa-IR",
+    publisher: { "@type": "Organization" as const, name: SITE.name },
+  };
+}
+
+/** Breadcrumb trail; helps search results show the section a page sits in. */
+export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList" as const,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem" as const,
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(item.url),
+    })),
+  };
+}
+
 /** Renders a JSON-LD script tag. */
 export function JsonLd({ data }: { data: object }) {
   return (

@@ -35,8 +35,8 @@ export function IssueCard({
         />
       </div>
 
-      <p className="mt-3 font-mono text-sm font-bold" dir="ltr">
-        {issue.number}
+      <p className="mt-3 font-mono text-sm font-bold">
+        <span dir="ltr">{issue.number}</span>
       </p>
       <p className="text-sm text-muted-foreground">{issue.description}</p>
       <MetaLine

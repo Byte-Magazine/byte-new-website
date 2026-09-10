@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
+import { Reveal } from "@/components/motion/reveal";
 import type { Workshop } from "@/lib/content";
 import { toPersianDigits } from "@/lib/persian";
 
@@ -10,16 +11,16 @@ export function WorkshopsTeaser({ workshops }: { workshops: Workshop[] }) {
   return (
     <section className="border-y bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-16">
-        <div className="mb-8 flex items-end justify-between gap-4">
+        <Reveal className="mb-8 flex items-end justify-between gap-4">
           <h2 className="text-2xl font-black">کارگاه‌ها</h2>
           <Link
             href="/workshops"
-            className="flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="group flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             همه
-            <ArrowLeft className="size-4" />
+            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
           </Link>
-        </div>
+        </Reveal>
 
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 [&:has(>li:only-child)]:lg:grid-cols-2">
           {workshops.map((workshop) => (

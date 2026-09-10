@@ -1,10 +1,30 @@
 import { normalizePersian } from "../../lib/persian";
 
-/** Removes `import X from "@site/..."` lines left over from Docusaurus. */
+/**
+ * Removes the Docusaurus-specific import lines (`@site/...` and `@theme/...`).
+ * The new site provides these components globally, so content needs no imports.
+ */
 export function stripSiteImports(body: string): string {
   return body
-    .replace(/^import\s+.*?from\s+["']@site\/[^"']*["'];?[ \t]*$/gm, "")
+    .replace(/^import\s+.*?from\s+["']@(?:site|theme|docusaurus)\/[^"']*["'];?[ \t]*$/gm, "")
     .replace(/\n{3,}/g, "\n\n");
+}
+
+/**
+ * Rewrites Docusaurus's `<Admonition type="info">` element to `<Callout>`,
+ * dropping its `icon` prop which the new Callout derives from the type.
+ */
+export function convertAdmonitionElements(body: string): string {
+  return body
+    .replace(/<Admonition\b([^>]*)>/g, (_match, attrs: string) => {
+      const type = attrs.match(/type=["'](\w+)["']/)?.[1] ?? "note";
+      const title = attrs.match(/title=["']([^"']*)["']/)?.[1] ?? "";
+      const mapped = type === "caution" ? "warning" : type;
+      return title
+        ? `<Callout type="${mapped}" title="${title}">`
+        : `<Callout type="${mapped}">`;
+    })
+    .replace(/<\/Admonition>/g, "</Callout>");
 }
 
 const ADMONITION_TYPES = [
@@ -150,11 +170,19 @@ export function findUnknownJsxTags(
   body: string,
   known: Set<string>,
 ): string[] {
+  // Components the file defines itself are valid MDX and need no provider.
+  const local = new Set<string>();
+  for (const match of body.matchAll(
+    /(?:export\s+)?(?:const|let|var|function|class)\s+([A-Z][A-Za-z0-9_]*)/g,
+  )) {
+    local.add(match[1]);
+  }
+
   const found = new Set<string>();
   for (const line of markFences(body)) {
     if (line.inFence) continue;
     for (const match of line.text.matchAll(/<([A-Z][A-Za-z0-9_]*)/g)) {
-      if (!known.has(match[1])) found.add(match[1]);
+      if (!known.has(match[1]) && !local.has(match[1])) found.add(match[1]);
     }
   }
   return [...found].sort();

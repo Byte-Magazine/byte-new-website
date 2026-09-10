@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  convertAdmonitionElements,
   stripSiteImports,
   convertAdmonitions,
   normalizeTag,
@@ -79,6 +80,34 @@ describe("convertAdmonitions", () => {
   it("leaves an unclosed admonition marker alone rather than corrupting text", () => {
     const input = "متن عادی\n::: چیزی\nادامه";
     expect(convertAdmonitions(input)).toBe(input);
+  });
+});
+
+describe("stripSiteImports (theme imports)", () => {
+  it("removes @theme imports", () => {
+    const input = 'import Admonition from "@theme/Admonition";\n\nمتن';
+    expect(stripSiteImports(input).trim()).toBe("متن");
+  });
+});
+
+describe("convertAdmonitionElements", () => {
+  it("rewrites an Admonition element to a Callout", () => {
+    const out = convertAdmonitionElements('<Admonition type="info" icon="" title="">x</Admonition>');
+    expect(out).toBe('<Callout type="info">x</Callout>');
+  });
+  it("keeps a non-empty title", () => {
+    const out = convertAdmonitionElements('<Admonition type="tip" title="نکته">x</Admonition>');
+    expect(out).toContain('title="نکته"');
+  });
+  it("defaults a missing type to note", () => {
+    expect(convertAdmonitionElements("<Admonition>x</Admonition>")).toContain('type="note"');
+  });
+});
+
+describe("findUnknownJsxTags (local definitions)", () => {
+  it("ignores components the file defines itself", () => {
+    const body = "export const Grid = ({children}) => <div>{children}</div>;\n\n<Grid>x</Grid>";
+    expect(findUnknownJsxTags(body, new Set())).toEqual([]);
   });
 });
 

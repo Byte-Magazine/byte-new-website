@@ -5,10 +5,12 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { ArticleCard, articleAssetBase } from "@/components/cards/article-card";
 import { AuthorList } from "@/components/content/author-list";
-import { TableOfContents } from "@/components/content/table-of-contents";
+import { IssueNav } from "@/components/content/issue-nav";
 import { MetaLine } from "@/components/content/meta-line";
+import { TableOfContents } from "@/components/content/table-of-contents";
 import { TagList } from "@/components/content/tag-list";
 import MdxContent from "@/components/mdx-content";
+import { Reveal } from "@/components/motion/reveal";
 import {
   getAdjacentArticles,
   getAllArticles,
@@ -62,9 +64,14 @@ export default async function ArticlePage({
   const related = getRelatedArticles(article, 3);
   const { prev, next } = getAdjacentArticles(article);
 
+  const issueArticles = article.issue.articles.map((item) => ({
+    url: item.url,
+    title: item.title,
+  }));
+
   return (
     <main
-      className="mx-auto max-w-6xl px-4 py-10"
+      className="mx-auto max-w-7xl px-4 py-10"
       style={{ ["--issue-accent" as string]: article.issue.themeColor }}
     >
       <JsonLd
@@ -83,18 +90,31 @@ export default async function ArticlePage({
         <Link href="/mags/intro" className="hover:text-foreground">
           آرشیو
         </Link>
-        <span>/</span>
+        <span aria-hidden>/</span>
         <Link
           href={article.issue.url}
-          dir="ltr"
-          className="font-mono hover:text-foreground"
+          className="hover:text-foreground"
         >
-          {article.issueNumber}
+          <span dir="ltr" className="font-mono">
+            {article.issueNumber}
+          </span>
         </Link>
       </nav>
 
-      <div className="lg:flex lg:gap-12">
-        <article className="min-w-0 flex-1">
+      <div className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[15rem_minmax(0,1fr)_14rem]">
+        {/* Issue contents: start side, matching the workshop lesson list. */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-6">
+            <IssueNav
+              issueNumber={article.issueNumber}
+              issueUrl={article.issue.url}
+              description={article.issue.description}
+              articles={issueArticles}
+            />
+          </div>
+        </aside>
+
+        <article className="min-w-0">
           <header className="mb-8 border-b pb-8">
             <h1 className="text-balance text-3xl font-black leading-[1.6] md:text-[2.1rem]">
               {article.title}
@@ -119,16 +139,33 @@ export default async function ArticlePage({
             </div>
           </header>
 
-          {headings.length >= 2 ? (
-            <details className="mb-8 rounded-lg border bg-muted/40 p-4 lg:hidden">
+          {/* Both rails collapse into disclosures on small screens. */}
+          <div className="mb-8 grid gap-3 lg:hidden">
+            <details className="rounded-lg border bg-muted/40 p-4">
               <summary className="cursor-pointer font-bold">
-                فهرست مطالب
+                مطالب این شماره
               </summary>
               <div className="mt-3">
-                <TableOfContents headings={headings} />
+                <IssueNav
+                  issueNumber={article.issueNumber}
+                  issueUrl={article.issue.url}
+                  description={article.issue.description}
+                  articles={issueArticles}
+                />
               </div>
             </details>
-          ) : null}
+
+            {headings.length >= 2 ? (
+              <details className="rounded-lg border bg-muted/40 p-4">
+                <summary className="cursor-pointer font-bold">
+                  فهرست مطلب
+                </summary>
+                <div className="mt-3">
+                  <TableOfContents headings={headings} />
+                </div>
+              </details>
+            ) : null}
+          </div>
 
           <div className="prose max-w-none">
             <MdxContent
@@ -178,9 +215,10 @@ export default async function ArticlePage({
           ) : null}
         </article>
 
+        {/* Section headings: end side. */}
         {headings.length >= 2 ? (
-          <aside className="hidden w-60 shrink-0 lg:block">
-            <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto">
+          <aside className="hidden xl:block">
+            <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-6">
               <TableOfContents headings={headings} />
             </div>
           </aside>
@@ -190,11 +228,15 @@ export default async function ArticlePage({
       {related.length > 0 ? (
         <section className="mt-16 border-t pt-10">
           <h2 className="mb-6 text-xl font-bold">مطالب مرتبط</h2>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((item) => (
-              <ArticleCard key={item.url} article={item} />
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((item, index) => (
+              <li key={item.url}>
+                <Reveal delay={index * 70}>
+                  <ArticleCard article={item} />
+                </Reveal>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       ) : null}
     </main>

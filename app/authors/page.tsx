@@ -25,7 +25,7 @@ export default function AuthorsPage() {
         </p>
       </header>
 
-      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {authors.map((author) => (
           <li key={author.id}>
             <PersonCard

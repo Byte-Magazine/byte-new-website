@@ -26,7 +26,7 @@ export default function StaffPage() {
         {sections.map((section) => (
           <section key={section.name}>
             <h2 className="mb-6 text-xl font-bold">{section.name}</h2>
-            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {section.members.map((member) => {
                 const author = member.authorId
                   ? getAuthor(member.authorId)

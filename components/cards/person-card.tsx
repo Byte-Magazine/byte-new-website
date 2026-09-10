@@ -4,7 +4,6 @@ import { Globe, Mail } from "lucide-react";
 import { SiGithub, SiX } from "@icons-pack/react-simple-icons";
 
 import { LinkedInIcon } from "@/components/icons/linkedin";
-
 import { toPersianDigits } from "@/lib/persian";
 import { cn } from "@/lib/utils";
 
@@ -14,10 +13,10 @@ export interface PersonCardProps {
   image?: string;
   href?: string;
   articleCount?: number;
+  role?: string;
   socials?: Record<string, string | undefined>;
   className?: string;
 }
-
 
 const SOCIAL_ICONS = {
   github: { icon: SiGithub, label: "گیت‌هاب" },
@@ -41,7 +40,7 @@ export function SocialLinks({
   if (entries.length === 0) return null;
 
   return (
-    <ul className={cn("flex items-center gap-2.5", className)}>
+    <ul className={cn("flex items-center gap-1", className)}>
       {entries.map(([key, value]) => {
         const { icon: Icon, label } = SOCIAL_ICONS[key];
         const href = key === "email" ? `mailto:${value}` : value;
@@ -52,9 +51,10 @@ export function SocialLinks({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              title={label}
+              className="flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
-              <Icon className="size-4" />
+              <Icon className="size-[0.9rem]" />
             </a>
           </li>
         );
@@ -63,62 +63,108 @@ export function SocialLinks({
   );
 }
 
+/** Deterministic hue from a name, so an author without a photo still reads as an individual. */
+function hueFor(name: string): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash * 31 + name.charCodeAt(i)) % 360;
+  }
+  return hash;
+}
+
+function Avatar({
+  name,
+  image,
+  size = 56,
+}: {
+  name: string;
+  image?: string;
+  size?: number;
+}) {
+  if (image) {
+    return (
+      <Image
+        src={image}
+        alt=""
+        width={size}
+        height={size}
+        unoptimized
+        style={{ width: size, height: size }}
+        className="shrink-0 rounded-full border object-cover"
+      />
+    );
+  }
+
+  const hue = hueFor(name);
+  return (
+    <span
+      aria-hidden
+      style={{
+        width: size,
+        height: size,
+        background: `linear-gradient(140deg, oklch(0.72 0.09 ${hue}), oklch(0.55 0.11 ${(hue + 40) % 360}))`,
+      }}
+      className="flex shrink-0 items-center justify-center rounded-full text-lg font-bold text-white/95"
+    >
+      {name.trim().slice(0, 1)}
+    </span>
+  );
+}
+
+/**
+ * Person summary, laid out horizontally.
+ *
+ * A row reads better than a centred tile here: Persian names vary a lot in
+ * length, and the row keeps the name, role, and contribution on a single
+ * baseline instead of forcing ragged wrapping under a centred portrait.
+ */
 export function PersonCard({
   name,
   title,
   image,
   href,
   articleCount,
+  role,
   socials,
   className,
 }: PersonCardProps) {
-  const body = (
-    <>
-      <div className="relative mx-auto size-20 overflow-hidden rounded-full border bg-muted">
-        {image ? (
-          <Image
-            src={image}
-            alt=""
-            fill
-            unoptimized
-            sizes="80px"
-            className="object-cover"
-          />
-        ) : (
-          <span className="flex size-full items-center justify-center text-xl text-muted-foreground/50">
-            {name.slice(0, 1)}
-          </span>
-        )}
-      </div>
+  const meta = [title, role].filter(Boolean).join(" · ");
 
-      <p className="mt-3 font-bold leading-7">{name}</p>
-      {title ? (
-        <p className="text-xs text-muted-foreground">{title}</p>
-      ) : null}
-      {articleCount !== undefined && articleCount > 0 ? (
-        <p className="mt-1 text-xs text-muted-foreground">
-          {toPersianDigits(articleCount)} مطلب
-        </p>
-      ) : null}
+  const inner = (
+    <>
+      <Avatar name={name} image={image} />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate font-bold leading-7">{name}</span>
+        {meta ? (
+          <span className="block truncate text-xs text-muted-foreground">
+            {meta}
+          </span>
+        ) : null}
+        {articleCount !== undefined && articleCount > 0 ? (
+          <span className="mt-0.5 block text-xs text-accent">
+            {toPersianDigits(articleCount)} مطلب
+          </span>
+        ) : null}
+      </span>
     </>
   );
 
   return (
     <div
       className={cn(
-        "flex flex-col items-center rounded-xl border bg-card p-5 text-center transition-colors",
-        href && "hover:border-accent",
+        "group flex items-center gap-3 rounded-xl border bg-card p-3.5 transition-all duration-300",
+        href && "hover:-translate-y-0.5 hover:border-accent hover:shadow-sm",
         className,
       )}
     >
       {href ? (
-        <Link href={href} className="flex flex-col items-center">
-          {body}
+        <Link href={href} className="flex min-w-0 flex-1 items-center gap-3">
+          {inner}
         </Link>
       ) : (
-        body
+        <span className="flex min-w-0 flex-1 items-center gap-3">{inner}</span>
       )}
-      <SocialLinks socials={socials} className="mt-3" />
+      <SocialLinks socials={socials} className="shrink-0" />
     </div>
   );
 }

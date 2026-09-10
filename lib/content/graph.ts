@@ -183,8 +183,19 @@ function buildGraph(): ContentGraph {
     author.articleCount = author.articles.length;
   }
 
+  /**
+   * Ordering: people with a complete profile first, then by how much they have
+   * written. An author with neither a photo nor a class year renders as a bare
+   * initial, so grouping those at the end keeps the grids visually even.
+   */
+  const profileRank = (author: Author) =>
+    (author.image ? 0 : 1) + (author.title ? 0 : 1);
+
   const authors = [...authorsById.values()].sort(
-    (a, b) => b.articleCount - a.articleCount || a.name.localeCompare(b.name),
+    (a, b) =>
+      profileRank(a) - profileRank(b) ||
+      b.articleCount - a.articleCount ||
+      a.name.localeCompare(b.name, "fa"),
   );
 
   // ---- Tags ---------------------------------------------------------------

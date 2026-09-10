@@ -407,6 +407,29 @@
   box-shadow: 0 10px 15px -3px color-mix(in oklab, var(--foreground) 12%, transparent);
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Two identical copies sit side by side, so one full width is a seamless
+       loop. RTL flips the direction automatically. */
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-marquee {
+    animation-name: marquee;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+}
+
+[dir="rtl"] .animate-marquee {
+  animation-direction: reverse;
+}
+
 /* rehype-pretty-code emits both themes; show the one that matches. */
 code[data-theme] span,
 pre[data-theme] span {

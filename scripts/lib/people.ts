@@ -1,4 +1,4 @@
-import { normalizePersian } from "../../lib/persian";
+import { looseKey } from "../../lib/persian";
 import type { AuthorRecord, StaffSection } from "../../lib/content/schema";
 
 export type LegacyPerson = {
@@ -32,15 +32,6 @@ export function expandSocialUrl(platform: string, value: string): string {
   if (/^https?:\/\//.test(value)) return value;
   const base = SOCIAL_BASES[platform];
   return base ? `${base}${value.replace(/^@/, "")}` : value;
-}
-
-/**
- * Key for matching a person across sources. Beyond the usual folds it also
- * removes spaces, because the same name appears written both with a ZWNJ
- * ("علی‌نژاد") and with a space ("علی نژاد").
- */
-function nameKey(name: string): string {
-  return normalizePersian(name).replace(/\s+/g, "");
 }
 
 function expandSocials(socials: Record<string, string> = {}) {
@@ -88,13 +79,13 @@ export function mergeAuthors(
 
   const byName = new Map<string, string>();
   for (const author of byId.values()) {
-    byName.set(nameKey(author.name), author.id);
+    byName.set(looseKey(author.name), author.id);
   }
 
   const staff: StaffSection[] = staffSections.map((section) => ({
     name: section.name,
     members: section.staffList.map((member) => {
-      const authorId = byName.get(nameKey(member.name));
+      const authorId = byName.get(looseKey(member.name));
       if (!authorId) {
         warnings.push(
           `staff member "${member.name}" in section "${section.name}" has no matching author record`,

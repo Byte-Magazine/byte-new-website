@@ -1,4 +1,4 @@
-import { normalizePersian } from "../../lib/persian";
+import { looseKey, normalizePersian } from "../../lib/persian";
 
 /**
  * Removes the Docusaurus-specific import lines (`@site/...` and `@theme/...`).
@@ -145,6 +145,34 @@ export function replaceHoverHandlers(body: string): string {
     /<a href=\{link\} target="_blank"(?![^>]*className)/g,
     '<a href={link} target="_blank" rel="noopener noreferrer" className="link-card"',
   );
+}
+
+/**
+ * Drops a leading H1 that merely repeats the frontmatter title.
+ *
+ * Docusaurus hid this duplicate in its theme; the new article page renders the
+ * title itself, so leaving it in the body would show it twice.
+ */
+export function stripLeadingTitle(body: string, title: string): string {
+  const trimmed = body.trimStart();
+  const match = trimmed.match(/^#\s+(.+?)\s*(?:\n|$)/);
+  if (!match) return body;
+
+  const normalize = (value: string) => looseKey(value.replace(/[*_`]/g, ""));
+  if (normalize(match[1]) !== normalize(title)) return body;
+
+  return trimmed.slice(match[0].length).trimStart();
+}
+
+/**
+ * Converts a lone "\\" line into a blank line.
+ *
+ * Docusaurus's markdown treated it as a hard break between adjacent elements;
+ * MDX renders it as a literal backslash. A blank line preserves the intent —
+ * the items stay separate blocks — without leaving the stray character.
+ */
+export function stripStrayEscapes(body: string): string {
+  return body.replace(/^\\[ \t]*$/gm, "");
 }
 
 /** Collapses whitespace in a tag while preserving its display casing. */

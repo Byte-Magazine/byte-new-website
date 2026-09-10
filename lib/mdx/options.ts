@@ -32,5 +32,4 @@ export const mdxOptions = {
     ],
     rehypeKatex,
   ],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;

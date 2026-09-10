@@ -51,8 +51,9 @@ export function SearchDialog() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [docs, setDocs] = useState<SearchDoc[]>([]);
-  const [loading, setLoading] = useState(false);
+  // `loaded` only tracks that the fetch finished; the documents themselves live
+  // in the module cache, so a second dialog open needs no state update at all.
+  const [loaded, setLoaded] = useState(indexCache !== null);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -66,19 +67,20 @@ export function SearchDialog() {
   }, []);
 
   useEffect(() => {
-    if (!open || indexCache) return;
-    setLoading(true);
-    void loadIndex().then((loaded) => {
-      setDocs(loaded);
-      setLoading(false);
-    });
-  }, [open]);
+    if (!open || loaded) return;
 
-  useEffect(() => {
-    if (open && indexCache) setDocs(indexCache);
-  }, [open]);
+    let cancelled = false;
+    void loadIndex().then(() => {
+      if (!cancelled) setLoaded(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, loaded]);
 
   const grouped = useMemo(() => {
+    const docs = loaded ? (indexCache ?? []) : [];
     const results = searchDocs(docs, query, 24);
     const map = new Map<SearchKind, SearchDoc[]>();
     for (const doc of results) {
@@ -87,7 +89,7 @@ export function SearchDialog() {
       map.set(doc.kind, list);
     }
     return map;
-  }, [docs, query]);
+  }, [loaded, query]);
 
   const go = useCallback(
     (url: string) => {
@@ -123,17 +125,17 @@ export function SearchDialog() {
           onValueChange={setQuery}
         />
         <CommandList>
-          {loading ? (
+          {!loaded ? (
             <div className="p-6 text-center text-sm text-muted-foreground">
               در حال بارگذاری…
             </div>
           ) : null}
 
-          {!loading && query.trim() && !hasResults ? (
+          {loaded && query.trim() && !hasResults ? (
             <CommandEmpty>چیزی پیدا نشد.</CommandEmpty>
           ) : null}
 
-          {!loading && !query.trim() ? (
+          {loaded && !query.trim() ? (
             <div className="p-6 text-center text-sm text-muted-foreground">
               نام مقاله، نویسنده یا موضوع را بنویسید.
             </div>

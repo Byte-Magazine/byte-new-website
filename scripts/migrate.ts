@@ -23,6 +23,8 @@ import {
   rewriteImagePaths,
   rewriteAssetRequires,
   replaceHoverHandlers,
+  stripLeadingTitle,
+  stripStrayEscapes,
   stripSiteImports,
 } from "./lib/transform";
 import { mergeAuthors, type LegacyPerson, type LegacyStaffSection } from "./lib/people";
@@ -147,6 +149,7 @@ function transformBody(
   body: string,
   sourceLabel: string,
   assetBaseUrl: string,
+  title: string,
 ): string {
   let out = stripSiteImports(body);
   out = convertAdmonitions(out);
@@ -154,6 +157,8 @@ function transformBody(
   out = rewriteImagePaths(out);
   out = rewriteAssetRequires(out, assetBaseUrl);
   out = replaceHoverHandlers(out);
+  out = stripStrayEscapes(out);
+  out = stripLeadingTitle(out, title);
 
   const unknown = findUnknownJsxTags(out, KNOWN_COMPONENTS);
   if (unknown.length > 0) unknownTags.set(sourceLabel, unknown);
@@ -320,6 +325,7 @@ function main() {
         parsed.content,
         `mags/${rel}`,
         `/content/issues/${issueNumber}/${slug}`,
+        frontmatter.title,
       ),
     );
     articleCount++;
@@ -363,7 +369,12 @@ function main() {
     writeMdx(
       join(targetDir, "index.mdx"),
       frontmatter,
-      transformBody(parsed.content, `blog/${rel}`, `/content/blog/${slug}`),
+      transformBody(
+        parsed.content,
+        `blog/${rel}`,
+        `/content/blog/${slug}`,
+        frontmatter.title,
+      ),
     );
     blogCount++;
   }
@@ -407,6 +418,7 @@ function main() {
           parsed.content,
           `workshops/${workshopSlug}/${slug}`,
           `/content/workshops/${workshopSlug}/${slug}`,
+          frontmatter.title,
         ),
       );
       workshopDocs++;

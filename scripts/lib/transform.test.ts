@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
+  stripLeadingTitle,
+  stripStrayEscapes,
   replaceHoverHandlers,
   rewriteAssetRequires,
   convertAdmonitionElements,
@@ -150,6 +152,40 @@ describe("rewriteAssetRequires", () => {
 
   it("leaves unrelated code untouched", () => {
     expect(rewriteAssetRequires("const x = 1;", base)).toBe("const x = 1;");
+  });
+});
+
+describe("stripLeadingTitle", () => {
+  it("removes an H1 that repeats the title", () => {
+    const out = stripLeadingTitle("# عنوان\n\nمتن", "عنوان");
+    expect(out).toBe("متن");
+  });
+
+  it("matches across yeh and ZWNJ variants", () => {
+    const out = stripLeadingTitle("# برنامه‌نويسی\n\nمتن", "برنامه نویسی");
+    expect(out).toBe("متن");
+  });
+
+  it("keeps an H1 that differs from the title", () => {
+    const body = "# چیز دیگری\n\nمتن";
+    expect(stripLeadingTitle(body, "عنوان")).toBe(body);
+  });
+
+  it("keeps the body when it starts with prose", () => {
+    const body = "متن\n\n# عنوان";
+    expect(stripLeadingTitle(body, "عنوان")).toBe(body);
+  });
+});
+
+describe("stripStrayEscapes", () => {
+  it("turns a lone backslash line into a blank line so blocks stay separate", () => {
+    const input = ["<A />", "\\", "<B />"].join("\n");
+    const expected = ["<A />", "", "<B />"].join("\n");
+    expect(stripStrayEscapes(input)).toBe(expected);
+  });
+
+  it("leaves escaped characters inside text alone", () => {
+    expect(stripStrayEscapes("a \\* b")).toBe("a \\* b");
   });
 });
 

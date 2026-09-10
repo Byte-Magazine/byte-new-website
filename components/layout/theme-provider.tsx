@@ -36,20 +36,29 @@ function applyTheme(theme: Theme) {
   return resolved;
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+function storedTheme(): Theme {
+  try {
+    return (localStorage.getItem(STORAGE_KEY) as Theme) ?? "system";
+  } catch {
+    // Private browsing or blocked storage: fall back to system.
+    return "system";
+  }
+}
 
-  useEffect(() => {
-    let stored: Theme = "system";
-    try {
-      stored = (localStorage.getItem(STORAGE_KEY) as Theme) ?? "system";
-    } catch {
-      // Private browsing or blocked storage: fall back to system.
-    }
-    setThemeState(stored);
-    setResolvedTheme(applyTheme(stored));
-  }, []);
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  // Read during initialisation rather than in an effect: the inline theme
+  // script has already applied the class, so this only mirrors it into state
+  // and avoids a second render.
+  const [theme, setThemeState] = useState<Theme>(() =>
+    typeof window === "undefined" ? "system" : storedTheme(),
+  );
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() =>
+    typeof window === "undefined"
+      ? "light"
+      : document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light",
+  );
 
   useEffect(() => {
     if (theme !== "system") return;

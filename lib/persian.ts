@@ -31,6 +31,16 @@ export function normalizePersian(input: string): string {
     .toLowerCase();
 }
 
+/**
+ * Comparison key for matching two pieces of Persian text that may differ only
+ * in word separation. Beyond the usual folds it removes spaces, because the
+ * same words appear written both with a ZWNJ ("برنامه‌نویسی") and with a space
+ * ("برنامه نویسی"). Use for matching names and titles, not for search.
+ */
+export function looseKey(input: string): string {
+  return normalizePersian(input).replace(/\s+/g, "");
+}
+
 const JALALI_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
 
 function jalaliFormatter(options: Intl.DateTimeFormatOptions) {

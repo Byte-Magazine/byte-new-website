@@ -1,6 +1,6 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import { resolve } from "path";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   plugins: [react()],
@@ -9,5 +9,7 @@ export default defineConfig({
     include: ["**/*.test.ts", "**/*.test.tsx"],
     exclude: ["node_modules/**", "out/**", ".next/**"],
   },
-  resolve: { alias: { "@": resolve(__dirname, ".") } },
+  resolve: {
+    alias: { "@": fileURLToPath(new URL(".", import.meta.url)) },
+  },
 });

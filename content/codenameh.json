@@ -6,7 +6,7 @@
     "description": "کدنامه شماره‌ ۱",
     "cover": "/img/codenameh_1.png",
     "themeColor": "rgba(242,105,115,0.75)",
-    "era": "دوره اول کدنامه"
+    "era": "دورهٔ اول کدنامه"
   },
   {
     "id": "codenameh_2",
@@ -15,7 +15,7 @@
     "description": "کدنامه شماره‌ ۲",
     "cover": "/img/codenameh_2.png",
     "themeColor": "rgba(242,105,115,0.75)",
-    "era": "دوره اول کدنامه"
+    "era": "دورهٔ اول کدنامه"
   },
   {
     "id": "codenameh_3",
@@ -24,7 +24,7 @@
     "description": "کدنامه شماره‌ ۳",
     "cover": "/img/codenameh_3.png",
     "themeColor": "rgba(242,105,115,0.75)",
-    "era": "دوره اول کدنامه"
+    "era": "دورهٔ اول کدنامه"
   },
   {
     "id": "codenameh_4",
@@ -33,7 +33,7 @@
     "description": "کدنامه شماره‌ ۴",
     "cover": "/img/codenameh_4.png",
     "themeColor": "rgba(242,105,115,0.75)",
-    "era": "دوره اول کدنامه"
+    "era": "دورهٔ اول کدنامه"
   },
   {
     "id": "codenameh_5",
@@ -42,7 +42,7 @@
     "description": "کدنامه شماره‌ ۵",
     "cover": "/img/codenameh_5.png",
     "themeColor": "rgba(242,105,115,0.75)",
-    "era": "دوره اول کدنامه"
+    "era": "دورهٔ اول کدنامه"
   },
   {
     "id": "codenameh_6",
@@ -51,7 +51,7 @@
     "description": "کدنامه شماره‌ ۶",
     "cover": "/img/codenameh_6.png",
     "themeColor": "rgba(59,71,150,0.75)",
-    "era": "دوه دوم کدنامه"
+    "era": "دورهٔ دوم کدنامه"
   },
   {
     "id": "codenameh_7",
@@ -60,7 +60,7 @@
     "description": "کدنامه شماره‌ ۷",
     "cover": "/img/codenameh_7.png",
     "themeColor": "rgba(59,71,150,0.75)",
-    "era": "دوه دوم کدنامه"
+    "era": "دورهٔ دوم کدنامه"
   },
   {
     "id": "codenameh_8",
@@ -69,7 +69,7 @@
     "description": "کدنامه شماره‌ ۸",
     "cover": "/img/codenameh_8.png",
     "themeColor": "rgba(59,71,150,0.75)",
-    "era": "دوه دوم کدنامه"
+    "era": "دورهٔ دوم کدنامه"
   },
   {
     "id": "codenameh_9",
@@ -78,7 +78,7 @@
     "description": "کدنامه شماره‌ ۹",
     "cover": "/img/codenameh_9.png",
     "themeColor": "rgba(59,71,150,0.75)",
-    "era": "دوه دوم کدنامه"
+    "era": "دورهٔ دوم کدنامه"
   },
   {
     "id": "codenameh_10",
@@ -87,7 +87,7 @@
     "description": "کدنامه شماره‌ ۱۰",
     "cover": "/img/codenameh_10.png",
     "themeColor": "rgba(59,71,150,0.75)",
-    "era": "دوه دوم کدنامه"
+    "era": "دورهٔ دوم کدنامه"
   },
   {
     "id": "codenameh_11",
@@ -96,7 +96,7 @@
     "description": "کدنامه شماره‌ ۱۱",
     "cover": "/img/codenameh_11.png",
     "themeColor": "rgba(182,36,91,0.75)",
-    "era": "دوره سوم کدنامه"
+    "era": "دورهٔ سوم کدنامه"
   },
   {
     "id": "codenameh_12",
@@ -105,7 +105,7 @@
     "description": "کدنامه شماره‌ ۱۲",
     "cover": "/img/codenameh_12.png",
     "themeColor": "rgba(182,36,91,0.75)",
-    "era": "دوره سوم کدنامه"
+    "era": "دورهٔ سوم کدنامه"
   },
   {
     "id": "codenameh_13",
@@ -114,6 +114,6 @@
     "description": "کدنامه شماره‌ ۱۳",
     "cover": "/img/codenameh_13.png",
     "themeColor": "rgba(182,36,91,0.75)",
-    "era": "دوره سوم کدنامه"
+    "era": "دورهٔ سوم کدنامه"
   }
 ]

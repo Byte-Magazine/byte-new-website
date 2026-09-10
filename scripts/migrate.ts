@@ -463,6 +463,13 @@ function main() {
     }>;
   }>(join(LEGACY, "src/data/FEATURE_LIST.ts"), "export const codenamehList");
 
+  // The legacy data has a typo in the second era's label.
+  const ERA_FIXES: Record<string, string> = {
+    "دوه دوم کدنامه": "دورهٔ دوم کدنامه",
+    "دوره اول کدنامه": "دورهٔ اول کدنامه",
+    "دوره سوم کدنامه": "دورهٔ سوم کدنامه",
+  };
+
   const codenameh: CodenamehEntry[] = [];
   for (const era of codenamehList) {
     for (const entry of era.features) {
@@ -474,7 +481,7 @@ function main() {
           description: entry.description.trim(),
           cover: entry.imageSrc,
           themeColor: entry.themeColor,
-          era: era.name,
+          era: ERA_FIXES[era.name] ?? era.name,
         }),
       );
     }

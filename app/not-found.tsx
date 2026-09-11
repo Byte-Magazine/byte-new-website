@@ -10,7 +10,7 @@ export default function NotFound() {
         className="font-mono text-5xl font-black tracking-[0.2em] text-muted-foreground/40"
         dir="ltr"
       >
-        01000100
+        110010100
       </p>
       <h1 className="mt-8 text-3xl font-black">این صفحه پیدا نشد</h1>
       <p className="mt-4 leading-9 text-muted-foreground">

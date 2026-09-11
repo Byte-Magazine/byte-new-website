@@ -69,6 +69,7 @@ search index, and regenerates Open Graph images.
 | Variable | Default | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | CDN base for issue / codenameh PDFs |
+| `NEXT_PUBLIC_BASE_PATH` | _(empty)_ | Subpath when not hosted at domain root (GitHub Pages sets `/byte-new-website`) |
 
 Expected layout on the CDN:
 

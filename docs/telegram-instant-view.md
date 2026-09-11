@@ -41,6 +41,15 @@ author_url: //article/header//ul//a/@href
 published_date: //article//time/@datetime
 body: //article//div[has-class("prose")]
 
+# Instant View rejects <img> / <figure> nested in <p>.
+@split_parent: $body//p/img
+@split_parent: $body//p/figure
+@wrap(<figure>): $body//img[not(ancestor::figure)]
+
+# IV images are GIF/JPG/PNG only — drop SVGs so they don't fail the fetch.
+@remove: $body//img[contains(@src, ".svg")]
+@remove: $body//figure[.//img[contains(@src, ".svg")]]
+
 image_url: //meta[@property="og:image"]/@content
 description: //meta[@property="og:description"]/@content
 
@@ -49,5 +58,8 @@ description: //meta[@property="og:description"]/@content
 
 `description` / `image_url` only affect the **small link preview card**, not
 Instant View typography.
+
+**Note:** Instant View cannot load SVG images (only GIF/JPG/PNG). Prefer PNG/JPG
+in article bodies, or they are stripped by the rules above.
 
 Full reference: [Instant View Manual 2.1](https://instantview.telegram.org/docs?v=2.1)

@@ -18,6 +18,10 @@ export function resolveMdxSrc(src: string, baseUrl?: string): string {
   return baseUrl ? `${baseUrl}/${clean}` : `/${clean}`;
 }
 
+/**
+ * Always wrap in <figure> so markdown images are block-level.
+ * Instant View rejects <img> nested inside <p>.
+ */
 export function MdxImage({
   src,
   alt,
@@ -28,23 +32,17 @@ export function MdxImage({
   if (!src) return null;
   const resolved = resolveMdxSrc(src, baseUrl);
 
-  const image = (
-    <Image
-      src={resolved}
-      alt={alt ?? ""}
-      width={1200}
-      height={800}
-      unoptimized
-      className={cn("h-auto w-full rounded-lg border", className)}
-    />
-  );
-
-  if (!title) return image;
-
   return (
     <figure className="my-6">
-      {image}
-      <figcaption>{title}</figcaption>
+      <Image
+        src={resolved}
+        alt={alt ?? ""}
+        width={1200}
+        height={800}
+        unoptimized
+        className={cn("h-auto w-full rounded-lg border", className)}
+      />
+      {title ? <figcaption>{title}</figcaption> : null}
     </figure>
   );
 }

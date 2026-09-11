@@ -8,7 +8,7 @@ import { TableOfContents } from "@/components/content/table-of-contents";
 import MdxContent from "@/components/mdx-content";
 import { WorkshopSidebar } from "@/components/workshops/workshop-sidebar";
 import { getAllWorkshops, getWorkshop, getWorkshopDoc } from "@/lib/content";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, ogImage } from "@/lib/seo";
 import { extractHeadings } from "@/lib/mdx/headings";
 
 export const dynamicParams = false;
@@ -57,7 +57,10 @@ export default async function WorkshopDocPage({
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
-      <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
+      <nav
+        data-iv="ignore"
+        className="mb-6 flex items-center gap-2 text-sm text-muted-foreground"
+      >
         <Link href="/workshops" className="hover:text-foreground">
           کارگاه‌ها
         </Link>
@@ -66,7 +69,7 @@ export default async function WorkshopDocPage({
       </nav>
 
       <div className="lg:flex lg:gap-12">
-        <aside className="mb-8 shrink-0 lg:mb-0 lg:w-60">
+        <aside data-iv="ignore" className="mb-8 shrink-0 lg:mb-0 lg:w-60">
           <div className="lg:sticky lg:top-20">
             <WorkshopSidebar
               title={workshop.title}
@@ -79,6 +82,19 @@ export default async function WorkshopDocPage({
         </aside>
 
         <article className="min-w-0 flex-1" data-iv="article">
+          <p data-iv="kicker" className="sr-only">
+            {workshop.title}
+          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element -- plain img for Telegram IV */}
+          <img
+            data-iv="cover"
+            src={ogImage.default()}
+            alt=""
+            width={1200}
+            height={630}
+            className="hidden"
+          />
+
           <header className="mb-8 border-b pb-6">
             <h1 className="text-balance text-3xl font-black leading-[1.6]">
               {doc.title}

@@ -64,7 +64,7 @@ export default async function BlogPostPage({
         })}
       />
 
-      <nav className="mb-6 text-sm text-muted-foreground">
+      <nav data-iv="ignore" className="mb-6 text-sm text-muted-foreground">
         <Link href="/blog" className="hover:text-foreground">
           وبلاگ
         </Link>
@@ -72,6 +72,19 @@ export default async function BlogPostPage({
 
       <div className="lg:flex lg:gap-12">
         <article className="min-w-0 flex-1" data-iv="article">
+          <p data-iv="kicker" className="sr-only">
+            وبلاگ
+          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element -- plain img for Telegram IV */}
+          <img
+            data-iv="cover"
+            src={ogImage.blog(post.slug)}
+            alt=""
+            width={1200}
+            height={630}
+            className="hidden"
+          />
+
           <header className="mb-8 border-b pb-8">
             <h1 className="text-balance text-3xl font-black leading-[1.6]">
               {post.title}

@@ -130,6 +130,20 @@ export default async function ArticlePage({
         </aside>
 
         <article className="min-w-0" data-iv="article">
+          {/* Instant View markers (visually hidden; IV template reads these). */}
+          <p data-iv="kicker" className="sr-only" dir="ltr">
+            {article.issueNumber}
+          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element -- plain img for Telegram IV */}
+          <img
+            data-iv="cover"
+            src={ogImage.article(article.issueNumber, article.slug)}
+            alt=""
+            width={1200}
+            height={630}
+            className="hidden"
+          />
+
           <header className="mb-8 border-b pb-8">
             <h1 className="text-balance text-3xl font-black leading-[1.6] md:text-[2.1rem]">
               {article.title}
@@ -247,18 +261,30 @@ export default async function ArticlePage({
       </div>
 
       {related.length > 0 ? (
-        <section className="mt-16 border-t pt-10" data-iv="ignore">
-          <h2 className="mb-6 text-xl font-bold">مطالب مرتبط</h2>
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((item, index) => (
-              <li key={item.url}>
-                <Reveal delay={index * 70}>
-                  <ArticleCard article={item} />
-                </Reveal>
-              </li>
+        <>
+          {/* Plain links for Instant View RelatedArticles; cards stay site-only. */}
+          <aside data-iv="related" className="sr-only" aria-hidden="true">
+            <h2>مطالب مرتبط</h2>
+            {related.map((item) => (
+              <a key={item.url} href={item.url}>
+                {item.title}
+              </a>
             ))}
-          </ul>
-        </section>
+          </aside>
+
+          <section className="mt-16 border-t pt-10" data-iv="ignore">
+            <h2 className="mb-6 text-xl font-bold">مطالب مرتبط</h2>
+            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((item, index) => (
+                <li key={item.url}>
+                  <Reveal delay={index * 70}>
+                    <ArticleCard article={item} />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
       ) : null}
     </main>
   );

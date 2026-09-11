@@ -56,20 +56,20 @@ jobs:
           user_email: github-actions[bot]@users.noreply.github.com
           commit_message: "deploy: byte-new-website@${{ github.sha }}"
 
-  production:
-    needs: build-and-publish
-    runs-on: ubuntu-latest
-    steps:
-      - name: Pull on server and restart nginx
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.PROD_SSH_HOST }}
-          username: ${{ secrets.PROD_SSH_USER }}
-          key: ${{ secrets.PROD_SSH_KEY }}
-          port: ${{ secrets.PROD_SSH_PORT || 22 }}
-          script_stop: true
-          script: |
-            set -euo pipefail
-            cd "${{ secrets.PROD_DEPLOY_PATH }}"
-            git pull --ff-only origin main
-            sudo systemctl restart nginx
+  # production:
+  #   needs: build-and-publish
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Pull on server and restart nginx
+  #       uses: appleboy/ssh-action@v1.2.2
+  #       with:
+  #         host: ${{ secrets.PROD_SSH_HOST }}
+  #         username: ${{ secrets.PROD_SSH_USER }}
+  #         key: ${{ secrets.PROD_SSH_KEY }}
+  #         port: ${{ secrets.PROD_SSH_PORT || 22 }}
+  #         script_stop: true
+  #         script: |
+  #           set -euo pipefail
+  #           cd "${{ secrets.PROD_DEPLOY_PATH }}"
+  #           git pull --ff-only origin main
+  #           sudo systemctl restart nginx

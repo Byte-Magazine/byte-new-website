@@ -9,6 +9,9 @@ import { THEME_STORAGE_KEY } from "@/lib/stores/theme-key";
  *
  * It reads the same key the zustand `persist` middleware writes, so the two
  * never disagree. persist stores `{ "state": { "theme": ... }, "version": n }`.
+ *
+ * Default is dark — light only when the visitor chooses it (or picks system
+ * on a light OS).
  */
 const script = `
 (function () {
@@ -19,12 +22,14 @@ const script = `
     var read = function () {
       try {
         var raw = localStorage.getItem("${THEME_STORAGE_KEY}");
-        if (!raw) return "system";
+        if (!raw) return "dark";
         var parsed = JSON.parse(raw);
         var theme = parsed && parsed.state && parsed.state.theme;
-        return theme === "light" || theme === "dark" ? theme : "system";
+        return theme === "light" || theme === "dark" || theme === "system"
+          ? theme
+          : "dark";
       } catch (e) {
-        return "system";
+        return "dark";
       }
     };
 
@@ -33,8 +38,8 @@ const script = `
       var dark = theme === "dark" || (theme === "system" && query.matches);
       // Both classes are explicit so a chosen theme overrides the
       // prefers-color-scheme defaults in the stylesheet.
-      root.classList.toggle("dark", theme === "dark");
-      root.classList.toggle("light", theme === "light");
+      root.classList.toggle("dark", dark);
+      root.classList.toggle("light", !dark);
       root.style.colorScheme = dark ? "dark" : "light";
     };
 

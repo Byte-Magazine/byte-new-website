@@ -131,21 +131,21 @@ export function issueAccentVars(
 export function accentStyleTag(accent: BrandAccent): string {
   return `
 :root {
-  --accent: ${accent.light};
-  --accent-foreground: ${accent.onLight};
-  --accent-soft: ${accent.softLight};
-  --primary: ${accent.light};
-  --primary-foreground: ${accent.onLight};
-  --ring: ${accent.light};
+  --accent: ${accent.dark};
+  --accent-foreground: ${accent.onDark};
+  --accent-soft: ${accent.softDark};
+  --primary: ${accent.dark};
+  --primary-foreground: ${accent.onDark};
+  --ring: ${accent.dark};
 }
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    --accent: ${accent.dark};
-    --accent-foreground: ${accent.onDark};
-    --accent-soft: ${accent.softDark};
-    --primary: ${accent.dark};
-    --primary-foreground: ${accent.onDark};
-    --ring: ${accent.dark};
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    --accent: ${accent.light};
+    --accent-foreground: ${accent.onLight};
+    --accent-soft: ${accent.softLight};
+    --primary: ${accent.light};
+    --primary-foreground: ${accent.onLight};
+    --ring: ${accent.light};
   }
 }
 .dark {
@@ -155,6 +155,14 @@ export function accentStyleTag(accent: BrandAccent): string {
   --primary: ${accent.dark};
   --primary-foreground: ${accent.onDark};
   --ring: ${accent.dark};
+}
+.light {
+  --accent: ${accent.light};
+  --accent-foreground: ${accent.onLight};
+  --accent-soft: ${accent.softLight};
+  --primary: ${accent.light};
+  --primary-foreground: ${accent.onLight};
+  --ring: ${accent.light};
 }
 `.trim();
 }

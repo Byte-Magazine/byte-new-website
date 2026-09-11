@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
+    { color: "#12151c" },
     { media: "(prefers-color-scheme: light)", color: "#fbfcfd" },
     { media: "(prefers-color-scheme: dark)", color: "#12151c" },
   ],
@@ -45,7 +46,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning className={fontVariables}>
+    <html
+      lang="fa"
+      dir="rtl"
+      suppressHydrationWarning
+      className={`${fontVariables} dark`}
+    >
       <head>
         <ThemeScript />
         {/* The accent is taken from the newest issue at build time, so the

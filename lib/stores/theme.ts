@@ -28,14 +28,15 @@ function resolve(theme: Theme): "light" | "dark" {
 /**
  * Writes the theme to the document: the class an explicit choice needs, plus
  * `color-scheme` so native controls and scrollbars follow.
+ *
+ * Classes always mirror the resolved palette so Tailwind `dark:` variants and
+ * CSS custom properties stay in sync (including when theme is "system").
  */
-function applyToDocument(theme: Theme, resolved: "light" | "dark") {
+function applyToDocument(_theme: Theme, resolved: "light" | "dark") {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
-  // Only an explicit choice sets a class; "system" leaves both off so the
-  // prefers-color-scheme rules in the stylesheet apply.
-  root.classList.toggle("dark", theme === "dark");
-  root.classList.toggle("light", theme === "light");
+  root.classList.toggle("dark", resolved === "dark");
+  root.classList.toggle("light", resolved === "light");
   root.style.colorScheme = resolved;
 }
 
@@ -44,11 +45,12 @@ function applyToDocument(theme: Theme, resolved: "light" | "dark") {
  *
  * The initial paint is handled by the blocking script in the head, which reads
  * the same storage key; this store takes over once the app hydrates.
+ * Default is dark — visitors opt into light themselves.
  */
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
-      theme: "system",
+      theme: "dark",
       resolvedTheme: "dark",
 
       setTheme: (theme) => {

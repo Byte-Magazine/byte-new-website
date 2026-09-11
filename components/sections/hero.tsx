@@ -25,7 +25,7 @@ export function Hero({ latest }: { latest?: Issue }) {
     <section className="relative overflow-hidden border-b">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.05] [mask-image:radial-gradient(120%_90%_at_70%_0%,black,transparent_70%)]"
+        className="pointer-events-none absolute inset-0 opacity-[0.05] mask-[radial-gradient(120%_90%_at_70%_0%,black,transparent_70%)]"
         style={{
           backgroundImage:
             "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
@@ -35,7 +35,7 @@ export function Hero({ latest }: { latest?: Issue }) {
       {latest ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-40 start-1/4 size-[34rem] rounded-full opacity-20 blur-[120px]"
+          className="pointer-events-none absolute -top-40 inset-s-1/4 size-136 rounded-full opacity-20 blur-[120px]"
           style={{ background: latest.themeColor }}
         />
       ) : null}
@@ -46,14 +46,13 @@ export function Hero({ latest }: { latest?: Issue }) {
             <p className="text-sm text-muted-foreground">{SITE.tagline}</p>
           </Reveal>
 
-          <h1 className="mt-5 max-w-2xl text-balance text-4xl font-black leading-[1.42] md:text-6xl md:leading-[1.32]">
+          <h1 className="max-w-3xl text-balance text-4xl font-black  md:text-6xl leading-25 h-fit">
             <SplitText text="نشریه‌ی علمی فرهنگی بایت" />
           </h1>
 
           <Reveal delay={280}>
             <p className="mt-6 max-w-xl text-lg leading-9 text-muted-foreground">
-              نوشته‌های دانشجویی دربارهٔ علوم و مهندسی کامپیوتر — از سیستم‌عامل
-              و شبکه تا هوش مصنوعی و تاریخ فناوری.
+              نوشته‌های دانشجویی دربارهٔ علوم و مهندسی کامپیوتر 
             </p>
           </Reveal>
 

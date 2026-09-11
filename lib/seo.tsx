@@ -9,12 +9,25 @@ export function absoluteUrl(path: string): string {
 
 /** Build-time Open Graph image paths, produced by scripts/generate-og.ts. */
 export const ogImage = {
-  default: () => "/og/default.png",
+  /** Same asset Docusaurus used (`themeConfig.image`) for link previews. */
+  default: () => "/img/social-card.png",
   article: (issue: string, slug: string) => `/og/article-${issue}-${slug}.png`,
   issue: (number: string) => `/og/issue-${number}.png`,
   blog: (slug: string) => `/og/blog-${slug}.png`,
   author: (id: string) => `/og/author-${id}.png`,
 };
+
+/** OG image descriptor with dimensions crawlers expect for large previews. */
+export function ogImageEntry(path: string, alt = SITE.name) {
+  const social = path.includes("social-card");
+  return {
+    url: path,
+    width: social ? 2400 : 1200,
+    height: social ? 1350 : 630,
+    alt,
+    type: "image/png" as const,
+  };
+}
 
 interface MetadataInput {
   title: string;
@@ -40,7 +53,7 @@ export function buildMetadata({
 }: MetadataInput): Metadata {
   const url = absoluteUrl(path);
   const resolvedDescription = description?.trim() || SITE.description;
-  const images = [{ url: image ?? ogImage.default() }];
+  const images = [ogImageEntry(image ?? ogImage.default(), title)];
 
   return {
     title,
@@ -62,7 +75,7 @@ export function buildMetadata({
       card: "summary_large_image",
       title,
       description: resolvedDescription,
-      images,
+      images: images.map((entry) => entry.url),
     },
   };
 }

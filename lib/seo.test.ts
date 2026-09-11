@@ -27,6 +27,13 @@ describe("buildMetadata", () => {
     const meta = buildMetadata({ title: "t", path: "/", image: "/og/x.png" });
     expect(JSON.stringify(meta.openGraph?.images)).toContain("/og/x.png");
   });
+
+  it("defaults to the legacy social-card for link previews", () => {
+    const meta = buildMetadata({ title: "t", path: "/" });
+    expect(JSON.stringify(meta.openGraph?.images)).toContain(
+      "/img/social-card.png",
+    );
+  });
 });
 
 describe("articleJsonLd", () => {

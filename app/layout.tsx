@@ -7,10 +7,13 @@ import { accentStyleTag, siteAccent } from "@/lib/brand";
 import { getLatestIssue } from "@/lib/content";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { fontVariables } from "@/lib/fonts";
+import { ogImage, ogImageEntry } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
 import "./globals.css";
 import "katex/dist/katex.min.css";
+
+const defaultOg = ogImageEntry(ogImage.default());
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -27,8 +30,14 @@ export const metadata: Metadata = {
     title: SITE.name,
     description: SITE.description,
     url: SITE.url,
+    images: [defaultOg],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.name,
+    description: SITE.description,
+    images: [defaultOg.url],
+  },
   icons: { icon: "/img/favicon.ico" },
 };
 

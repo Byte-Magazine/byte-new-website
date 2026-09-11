@@ -9,7 +9,7 @@ import MdxContent from "@/components/mdx-content";
 import { WorkshopSidebar } from "@/components/workshops/workshop-sidebar";
 import { getAllWorkshops, getWorkshop, getWorkshopDoc } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
-import { extractHeadings } from "@/lib/toc";
+import { extractHeadings } from "@/lib/mdx/headings";
 
 export const dynamicParams = false;
 

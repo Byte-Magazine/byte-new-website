@@ -10,7 +10,7 @@ import MdxContent from "@/components/mdx-content";
 import { getAllBlogPosts, getBlogPost } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
 import { articleJsonLd, buildMetadata, JsonLd, ogImage } from "@/lib/seo";
-import { extractHeadings } from "@/lib/toc";
+import { extractHeadings } from "@/lib/mdx/headings";
 
 export const dynamicParams = false;
 

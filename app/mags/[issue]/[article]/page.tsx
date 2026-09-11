@@ -25,7 +25,7 @@ import {
   JsonLd,
   ogImage,
 } from "@/lib/seo";
-import { extractHeadings } from "@/lib/toc";
+import { extractHeadings } from "@/lib/mdx/headings";
 
 export const dynamicParams = false;
 

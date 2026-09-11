@@ -137,13 +137,6 @@ export const STAFF_SECTIONS: StaffSection[] = [
         }
       },
       {
-        "authorId": "MohammadMosayebi",
-        "name": "محمد مصیبی",
-        "title": "کارشناسی ۱۳۹۹",
-        "image": "/img/staff/MohammadMosayyebi.jpg",
-        "socials": {}
-      },
-      {
         "name": "امیررضا اینانلو",
         "title": "کارشناسی ۱۴۰۱",
         "image": "/img/staff/AmirrezaInanloo.jpg",

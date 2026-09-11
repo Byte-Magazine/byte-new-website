@@ -63,8 +63,9 @@ export default async function IssuePage({
         </Link>
       </nav>
 
-      <div className="grid gap-10 md:grid-cols-[minmax(0,18rem)_1fr]">
-        <div>
+      <div className="grid items-start gap-10 md:grid-cols-[minmax(0,18rem)_1fr]">
+        {/* Sticks while the long article list scrolls past it. */}
+        <div className="md:sticky md:top-20">
           <div className="relative aspect-[3/4] overflow-hidden rounded-xl border shadow-[0_16px_48px_-20px_var(--issue-accent)]">
             <Image
               src={issue.cover}

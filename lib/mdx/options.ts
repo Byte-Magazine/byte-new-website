@@ -10,6 +10,9 @@ import { remarkAdmonition } from "./remark-admonition";
 /**
  * Shared MDX plugin chain. Used by every content route so articles, blog
  * posts, and workshop docs render identically.
+ *
+ * `lib/mdx/headings.ts` runs the same `rehype-slug` over the same markdown to
+ * build the table of contents, so its anchors always match the rendered ids.
  */
 export const mdxOptions = {
   remarkPlugins: [remarkGfm, remarkMath, remarkAdmonition],
@@ -32,4 +35,5 @@ export const mdxOptions = {
     ],
     rehypeKatex,
   ],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;

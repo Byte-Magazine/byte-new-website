@@ -1,0 +1,88 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+import ScrollVelocity from "./scroll-velocity";
+import { cn } from "@/lib/utils";
+
+/**
+ * Section separator: an oversized wordmark ribbon whose speed is driven by
+ * scroll velocity — flick the page and it races, rest and it drifts.
+ *
+ * The type is outlined rather than filled. At this size a solid band would
+ * out-shout the section headings around it; hollow letterforms read as texture
+ * and leave the hierarchy intact.
+ *
+ * Latin, because it is a wordmark ribbon rather than body copy: Persian
+ * joined forms do not survive being tracked out this far.
+ */
+export function VelocityDivider({
+  className,
+  velocity = 30,
+  text = "A Bite Into Tech",
+}: {
+  className?: string;
+  /** Base drift in px/s before scroll velocity is folded in. */
+  velocity?: number;
+  text?: string;
+}) {
+  const hostRef = useRef<HTMLDivElement>(null);
+  const [animated, setAnimated] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setAnimated(!still.matches);
+    sync();
+    still.addEventListener("change", sync);
+    return () => still.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    const node = hostRef.current;
+    if (!node) return;
+
+    // The component measures scroll velocity for as long as it is mounted, so
+    // without this each divider would keep working while parked far offscreen.
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  const rowClass = cn(
+    "text-5xl font-black uppercase leading-[1.15] tracking-tight sm:text-6xl md:text-7xl",
+    // A 2px stroke: at this size a 1px outline disappears against the page.
+    "text-transparent [-webkit-text-stroke:2px_color-mix(in_oklch,var(--accent)_75%,transparent)]",
+  );
+
+  return (
+    <div
+      ref={hostRef}
+      aria-hidden
+      dir="ltr"
+      className={cn(
+        "relative overflow-hidden border-y bg-muted/20 py-10 md:py-14",
+        // Dissolve both ends so the ribbon never collides with the edge.
+        "[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]",
+        className,
+      )}
+    >
+      {animated && visible ? (
+        // Two rows travelling opposite ways: one row reads as a marquee, two
+        // crossing rows read as motion with a direction of its own.
+        <ScrollVelocity
+          texts={[text, text]}
+          velocity={velocity}
+          numCopies={6}
+          className={rowClass}
+          parallaxClassName="py-1"
+        />
+      ) : (
+        <div className={cn(rowClass, "truncate text-center")}>{text}</div>
+      )}
+    </div>
+  );
+}

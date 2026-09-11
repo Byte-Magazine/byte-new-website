@@ -46,6 +46,36 @@ function parseRgb(value: string): [number, number, number] | null {
   return [parts[0], parts[1], parts[2]];
 }
 
+/** OKLCH back to sRGB, for APIs that only accept hex. */
+function oklchToHex(l: number, c: number, hDeg: number): string {
+  const h = (hDeg * Math.PI) / 180;
+  const a = c * Math.cos(h);
+  const bb = c * Math.sin(h);
+
+  const l_ = l + 0.3963377774 * a + 0.2158037573 * bb;
+  const m_ = l - 0.1055613458 * a - 0.0638541728 * bb;
+  const s_ = l - 0.0894841775 * a - 1.291485548 * bb;
+
+  const lr = l_ * l_ * l_;
+  const mr = m_ * m_ * m_;
+  const sr = s_ * s_ * s_;
+
+  const toSrgb = (v: number) => {
+    const clamped = Math.max(0, Math.min(1, v));
+    const gamma =
+      clamped <= 0.0031308
+        ? clamped * 12.92
+        : 1.055 * clamped ** (1 / 2.4) - 0.055;
+    return Math.round(Math.max(0, Math.min(1, gamma)) * 255);
+  };
+
+  const r = toSrgb(4.0767416621 * lr - 3.3077115913 * mr + 0.2309699292 * sr);
+  const g = toSrgb(-1.2684380046 * lr + 2.6097574011 * mr - 0.3413193965 * sr);
+  const b = toSrgb(-0.0041960863 * lr - 0.7034186147 * mr + 1.707614701 * sr);
+
+  return `#${[r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("")}`;
+}
+
 export interface BrandAccent {
   /** Accent for the light theme: dark enough to read on a white ground. */
   light: string;
@@ -103,6 +133,36 @@ export function accentFromColor(color: string): BrandAccent {
 export function siteAccent(): BrandAccent {
   const latest = getLatestIssue();
   return latest ? accentFromColor(latest.themeColor) : FALLBACK;
+}
+
+export interface GrainientPalette {
+  /** The site accent, as hex. */
+  accent: string;
+  /** A near-neutral of the same hue, so the blend never looks muddy. */
+  neutralDark: string;
+  neutralLight: string;
+}
+
+/**
+ * Hex palette for the hero backdrop: the newest issue's accent paired with a
+ * neutral drawn from the same hue, so the gradient reads as one colour family
+ * rather than two unrelated ones.
+ */
+export function grainientPalette(color?: string): GrainientPalette {
+  const source = color ?? getLatestIssue()?.themeColor;
+  const rgb = source ? parseRgb(source) : null;
+
+  const hue = rgb ? rgbToOklch(rgb[0], rgb[1], rgb[2]).h : 264;
+  const chroma = rgb
+    ? Math.min(0.17, Math.max(0.09, rgbToOklch(rgb[0], rgb[1], rgb[2]).c))
+    : 0.11;
+
+  return {
+    accent: oklchToHex(0.62, chroma, hue),
+    // Barely-there chroma keeps the neutral from fighting the accent.
+    neutralDark: oklchToHex(0.22, 0.02, hue),
+    neutralLight: oklchToHex(0.9, 0.015, hue),
+  };
 }
 
 /**

@@ -511,6 +511,7 @@ class App {
 
   isDown: boolean = false;
   start: number = 0;
+  lastFrame: number = 0;
 
   /** Set when a pointer moves far enough that the gesture counts as a drag. */
   dragged: boolean = false;
@@ -672,7 +673,6 @@ class App {
 
   onTouchUp() {
     this.isDown = false;
-    this.onCheck();
   }
 
   /**
@@ -709,9 +709,36 @@ class App {
 
   onWheel(e: Event) {
     const wheelEvent = e as WheelEvent;
-    const delta = wheelEvent.deltaY || (wheelEvent as any).wheelDelta || (wheelEvent as any).detail;
-    this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
-    this.onCheckDebounce();
+
+    // Only respond when the cursor is over the gallery. The listener is
+    // global, so otherwise scrolling the page anywhere spun the carousel.
+    // The event's own coordinates are used rather than its target, which is
+    // the scrolling element and not the canvas.
+    const rect = this.container.getBoundingClientRect();
+    const { clientX, clientY } = wheelEvent;
+    if (
+      clientX < rect.left ||
+      clientX > rect.right ||
+      clientY < rect.top ||
+      clientY > rect.bottom
+    ) {
+      return;
+    }
+
+    // deltaMode: 0 pixels, 1 lines, 2 pages. Normalising them keeps a
+    // trackpad swipe and a mouse wheel click proportional to each other,
+    // where reading only the sign made every gesture the same size.
+    const unit =
+      wheelEvent.deltaMode === 1
+        ? 16
+        : wheelEvent.deltaMode === 2
+          ? rect.height
+          : 1;
+    const delta = (wheelEvent.deltaY || 0) * unit;
+
+    // Clamped so a fast flick cannot overshoot the whole strip in one frame.
+    const step = Math.max(-60, Math.min(60, delta)) * this.scrollSpeed * 0.012;
+    this.scroll.target += step;
   }
 
   onKeyDown(e: KeyboardEvent) {
@@ -756,8 +783,22 @@ class App {
     }
   }
 
-  update() {
-    this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
+  update(now?: number) {
+    // Frame-rate independent easing. A plain per-frame lerp settles twice as
+    // fast on a 120Hz display as on 60Hz, which is what made the motion feel
+    // inconsistent; converting the factor to a time constant fixes that.
+    const time = now ?? performance.now();
+    const dt = Math.min(64, time - (this.lastFrame || time));
+    this.lastFrame = time;
+
+    const t = 1 - Math.pow(1 - this.scroll.ease, dt / 16.667);
+    this.scroll.current = lerp(this.scroll.current, this.scroll.target, t);
+
+    // Settle exactly, so the render loop is not left nudging by fractions.
+    if (Math.abs(this.scroll.target - this.scroll.current) < 0.001) {
+      this.scroll.current = this.scroll.target;
+    }
+
     const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
     if (this.medias) {
       this.medias.forEach(media => media.update(this.scroll, direction));

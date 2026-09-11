@@ -18,7 +18,7 @@ export const ogImage = {
 };
 
 /** OG image descriptor with dimensions crawlers expect for large previews. */
-export function ogImageEntry(path: string, alt = SITE.name) {
+export function ogImageEntry(path: string, alt: string = SITE.name) {
   const social = path.includes("social-card");
   return {
     url: path,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -36,6 +37,7 @@ export interface WallIssue {
  * reachable as a real link either way.
  */
 export function IssueWall({ issues }: { issues: WallIssue[] }) {
+  const router = useRouter();
   const resolvedTheme = useThemeStore((state) => state.resolvedTheme);
   const [enabled, setEnabled] = useState(false);
 
@@ -82,35 +84,35 @@ export function IssueWall({ issues }: { issues: WallIssue[] }) {
 
       {enabled ? (
         <>
-          <div className="-mt-14 h-92 w-full md:-mt-16 md:h-108">
+          <div className="-mt-14 h-92 w-full cursor-pointer md:-mt-16 md:h-108">
             <CircularGallery
               items={items}
               bend={2.4}
               textColor={resolvedTheme === "dark" ? "#e7eaf2" : "#1b1f2a"}
               borderRadius={0.05}
               scrollEase={0.05}
+              onItemClick={(index) => {
+                const issue = issues[index];
+                if (issue) router.push(issue.url);
+              }}
             />
           </div>
 
-          {/* The canvas is not focusable, so the issues are also listed as
-              plain links; this is the keyboard and screen-reader path. */}
-          <nav
-            aria-label="شماره‌ها"
-            className="mx-auto max-w-6xl px-4 pb-14 pt-2"
-          >
-            <ul className="flex flex-wrap justify-center gap-2">
+          {/*
+            The canvas cannot receive focus, so the same issues are listed
+            here for keyboard and screen-reader users. Visually hidden, since
+            clicking a cover now navigates directly.
+          */}
+          <nav aria-label="شماره‌ها" className="sr-only">
+            <ul>
               {issues.map((issue) => (
                 <li key={issue.number}>
-                  <Link
-                    href={issue.url}
-                    className="block rounded-md border px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-accent hover:text-foreground"
-                  >
-                    <span dir="ltr">{issue.number}</span>
-                  </Link>
+                  <Link href={issue.url}>شمارهٔ {issue.number}</Link>
                 </li>
               ))}
             </ul>
           </nav>
+
         </>
       ) : (
         <div className="mx-auto max-w-6xl px-4 pb-16">

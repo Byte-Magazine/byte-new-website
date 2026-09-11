@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 export function VelocityDivider({
   className,
   velocity = 30,
-  text = "A Bite Into Tech",
+  text = "A Bite Into Tech ·",
 }: {
   className?: string;
   /** Base drift in px/s before scroll velocity is folded in. */
@@ -53,7 +53,9 @@ export function VelocityDivider({
   }, []);
 
   const rowClass = cn(
-    "text-2xl font-black uppercase leading-[1.3] tracking-tight sm:text-3xl md:text-4xl",
+    // pe-* is the gap between repetitions: the component only appends a
+    // single space, which runs the copies together at this size.
+    "pe-8 text-2xl font-black uppercase leading-[1.3] tracking-tight sm:pe-10 sm:text-3xl md:pe-12 md:text-4xl",
     "text-transparent [-webkit-text-stroke:1.5px_color-mix(in_oklch,var(--accent)_70%,transparent)]",
   );
 

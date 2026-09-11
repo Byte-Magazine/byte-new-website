@@ -476,6 +476,7 @@ interface AppConfig {
   font?: string;
   scrollSpeed?: number;
   scrollEase?: number;
+  onItemClick?: (index: number) => void;
 }
 
 class App {
@@ -505,10 +506,16 @@ class App {
   boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
   boundOnTouchMove!: (e: MouseEvent | TouchEvent) => void;
   boundOnTouchUp!: () => void;
+  boundOnClick!: (e: MouseEvent) => void;
   boundOnKeyDown!: (e: KeyboardEvent) => void;
 
   isDown: boolean = false;
   start: number = 0;
+
+  /** Set when a pointer moves far enough that the gesture counts as a drag. */
+  dragged: boolean = false;
+  /** Called with an item index when a cover is clicked rather than dragged. */
+  onItemClick?: (index: number) => void;
 
   constructor(
     container: HTMLElement,
@@ -519,13 +526,15 @@ class App {
       borderRadius = 0,
       font = 'bold 30px Figtree',
       scrollSpeed = 2,
-      scrollEase = 0.05
+      scrollEase = 0.05,
+      onItemClick
     }: AppConfig
   ) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
     this.scrollSpeed = scrollSpeed;
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
+    this.onItemClick = onItemClick;
     this.onCheckDebounce = debounce(this.onCheck.bind(this), 200);
     this.createRenderer();
     this.createCamera();
@@ -646,6 +655,7 @@ class App {
 
   onTouchDown(e: MouseEvent | TouchEvent) {
     this.isDown = true;
+    this.dragged = false;
     this.scroll.position = this.scroll.current;
     this.start = 'touches' in e ? e.touches[0].clientX : e.clientX;
   }
@@ -653,6 +663,9 @@ class App {
   onTouchMove(e: MouseEvent | TouchEvent) {
     if (!this.isDown) return;
     const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    // A few pixels of slop: a click almost always moves the pointer slightly,
+    // and treating that as a drag would swallow every activation.
+    if (Math.abs(this.start - x) > 6) this.dragged = true;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
     this.scroll.target = (this.scroll.position ?? 0) + distance;
   }
@@ -660,6 +673,38 @@ class App {
   onTouchUp() {
     this.isDown = false;
     this.onCheck();
+  }
+
+  /**
+   * Resolves a click to the cover under the pointer.
+   *
+   * The gallery draws into a canvas, so there is nothing to attach a link to.
+   * Each plane's position is known in viewport units, so the click is mapped
+   * back to an index by finding the plane whose horizontal span contains it.
+   */
+  onClick(e: MouseEvent) {
+    if (this.dragged || !this.onItemClick || !this.medias.length) return;
+
+    const rect = this.container.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    // Canvas x runs left-to-right regardless of document direction.
+    const x = (ratio - 0.5) * this.viewport.width;
+
+    let closest = 0;
+    let best = Infinity;
+    this.medias.forEach((media, index) => {
+      const distance = Math.abs(media.plane.position.x - x);
+      if (distance < best) {
+        best = distance;
+        closest = index;
+      }
+    });
+
+    // Ignore a click that lands in the gap between covers.
+    if (best > this.medias[closest].plane.scale.x * 0.6) return;
+
+    // The list is duplicated to loop seamlessly, so map back to the original.
+    this.onItemClick(closest % (this.mediasImages.length / 2));
   }
 
   onWheel(e: Event) {
@@ -728,6 +773,7 @@ class App {
     this.boundOnTouchDown = this.onTouchDown.bind(this);
     this.boundOnTouchMove = this.onTouchMove.bind(this);
     this.boundOnTouchUp = this.onTouchUp.bind(this);
+    this.boundOnClick = this.onClick.bind(this);
     this.boundOnKeyDown = this.onKeyDown.bind(this);
 
     window.addEventListener('resize', this.boundOnResize);
@@ -736,6 +782,7 @@ class App {
     window.addEventListener('mousedown', this.boundOnTouchDown);
     window.addEventListener('mousemove', this.boundOnTouchMove);
     window.addEventListener('mouseup', this.boundOnTouchUp);
+    this.container.addEventListener('click', this.boundOnClick);
     window.addEventListener('touchstart', this.boundOnTouchDown);
     window.addEventListener('touchmove', this.boundOnTouchMove);
     window.addEventListener('touchend', this.boundOnTouchUp);
@@ -755,6 +802,7 @@ class App {
     window.removeEventListener('mousedown', this.boundOnTouchDown);
     window.removeEventListener('mousemove', this.boundOnTouchMove);
     window.removeEventListener('mouseup', this.boundOnTouchUp);
+    this.container?.removeEventListener('click', this.boundOnClick);
     window.removeEventListener('touchstart', this.boundOnTouchDown);
     window.removeEventListener('touchmove', this.boundOnTouchMove);
     window.removeEventListener('touchend', this.boundOnTouchUp);
@@ -773,6 +821,8 @@ class App {
 
 interface CircularGalleryProps {
   items?: { image: string; text: string }[];
+  /** Called with the item's index when a cover is clicked rather than dragged. */
+  onItemClick?: (index: number) => void;
   bend?: number;
   textColor?: string;
   borderRadius?: number;
@@ -790,9 +840,18 @@ export default function CircularGallery({
   font = 'bold 30px Figtree',
   fontUrl,
   scrollSpeed = 2,
-  scrollEase = 0.05
+  scrollEase = 0.05,
+  onItemClick
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Held in a ref so a changing handler never tears down and rebuilds the
+  // WebGL scene, which would reset the carousel's position.
+  const clickRef = useRef(onItemClick);
+  useEffect(() => {
+    clickRef.current = onItemClick;
+  }, [onItemClick]);
+
   useEffect(() => {
     if (!containerRef.current) return;
     let app: App | undefined;
@@ -806,7 +865,8 @@ export default function CircularGallery({
         borderRadius,
         font: resolvedFont,
         scrollSpeed,
-        scrollEase
+        scrollEase,
+        onItemClick: (index) => clickRef.current?.(index)
       });
     });
     return () => {

@@ -12,6 +12,12 @@ import type {
 } from "./schema";
 
 export { getGraph, tagSlug };
+export {
+  authorHasEntryYear,
+  authorHasPhoto,
+  normalizeAuthorImage,
+  normalizeAuthorTitle,
+} from "./author-profile";
 export * from "./schema";
 
 export function getAllArticles(): Article[] {

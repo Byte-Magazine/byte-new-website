@@ -157,11 +157,38 @@ describe("content graph", () => {
     expect(stats.codenameh).toBe(13);
   });
 
-  it("sorts authors by article count descending", () => {
+  it("sorts authors by article count, then photo, then entry year", () => {
     const authors = getAllAuthors();
     for (let i = 1; i < authors.length; i++) {
-      expect(authors[i - 1].articleCount >= authors[i].articleCount).toBe(true);
+      const prev = authors[i - 1];
+      const curr = authors[i];
+      if (prev.articleCount !== curr.articleCount) {
+        expect(prev.articleCount).toBeGreaterThan(curr.articleCount);
+        continue;
+      }
+      const prevPhoto = Boolean(prev.image);
+      const currPhoto = Boolean(curr.image);
+      if (prevPhoto !== currPhoto) {
+        expect(prevPhoto).toBe(true);
+        continue;
+      }
+      const prevYear = Boolean(
+        prev.title && /[۰-۹]{4}|[12]\d{3}/.test(prev.title),
+      );
+      const currYear = Boolean(
+        curr.title && /[۰-۹]{4}|[12]\d{3}/.test(curr.title),
+      );
+      if (prevYear !== currYear) {
+        expect(prevYear).toBe(true);
+      }
     }
+  });
+
+  it("strips the placeholder author avatar", () => {
+    const bare = getAllAuthors().find((a) => a.id === "FatemeHarirforoush");
+    expect(bare).toBeTruthy();
+    expect(bare!.image).toBeUndefined();
+    expect(bare!.title).toBeUndefined();
   });
 
   it("marks authors who appear in the staff list", () => {

@@ -1,6 +1,12 @@
 import { readingTimeMinutes, transliterate } from "../persian";
 import { pdfUrl } from "../site";
 import {
+  normalizeAuthorImage,
+  normalizeAuthorTitle,
+  authorHasPhoto,
+  authorHasEntryYear,
+} from "./author-profile";
+import {
   readArticles,
   readAuthorRecords,
   readBlogPosts,
@@ -51,6 +57,8 @@ function buildGraph(): ContentGraph {
     const staffSectionNames = staffByAuthorId.get(record.id) ?? [];
     authorsById.set(record.id, {
       ...record,
+      image: normalizeAuthorImage(record.image),
+      title: normalizeAuthorTitle(record.title),
       url: `/authors/${record.id}`,
       articles: [],
       blogPosts: [],
@@ -191,19 +199,23 @@ function buildGraph(): ContentGraph {
   }
 
   /**
-   * Ordering: people with a complete profile first, then by how much they have
-   * written. An author with neither a photo nor a class year renders as a bare
-   * initial, so grouping those at the end keeps the grids visually even.
+   * Ordering for author grids:
+   * 1. article count (desc)
+   * 2. real photo (placeholder SVG counts as none)
+   * 3. entry / graduation year in title
+   * 4. name
    */
-  const profileRank = (author: Author) =>
-    (author.image ? 0 : 1) + (author.title ? 0 : 1);
-
-  const authors = [...authorsById.values()].sort(
-    (a, b) =>
-      profileRank(a) - profileRank(b) ||
-      b.articleCount - a.articleCount ||
-      a.name.localeCompare(b.name, "fa"),
-  );
+  const authors = [...authorsById.values()].sort((a, b) => {
+    if (b.articleCount !== a.articleCount) {
+      return b.articleCount - a.articleCount;
+    }
+    const photo = Number(authorHasPhoto(b.image)) - Number(authorHasPhoto(a.image));
+    if (photo !== 0) return photo;
+    const year =
+      Number(authorHasEntryYear(b.title)) - Number(authorHasEntryYear(a.title));
+    if (year !== 0) return year;
+    return a.name.localeCompare(b.name, "fa");
+  });
 
   // ---- Tags ---------------------------------------------------------------
   const tagsBySlug = new Map<string, Tag>();

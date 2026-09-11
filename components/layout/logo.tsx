@@ -24,9 +24,12 @@ export function LogoMark({ className }: { className?: string }) {
 export function Logo({
   className,
   showBinary = true,
+  binary,
 }: {
   className?: string;
   showBinary?: boolean;
+  /** Defaults to the newest issue number, so the mark tracks the archive. */
+  binary?: string;
 }) {
   return (
     <Link
@@ -42,7 +45,7 @@ export function Logo({
             dir="ltr"
             className="hidden font-mono text-[0.68rem] text-muted-foreground transition-colors group-hover:text-accent sm:inline"
           >
-            01000010
+            {binary ?? "01000010"}
           </span>
         ) : null}
       </span>

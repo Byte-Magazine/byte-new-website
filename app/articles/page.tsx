@@ -59,13 +59,12 @@ export default function ArticlesPage() {
   }));
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12">
+    <main className="mx-auto max-w-7xl px-4 py-12">
       <header className="mb-10 max-w-2xl">
         <h1 className="text-3xl font-black md:text-4xl">مقاله‌ها</h1>
         <p className="mt-4 text-lg leading-9 text-muted-foreground">
           {toPersianDigits(articles.length)} مطلب از{" "}
-          {toPersianDigits(authors.length)} نویسنده. جست‌وجو کنید یا با برچسب،
-          نویسنده و شماره فیلتر بزنید.
+          {toPersianDigits(authors.length)} نویسنده.
         </p>
       </header>
 

@@ -18,7 +18,7 @@ export function Stats({ stats }: { stats: SiteStats }) {
           <Reveal key={item.key} delay={index * 90} className="text-center">
             <PersianCount
               to={stats[item.key]}
-              className="block font-mono text-4xl font-black tabular-nums md:text-5xl"
+              className="block text-4xl font-black md:text-5xl"
             />
             <p className="mt-2 text-sm text-muted-foreground">{item.label}</p>
           </Reveal>

@@ -59,14 +59,14 @@ function NavLink({
   );
 }
 
-export function Header() {
+export function Header({ binary }: { binary?: string }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4">
-        <Logo />
+        <Logo binary={binary} />
 
         <nav
           className="hidden items-center gap-0.5 lg:flex"

@@ -31,10 +31,10 @@ export function Footer() {
             <p className="mt-3 text-sm leading-8 text-muted-foreground">
               {SITE.name} — {SITE.tagline}
             </p>
-            <p className="mt-4 font-mono text-xs text-muted-foreground">
-              <span dir="ltr">{toPersianDigits(stats.articles)}</span> مقاله ·{" "}
-              <span dir="ltr">{toPersianDigits(stats.issues)}</span> شماره ·{" "}
-              <span dir="ltr">{toPersianDigits(stats.authors)}</span> نویسنده
+            <p className="mt-4 text-xs text-muted-foreground">
+              {toPersianDigits(stats.articles)} مقاله ·{" "}
+              {toPersianDigits(stats.issues)} شماره ·{" "}
+              {toPersianDigits(stats.authors)} نویسنده
             </p>
           </div>
 

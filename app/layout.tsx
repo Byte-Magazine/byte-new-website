@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from "next";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { ThemeScript } from "@/components/layout/theme-script";
+import { accentStyleTag, siteAccent } from "@/lib/brand";
+import { getLatestIssue } from "@/lib/content";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { fontVariables } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
@@ -46,6 +48,9 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" suppressHydrationWarning className={fontVariables}>
       <head>
         <ThemeScript />
+        {/* The accent is taken from the newest issue at build time, so the
+            whole site carries the colour of the current cover. */}
+        <style dangerouslySetInnerHTML={{ __html: accentStyleTag(siteAccent()) }} />
       </head>
       <body className="min-h-dvh antialiased">
         <TooltipProvider>
@@ -55,7 +60,7 @@ export default function RootLayout({
           >
             رفتن به محتوا
           </a>
-          <Header />
+          <Header binary={getLatestIssue()?.number} />
           <div id="main">{children}</div>
           <Footer />
         </TooltipProvider>

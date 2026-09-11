@@ -18,6 +18,7 @@ export function TagList({
         <li key={tag}>
           <Link
             href={`/tags/${tagSlug(tag)}`}
+            prefetch={false}
             className="inline-block rounded-full border px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-issue hover:text-foreground"
           >
             {tag}

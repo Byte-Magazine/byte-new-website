@@ -31,7 +31,10 @@ export function ArticleCard({
         issueNumber: article.issueNumber,
         themeColor: article.issue.themeColor,
         tags: article.tags,
-        authorNames: article.authors.map((a) => a.name),
+        authors: article.authors.map((a) => ({
+          name: a.name,
+          image: a.image,
+        })),
       }}
     />
   );

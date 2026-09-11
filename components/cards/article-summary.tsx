@@ -1,7 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { toPersianDigits } from "@/lib/persian";
 import { cn } from "@/lib/utils";
+
+/** Minimal author payload for the card; no nested links (the card is already one). */
+export interface ArticleSummaryAuthor {
+  name: string;
+  image?: string;
+}
 
 /**
  * The plain data an article card needs, with dates already formatted.
@@ -19,13 +26,14 @@ export interface ArticleSummaryData {
   issueNumber: string;
   themeColor: string;
   tags: string[];
-  authorNames: string[];
+  authors: ArticleSummaryAuthor[];
 }
 
 /**
- * Article summary. Deliberately has no image: only half the articles carry
- * one, and those are inline figures rather than posters, so a thumbnail row
- * would be ragged and would misrepresent the content.
+ * Article summary. Deliberately has no cover image: only half the articles
+ * carry one, and those are inline figures rather than posters, so a thumbnail
+ * row would be ragged and would misrepresent the content. Author avatars are
+ * fine — every author record already has a headshot.
  */
 export function ArticleSummary({
   article,
@@ -88,10 +96,27 @@ export function ArticleSummary({
             </ul>
           ) : null}
 
-          {article.authorNames.length > 0 ? (
-            <p className="text-xs text-muted-foreground">
-              {article.authorNames.join("، ")}
-            </p>
+          {article.authors.length > 0 ? (
+            <ul className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              {article.authors.map((author) => (
+                <li
+                  key={author.name}
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground"
+                >
+                  {author.image ? (
+                    <Image
+                      src={author.image}
+                      alt=""
+                      width={20}
+                      height={20}
+                      unoptimized
+                      className="size-5 shrink-0 rounded-full border object-cover"
+                    />
+                  ) : null}
+                  <span>{author.name}</span>
+                </li>
+              ))}
+            </ul>
           ) : null}
         </div>
       </Link>

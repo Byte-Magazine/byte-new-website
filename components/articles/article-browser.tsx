@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
  */
 export interface BrowserArticle extends ArticleSummaryData {
   date: string;
-  authors: Array<{ id: string; name: string }>;
+  authors: Array<{ id: string; name: string; image?: string }>;
 }
 
 interface Facet {
@@ -138,7 +138,7 @@ export function ArticleBrowser({
         title: article.title,
         description: article.description,
         tags: article.tags,
-        authors: article.authorNames,
+        authors: article.authors.map((a) => a.name),
         kind: "article" as const,
         issue: article.issueNumber,
       })),

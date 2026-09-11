@@ -32,8 +32,11 @@ export default function ArticlesPage() {
     issueNumber: article.issueNumber,
     themeColor: article.issue.themeColor,
     tags: article.tags,
-    authors: article.authors.map((a) => ({ id: a.id, name: a.name })),
-    authorNames: article.authors.map((a) => a.name),
+    authors: article.authors.map((a) => ({
+      id: a.id,
+      name: a.name,
+      image: a.image,
+    })),
   }));
 
   const tags = getAllTags()

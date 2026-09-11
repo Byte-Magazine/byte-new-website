@@ -115,7 +115,7 @@ export default async function BlogPostPage({
 
         {headings.length >= 2 ? (
           <aside className="hidden w-56 shrink-0 lg:block">
-            <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto">
+            <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto scroll-subtle">
               <TableOfContents headings={headings} />
             </div>
           </aside>

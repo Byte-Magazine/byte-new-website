@@ -5,22 +5,20 @@ import { X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  ArticleSummary,
+  type ArticleSummaryData,
+} from "@/components/cards/article-summary";
 import { searchDocs, type SearchDoc } from "@/lib/search";
 import { toPersianDigits } from "@/lib/persian";
 import { cn } from "@/lib/utils";
 
-/** Serialisable article shape; bodies are never sent to the client. */
-export interface BrowserArticle {
-  url: string;
-  title: string;
-  description: string;
+/**
+ * Serialisable article shape; bodies are never sent to the client.
+ * Extends the card's data with the fields only filtering needs.
+ */
+export interface BrowserArticle extends ArticleSummaryData {
   date: string;
-  jalaliDate: string;
-  readingTime: number;
-  cover?: string;
-  issueNumber: string;
-  themeColor: string;
-  tags: string[];
   authors: Array<{ id: string; name: string }>;
 }
 
@@ -204,77 +202,14 @@ export function ArticleBrowser({
           مطلبی با این فیلترها پیدا نشد. فیلترها را تغییر دهید.
         </p>
       ) : (
-        <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {results.map((article) => (
             <li key={article.url}>
-              <ArticleResult article={article} />
+              <ArticleSummary article={article} />
             </li>
           ))}
         </ul>
       )}
     </div>
-  );
-}
-
-function ArticleResult({ article }: { article: BrowserArticle }) {
-  return (
-    <article
-      className="group flex h-full flex-col"
-      style={{ ["--issue-accent" as string]: article.themeColor }}
-    >
-      <a href={article.url} className="flex h-full flex-col">
-        <div className="relative mb-3 aspect-[16/10] overflow-hidden rounded-lg border bg-muted">
-          {article.cover ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={article.cover}
-              alt=""
-              loading="lazy"
-              className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-          ) : (
-            <span
-              className="absolute inset-0 flex items-center justify-center font-mono text-2xl text-muted-foreground/40"
-              dir="ltr"
-            >
-              {article.issueNumber}
-            </span>
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-          <span
-            dir="ltr"
-            className="rounded border px-1.5 py-0.5 font-mono"
-            style={{ borderColor: article.themeColor }}
-          >
-            {article.issueNumber}
-          </span>
-          <span className="isolate">{article.jalaliDate}</span>
-          <span aria-hidden className="opacity-50">
-            ·
-          </span>
-          <span className="isolate">
-            {toPersianDigits(article.readingTime)} دقیقه
-          </span>
-        </div>
-
-        <h3 className="mt-1.5 text-balance text-[1.05rem] font-bold leading-8 decoration-issue underline-offset-4 group-hover:underline">
-          {article.title}
-        </h3>
-
-        {article.description ? (
-          <p className="mt-1.5 line-clamp-2 text-sm leading-7 text-muted-foreground">
-            {article.description}
-          </p>
-        ) : null}
-
-        {article.authors.length > 0 ? (
-          <p className="mt-auto pt-3 text-xs text-muted-foreground">
-            {article.authors.map((a) => a.name).join("، ")}
-          </p>
-        ) : null}
-      </a>
-    </article>
   );
 }

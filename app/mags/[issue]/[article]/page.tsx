@@ -118,7 +118,7 @@ export default async function ArticlePage({
       <div className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[15rem_minmax(0,1fr)_14rem]">
         {/* Issue contents: start side, matching the workshop lesson list. */}
         <aside className="hidden lg:block">
-          <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-6">
+          <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto scroll-subtle pb-6">
             <IssueNav
               issueNumber={article.issueNumber}
               issueUrl={article.issue.url}
@@ -232,7 +232,7 @@ export default async function ArticlePage({
         {/* Section headings: end side. */}
         {headings.length >= 2 ? (
           <aside className="hidden xl:block">
-            <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-6">
+            <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto scroll-subtle pb-6">
               <TableOfContents headings={headings} />
             </div>
           </aside>

@@ -29,13 +29,11 @@ export default function ArticlesPage() {
     date: article.date,
     jalaliDate: formatJalali(article.date),
     readingTime: article.readingTime,
-    cover: article.cover
-      ? `/content/issues/${article.issueNumber}/${article.slug}/${article.cover.replace(/^\.\//, "")}`
-      : undefined,
     issueNumber: article.issueNumber,
     themeColor: article.issue.themeColor,
     tags: article.tags,
     authors: article.authors.map((a) => ({ id: a.id, name: a.name })),
+    authorNames: article.authors.map((a) => a.name),
   }));
 
   const tags = getAllTags()

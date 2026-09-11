@@ -37,13 +37,13 @@ export function Mermaid({ chart }: { chart: string }) {
 
   if (error) {
     return (
-      <pre className="overflow-x-auto" dir="ltr">
+      <pre className="scroll-subtle overflow-x-auto" dir="ltr">
         <code>{chart}</code>
       </pre>
     );
   }
 
-  return <div ref={ref} className="my-6 flex justify-center overflow-x-auto" />;
+  return <div ref={ref} className="scroll-subtle my-6 flex justify-center overflow-x-auto" />;
 }
 
 export default Mermaid;

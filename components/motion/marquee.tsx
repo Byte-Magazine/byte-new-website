@@ -23,7 +23,7 @@ export function Marquee({
   return (
     <div
       className={cn(
-        "group relative flex overflow-x-auto motion-safe:overflow-hidden",
+        "group scroll-none relative flex overflow-x-auto motion-safe:overflow-hidden",
         "[mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]",
         className,
       )}

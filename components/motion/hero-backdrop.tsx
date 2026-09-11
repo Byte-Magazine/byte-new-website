@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 import { useThemeStore } from "@/lib/stores/theme";
-import type { GrainientPalette } from "@/lib/brand";
+import type { GrainientPalette } from "@/lib/brand-color";
 
 const Grainient = dynamic(() => import("./grainient"), { ssr: false });
 const DotGrid = dynamic(() => import("./dot-grid"), { ssr: false });

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { issueAccentValue } from "@/lib/brand-color";
 import { toPersianDigits } from "@/lib/persian";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +48,7 @@ export function ArticleSummary({
   return (
     <article
       className={cn("group h-full", className)}
-      style={{ ["--issue-accent" as string]: article.themeColor }}
+      style={{ ["--issue-accent" as string]: issueAccentValue(article.themeColor) }}
     >
       <Link
         href={article.url}
@@ -57,8 +58,7 @@ export function ArticleSummary({
           {showIssue ? (
             <span
               dir="ltr"
-              className="rounded border px-1.5 py-0.5 font-mono"
-              style={{ borderColor: article.themeColor }}
+              className="rounded border border-issue px-1.5 py-0.5 font-mono"
             >
               {article.issueNumber}
             </span>

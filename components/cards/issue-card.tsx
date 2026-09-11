@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatJalali, toPersianDigits } from "@/lib/persian";
+import { issueAccentValue } from "@/lib/brand-color";
 import { cn } from "@/lib/utils";
 import { MetaLine } from "@/components/content/meta-line";
 
@@ -35,7 +36,7 @@ export function IssueCard({
     <Link
       href={issue.url}
       className={cn("group block", className)}
-      style={{ ["--issue-accent" as string]: issue.themeColor }}
+      style={{ ["--issue-accent" as string]: issueAccentValue(issue.themeColor) }}
     >
       <div className="relative aspect-[3/4] overflow-hidden rounded-lg border bg-muted transition-shadow duration-300 group-hover:shadow-[0_12px_40px_-12px_var(--issue-accent)]">
         <Image

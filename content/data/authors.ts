@@ -396,7 +396,7 @@ export const AUTHORS: AuthorRecord[] = [
   {
     id: "MahdiLotfian",
     name: "مهدی لطفیان",
-    title: "کارشناسی ارشد The Chinese University of Hong Kong",
+    title: "کارشناسی ۱۳۹۹",
     image: "/img/authors/mahdilotfian.png",
     socials: {},
   },

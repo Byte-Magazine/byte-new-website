@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Download } from "lucide-react";
 
 import { getCodenameh } from "@/lib/content";
+import { issueAccentValue } from "@/lib/brand-color";
 import { toPersianDigits } from "@/lib/persian";
 import { buildMetadata } from "@/lib/seo";
 import { codenamehPdfUrl } from "@/lib/site";
@@ -43,7 +44,11 @@ export default function CodenamehPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="group block"
-                      style={{ ["--issue-accent" as string]: entry.themeColor }}
+                      style={{
+                        ["--issue-accent" as string]: issueAccentValue(
+                          entry.themeColor,
+                        ),
+                      }}
                     >
                       <div className="relative aspect-[3/4] overflow-hidden rounded-lg border bg-muted transition-shadow duration-300 group-hover:shadow-[0_12px_40px_-12px_var(--issue-accent)]">
                         <Image

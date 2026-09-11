@@ -8,7 +8,7 @@ import { Magnetic } from "@/components/motion/magnetic";
 import { Reveal } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
 import { Button } from "@/components/ui/button";
-import { grainientPalette } from "@/lib/brand";
+import { grainientPalette, issueAccentValue } from "@/lib/brand-color";
 import type { Issue } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { SITE } from "@/lib/site";
@@ -82,7 +82,11 @@ export function Hero({ latest }: { latest?: Issue }) {
           <Reveal delay={200}>
             <div
               className="mx-auto w-full max-w-[15rem] lg:mx-0 lg:max-w-none"
-              style={{ ["--issue-accent" as string]: latest.themeColor }}
+              style={{
+                ["--issue-accent" as string]: issueAccentValue(
+                  latest.themeColor,
+                ),
+              }}
             >
               <Link href={latest.url} className="group block">
                 <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border shadow-[0_30px_80px_-40px_var(--issue-accent)] transition-transform duration-500 group-hover:-translate-y-1">

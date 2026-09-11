@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { accentFromColor } from "./brand";
+import {
+  accentFromColor,
+  issueAccentVars,
+  issueAccentValue,
+} from "./brand-color";
 
 describe("accentFromColor", () => {
   it("derives a light and a dark accent from an rgba colour", () => {
@@ -37,5 +41,15 @@ describe("accentFromColor", () => {
   it("falls back when the colour cannot be parsed", () => {
     const a = accentFromColor("not a colour");
     expect(a.light).toBe("oklch(0.36 0.09 264)");
+  });
+});
+
+describe("issueAccentVars", () => {
+  it("uses the readable accent for --issue-accent, not the raw rgba", () => {
+    const raw = "rgba(167, 0, 0, 0.4)";
+    const vars = issueAccentVars(raw);
+    expect(vars["--issue-accent"]).toBe(issueAccentValue(raw));
+    expect(vars["--issue-accent"]).toBe(vars["--primary"]);
+    expect(vars["--issue-accent"]).not.toBe(raw);
   });
 });

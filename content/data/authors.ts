@@ -239,6 +239,7 @@ export const AUTHORS: AuthorRecord[] = [
     image: "/img/staff/baghal.png",
     socials: {
       github: "https://github.com/arvinasli",
+      linkedin: "https://www.linkedin.com/in/arvin-baghal-asl",
     },
   },
   {

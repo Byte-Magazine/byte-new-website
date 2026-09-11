@@ -1,6 +1,7 @@
 # Telegram Instant View — byte-mag.ir
 
 ## Setup
+
 1. Open https://instantview.telegram.org/
 2. Load an article URL (e.g. `https://byte-mag.ir/mags/00000010/timebased-otp/`)
 3. Domain level: **byte-mag.ir**
@@ -69,16 +70,16 @@ description: //meta[@property="og:description"]/@content
 
 ### What each piece does
 
-| Field / rule | Source | Effect |
-| --- | --- | --- |
-| `kicker` | issue number / «وبلاگ» / workshop title | small label above title |
-| `cover` | OG image via `data-iv="cover"` | hero image at top of IV |
-| lead → `$body` | `data-iv="subtitle"` | intro as normal paragraph (not huge subtitle) |
-| `related` | `aside[data-iv=related]` | RelatedArticles links |
-| `channel` | `@byte_mag` | channel join affordance |
-| `dir="rtl"` | set on `$body` | Persian RTL layout |
-| `image_url` / `description` | OG meta | small link-preview card only |
-| `@remove` | nav / chrome / `data-iv="ignore"` | strip site chrome |
+| Field / rule                | Source                                  | Effect                                        |
+| --------------------------- | --------------------------------------- | --------------------------------------------- |
+| `kicker`                    | issue number / «وبلاگ» / workshop title | small label above title                       |
+| `cover`                     | OG image via `data-iv="cover"`          | hero image at top of IV                       |
+| lead → `$body`              | `data-iv="subtitle"`                    | intro as normal paragraph (not huge subtitle) |
+| `related`                   | `aside[data-iv=related]`                | RelatedArticles links                         |
+| `channel`                   | `@byte_mag`                             | channel join affordance                       |
+| `dir="rtl"`                 | set on `$body`                          | Persian RTL layout                            |
+| `image_url` / `description` | OG meta                                 | small link-preview card only                  |
+| `@remove`                   | nav / chrome / `data-iv="ignore"`       | strip site chrome                             |
 
 Tables, lists, blockquotes, `<pre>`, images, and `<details>` inside `.prose`
 come through with `body` automatically.

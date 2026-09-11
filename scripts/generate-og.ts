@@ -22,6 +22,7 @@ import { SITE } from "../lib/site";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const OUT_DIR = join(ROOT, "public", "og");
+const PUBLIC_DIR = join(ROOT, "public");
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -33,6 +34,9 @@ const COLORS = {
   border: "#2b3040",
 };
 
+const COVER_WIDTH = 360;
+const AVATAR_SIZE = 44;
+
 /**
  * Satori needs a static TTF; the app ships a variable WOFF2 whose `fvar` table
  * Satori's parser cannot read. The instanced weights are committed under
@@ -42,59 +46,151 @@ function loadFont(weight: 400 | 700): Buffer {
   return readFileSync(join(ROOT, "assets", "fonts", `Pinar-${weight}.ttf`));
 }
 
-interface CardInput {
-  title: string;
-  subtitle?: string;
-  meta?: string;
-  accent: string;
-  badge?: string;
+/** Load a public/ asset as an ArrayBuffer for Satori `<img src>`. */
+function loadPublicImage(publicPath?: string): ArrayBuffer | undefined {
+  if (!publicPath?.startsWith("/")) return undefined;
+  // Satori rasterises JPEG/PNG/GIF/WebP — skip SVG placeholders.
+  if (/\.svg$/i.test(publicPath)) return undefined;
+  try {
+    const buf = readFileSync(join(PUBLIC_DIR, publicPath.slice(1)));
+    return buf.buffer.slice(
+      buf.byteOffset,
+      buf.byteOffset + buf.byteLength,
+    ) as ArrayBuffer;
+  } catch {
+    return undefined;
+  }
 }
 
-/**
- * Builds the card as a Satori element tree.
- * Written as plain objects rather than JSX so this stays a standalone script.
- */
-function card({ title, subtitle, meta, accent, badge }: CardInput) {
-  const children: unknown[] = [];
+interface OgAuthor {
+  name: string;
+  image?: ArrayBuffer;
+}
+
+interface CardInput {
+  title: string;
+  /** Optional secondary line — omitted entirely when empty. */
+  subtitle?: string;
+  badge?: string;
+  accent: string;
+  authors?: OgAuthor[];
+  /** Optional footer meta — omitted entirely when empty (no tagline fallback). */
+  meta?: string;
+  /** Issue cover / author portrait shown on the left. */
+  cover?: ArrayBuffer;
+}
+
+function card({
+  title,
+  subtitle,
+  badge,
+  accent,
+  authors,
+  meta,
+  cover,
+}: CardInput) {
+  const textColWidth = cover ? WIDTH - COVER_WIDTH - 40 - 128 : WIDTH - 128;
+  const textMax = cover ? 26 : 34;
+  const titleSize = title.length > 55 ? 46 : title.length > 40 ? 52 : 58;
+
+  const headerChildren: unknown[] = [];
 
   if (badge) {
-    children.push({
+    headerChildren.push(badgeEl(badge, accent, textColWidth));
+  }
+
+  headerChildren.push(
+    rtlBlock(title, textMax, {
+      fontSize: titleSize,
+      fontWeight: 700,
+      color: COLORS.foreground,
+      lineHeight: 1.45,
+      width: textColWidth,
+    }),
+  );
+
+  const trimmedSubtitle = subtitle?.trim();
+  if (trimmedSubtitle) {
+    const clipped =
+      trimmedSubtitle.length > 100
+        ? `${trimmedSubtitle.slice(0, 100)}…`
+        : trimmedSubtitle;
+    headerChildren.push(
+      rtlBlock(clipped, textMax + 8, {
+        fontSize: 26,
+        color: COLORS.muted,
+        lineHeight: 1.55,
+        marginTop: 20,
+        width: textColWidth,
+      }),
+    );
+  }
+
+  const footer = authorsFooter(authors, meta?.trim(), textColWidth);
+
+  const textColumn = {
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        width: textColWidth,
+        height: "100%",
+      },
+      children: [
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              width: textColWidth,
+            },
+            children: headerChildren,
+          },
+        },
+        footer,
+      ],
+    },
+  };
+
+  const bodyChildren: unknown[] = [];
+
+  if (cover) {
+    bodyChildren.push({
       type: "div",
       props: {
         style: {
           display: "flex",
-          fontSize: 26,
-          color: accent,
-          letterSpacing: 4,
-          marginBottom: 28,
+          width: COVER_WIDTH,
+          height: HEIGHT - 136,
+          borderRadius: 16,
+          overflow: "hidden",
+          border: `1px solid ${COLORS.border}`,
+          flexShrink: 0,
         },
-        children: badge,
+        children: [
+          {
+            type: "img",
+            props: {
+              src: cover,
+              width: COVER_WIDTH,
+              height: HEIGHT - 136,
+              style: {
+                width: COVER_WIDTH,
+                height: HEIGHT - 136,
+                objectFit: "cover",
+              },
+            },
+          },
+        ],
       },
     });
   }
 
-  const titleSize = title.length > 60 ? 52 : 62;
-  children.push(
-    rtlBlock(title, title.length > 60 ? 38 : 32, {
-      fontSize: titleSize,
-      fontWeight: 700,
-      color: COLORS.foreground,
-      lineHeight: 1.5,
-    }),
-  );
-
-  if (subtitle) {
-    const trimmed =
-      subtitle.length > 130 ? `${subtitle.slice(0, 130)}…` : subtitle;
-    children.push(
-      rtlBlock(trimmed, 62, {
-        fontSize: 30,
-        color: COLORS.muted,
-        lineHeight: 1.6,
-        marginTop: 24,
-      }),
-    );
-  }
+  bodyChildren.push(textColumn);
 
   return {
     type: "div",
@@ -104,44 +200,194 @@ function card({ title, subtitle, meta, accent, badge }: CardInput) {
         height: HEIGHT,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
         backgroundColor: COLORS.background,
-        padding: "68px 72px",
+        padding: "68px 64px",
         fontFamily: "Pinar",
-        direction: "rtl",
         borderTop: `10px solid ${accent}`,
       },
       children: [
         {
           type: "div",
           props: {
-            style: { display: "flex", flexDirection: "column" },
-            children,
+            style: {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "stretch",
+              gap: 40,
+              width: "100%",
+              height: "100%",
+            },
+            children: bodyChildren,
           },
         },
+      ],
+    },
+  };
+}
+
+/** Badge above the title. Never letter-space Persian — it tears glyphs apart. */
+function badgeEl(badge: string, accent: string, width: number) {
+  const latinOrDigitsOnly = /^[\dA-Za-z0-9._\-\s]+$/.test(badge);
+
+  if (latinOrDigitsOnly) {
+    return {
+      type: "div",
+      props: {
+        style: {
+          display: "flex",
+          position: "relative",
+          width,
+          height: 36,
+          marginBottom: 22,
+        },
+        children: [
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                position: "absolute",
+                right: 0,
+                top: 0,
+                fontSize: 24,
+                color: accent,
+                letterSpacing: 4,
+                fontFamily: "Pinar",
+              },
+              children: badge,
+            },
+          },
+        ],
+      },
+    };
+  }
+
+  // Persian as ONE text node (keeps ligatures), pinned to the right.
+  return {
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        position: "relative",
+        width,
+        height: 40,
+        marginBottom: 22,
+      },
+      children: [
         {
           type: "div",
           props: {
             style: {
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              borderTop: `1px solid ${COLORS.border}`,
-              paddingTop: 28,
+              position: "absolute",
+              right: 0,
+              top: 0,
+              fontSize: 28,
+              color: accent,
+              fontFamily: "Pinar",
+              fontWeight: 700,
+              // Keep glyph order stable for a single Persian word.
+              direction: "rtl",
+              unicodeBidi: "isolate",
             },
-            children: [
-              rtlBlock(SITE.name, 200, {
-                fontSize: 28,
-                color: COLORS.foreground,
-              }),
-              rtlBlock(meta ?? SITE.tagline, 200, {
-                fontSize: 24,
-                color: COLORS.muted,
-              }),
-            ],
+            children: badge,
           },
         },
       ],
+    },
+  };
+}
+
+function authorsFooter(
+  authors: OgAuthor[] | undefined,
+  meta: string | undefined,
+  width: number,
+) {
+  const brand = rtlBlock("نشریه علمی بایت", 24, {
+    fontSize: 24,
+    color: COLORS.foreground,
+    width: 280,
+  });
+
+  const trailing: unknown[] = [];
+
+  if (authors && authors.length > 0) {
+    trailing.push({
+      type: "div",
+      props: {
+        style: {
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 20,
+        },
+        children: authors.slice(0, 3).map((author) => authorChip(author)),
+      },
+    });
+  } else if (meta) {
+    trailing.push(
+      rtlBlock(meta, 28, {
+        fontSize: 22,
+        color: COLORS.muted,
+        width: Math.min(360, width - 300),
+      }),
+    );
+  }
+
+  return {
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: trailing.length > 0 ? "space-between" : "flex-end",
+        alignItems: "center",
+        borderTop: `1px solid ${COLORS.border}`,
+        paddingTop: 24,
+        marginTop: 28,
+        width,
+        gap: 20,
+      },
+      // Brand on the left; authors / meta packed on the right.
+      children: trailing.length > 0 ? [brand, ...trailing] : [brand],
+    },
+  };
+}
+
+function authorChip(author: OgAuthor) {
+  return {
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 12,
+      },
+      children: [
+        rtlBlock(author.name, 24, {
+          fontSize: 22,
+          color: COLORS.muted,
+          width: 220,
+        }),
+        author.image
+          ? {
+              type: "img",
+              props: {
+                src: author.image,
+                width: AVATAR_SIZE,
+                height: AVATAR_SIZE,
+                style: {
+                  width: AVATAR_SIZE,
+                  height: AVATAR_SIZE,
+                  borderRadius: AVATAR_SIZE / 2,
+                  objectFit: "cover",
+                  border: `1px solid ${COLORS.border}`,
+                },
+              },
+            }
+          : null,
+      ].filter(Boolean),
     },
   };
 }
@@ -171,17 +417,9 @@ async function render(input: CardInput, file: string, fonts: Fonts) {
 }
 
 /**
- * Satori lays text out left-to-right and does not apply the bidi algorithm, so
- * Persian renders with its words in the wrong order — and its own line
- * wrapping would then scramble them further.
- *
- * Text is therefore wrapped here into fixed-width lines, each line reversed,
- * and rendered as separate rows. `maxChars` is approximate: Persian glyphs are
- * narrow enough that character count tracks width closely at these sizes.
- */
-/**
- * Satori renders a run of Persian digits right-to-left, which flips the
- * number. Pre-reversing each digit run cancels that out.
+ * Satori ignores `row-reverse` and has unreliable bidi for mixed Persian/Latin.
+ * Keep natural wrap order, reverse each line for an LTR flex row, and pin the
+ * row to `right: 0`. Each word is its own text node so shaping stays intact.
  */
 function fixDigitRuns(word: string): string {
   return word.replace(/[۰-۹٠-٩]{2,}/g, (run) => [...run].reverse().join(""));
@@ -195,50 +433,84 @@ export function rtlLines(text: string, maxChars: number): string[][] {
   for (const word of words) {
     const candidate = [...current, word].join(" ");
     if (candidate.length > maxChars && current.length > 0) {
-      lines.push([...current].reverse());
+      lines.push(current.map(fixDigitRuns));
       current = [word];
     } else {
       current.push(word);
     }
   }
-  if (current.length > 0) lines.push([...current].reverse());
+  if (current.length > 0) lines.push(current.map(fixDigitRuns));
 
-  return lines.map((line) => line.map(fixDigitRuns));
+  return lines;
 }
 
-/**
- * A stack of pre-wrapped, order-corrected RTL rows.
- *
- * Each word is its own flex child with an explicit gap: Satori collapses
- * whitespace inside a text node, which would run the reversed words together.
- */
 function rtlBlock(
   text: string,
   maxChars: number,
   style: Record<string, unknown>,
 ) {
   const fontSize = Number(style.fontSize ?? 30);
-  // Persian word-final glyphs extend visually; large display text needs a
-  // proportionally wider space than body text to read as separate words.
+  const lineHeight = Number(style.lineHeight ?? 1.45);
   const space = Math.round(fontSize * 0.32);
+  const rowHeight = Math.round(fontSize * lineHeight);
+  const {
+    width,
+    lineHeight: _lh,
+    fontWeight = 400,
+    color = COLORS.foreground,
+    fontSize: _fs,
+    ...rest
+  } = style;
+  const colWidth = typeof width === "number" ? width : WIDTH - 128;
+  const lines = rtlLines(text, maxChars);
 
   return {
     type: "div",
     props: {
-      style: { display: "flex", flexDirection: "column", ...style },
-      children: rtlLines(text, maxChars).map((line) => ({
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        width: colWidth,
+        ...rest,
+      },
+      children: lines.map((line) => ({
         type: "div",
         props: {
-          style: { display: "flex", flexDirection: "row" },
-          children: line.map((word) => ({
-            type: "div",
-            props: {
-              // A right margin on every word, including the last: the row is
-              // start-aligned, so the trailing space is invisible.
-              style: { display: "flex", marginRight: space },
-              children: word,
+          style: {
+            display: "flex",
+            position: "relative",
+            width: colWidth,
+            height: rowHeight,
+          },
+          children: [
+            {
+              type: "div",
+              props: {
+                style: {
+                  display: "flex",
+                  flexDirection: "row",
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  height: rowHeight,
+                  alignItems: "center",
+                },
+                children: [...line].reverse().map((word, index) => ({
+                  type: "div",
+                  props: {
+                    style: {
+                      display: "flex",
+                      fontSize,
+                      fontWeight,
+                      color,
+                      marginLeft: index === 0 ? 0 : space,
+                    },
+                    children: word,
+                  },
+                })),
+              },
             },
-          })),
+          ],
         },
       })),
     },
@@ -255,6 +527,16 @@ function solidAccent(themeColor: string): string {
       .toString(16)
       .padStart(2, "0");
   return `#${hex(r)}${hex(g)}${hex(b)}`;
+}
+
+function toOgAuthors(
+  authors: { name: string; image?: string }[],
+): OgAuthor[] | undefined {
+  if (authors.length === 0) return undefined;
+  return authors.map((author) => ({
+    name: author.name,
+    image: loadPublicImage(author.image),
+  }));
 }
 
 async function main() {
@@ -281,6 +563,7 @@ async function main() {
         meta: formatJalali(issue.date),
         accent: solidAccent(issue.themeColor),
         badge: issue.number,
+        cover: loadPublicImage(issue.cover),
       },
       `issue-${issue.number}.png`,
       fonts,
@@ -292,12 +575,11 @@ async function main() {
     await render(
       {
         title: article.title,
-        subtitle: article.description,
-        meta:
-          article.authors.map((a) => a.name).join("، ") ||
-          formatJalali(article.date),
         accent: solidAccent(article.issue.themeColor),
         badge: article.issueNumber,
+        authors: toOgAuthors(article.authors),
+        meta: formatJalali(article.date),
+        cover: loadPublicImage(article.issue.cover),
       },
       `article-${article.issueNumber}-${article.slug}.png`,
       fonts,
@@ -309,11 +591,10 @@ async function main() {
     await render(
       {
         title: post.title,
-        subtitle: post.description,
-        meta:
-          post.authors.map((a) => a.name).join("، ") || formatJalali(post.date),
         accent: "#6b8afd",
         badge: "وبلاگ",
+        authors: toOgAuthors(post.authors),
+        meta: formatJalali(post.date),
       },
       `blog-${post.slug}.png`,
       fonts,
@@ -322,16 +603,21 @@ async function main() {
   }
 
   for (const author of getAllAuthors()) {
+    const title = author.title?.trim();
+    const meta =
+      author.articleCount > 0
+        ? `${toPersianDigits(author.articleCount)} مطلب`
+        : undefined;
+
     await render(
       {
         title: author.name,
-        subtitle: author.title,
-        meta:
-          author.articleCount > 0
-            ? `${toPersianDigits(author.articleCount)} مطلب`
-            : undefined,
+        // Only render a subtitle when the author actually has one.
+        ...(title ? { subtitle: title } : {}),
+        ...(meta ? { meta } : {}),
         accent: "#6b8afd",
         badge: "نویسنده",
+        cover: loadPublicImage(author.image),
       },
       `author-${author.id}.png`,
       fonts,

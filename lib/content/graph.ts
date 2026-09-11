@@ -46,7 +46,6 @@ function buildGraph(): ContentGraph {
   const staffByAuthorId = new Map<string, string[]>();
   for (const section of staffSections) {
     for (const member of section.members) {
-      if (!member.authorId) continue;
       const sections = staffByAuthorId.get(member.authorId) ?? [];
       sections.push(section.name);
       staffByAuthorId.set(member.authorId, sections);
@@ -67,6 +66,16 @@ function buildGraph(): ContentGraph {
       isStaff: staffSectionNames.length > 0,
       staffSections: staffSectionNames,
     });
+  }
+
+  for (const section of staffSections) {
+    for (const member of section.members) {
+      if (!authorsById.has(member.authorId)) {
+        throw new Error(
+          `staff member "${member.name}" references unknown authorId "${member.authorId}" — add them to content/data/authors.ts`,
+        );
+      }
+    }
   }
 
   /** Resolves author ids, silently skipping ids with no record. */

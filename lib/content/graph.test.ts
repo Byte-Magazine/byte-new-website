@@ -215,6 +215,16 @@ describe("content graph", () => {
     }
   });
 
+  it("gives every staff member a linked author profile", () => {
+    for (const section of getStaffSections()) {
+      for (const member of section.members) {
+        const author = getAuthor(member.authorId);
+        expect(author, member.name).toBeDefined();
+        expect(author!.url).toBe(`/authors/${member.authorId}`);
+      }
+    }
+  });
+
   it("memoizes the graph", () => {
     expect(getGraph()).toBe(getGraph());
   });

@@ -1,8 +1,9 @@
 import type { AuthorRecord } from "@/lib/content/schema";
 
 /**
- * Everyone who has written for Byte. Referenced by `id` from article
- * frontmatter; article counts are derived at build time, never stored here.
+ * People with a `/authors/[id]` profile — writers and central staff.
+ * Referenced by `id` from article frontmatter and staff `authorId`;
+ * article counts are derived at build time, never stored here.
  */
 export const AUTHORS: AuthorRecord[] = [
   {
@@ -144,6 +145,23 @@ export const AUTHORS: AuthorRecord[] = [
       github: "https://github.com/titansarus",
       linkedin: "https://www.linkedin.com/in/amirmahdi-namjoo-23b4b9192",
     },
+  },
+  {
+    id: "AmirrezaInanloo",
+    name: "امیررضا اینانلو",
+    title: "کارشناسی ۱۴۰۱",
+    image: "/img/staff/AmirrezaInanloo.jpg",
+    socials: {
+      github: "https://github.com/oAmirrezao",
+      linkedin: "https://www.linkedin.com/in/amirreza-inanloo-00576425b",
+    },
+  },
+  {
+    id: "AmirrezaJafari",
+    name: "امیررضا جعفری",
+    title: "کارشناسی ۱۴۰۲",
+    image: "/img/staff/jafar.png",
+    socials: {},
   },
   {
     id: "Amnam",
@@ -478,6 +496,17 @@ export const AUTHORS: AuthorRecord[] = [
     socials: {},
   },
   {
+    id: "MohammadParsaArani",
+    name: "محمدپارسا آرانی",
+    title: "کارشناسی ۱۴۰۳",
+    image: "/img/staff/arani.png",
+    socials: {
+      linkedin:
+        "https://www.linkedin.com/in/mohammad-parsa-arani-397072382",
+      github: "https://github.com/MParsa-0684",
+    },
+  },
+  {
     id: "MohsenPiri",
     name: "محسن پیری",
     title: "کارشناسی ارشد ۱۴۰۳",
@@ -494,6 +523,17 @@ export const AUTHORS: AuthorRecord[] = [
     socials: {
       linkedin: "https://www.linkedin.com/in/shirzady",
       github: "https://github.com/shirzady1934",
+    },
+  },
+  {
+    id: "NargesKari",
+    name: "نرگس کاری",
+    title: "کارشناسی ۱۴۰۲",
+    image: "/img/staff/nargesKari.jpg",
+    socials: {
+      linkedin:
+        "https://www.linkedin.com/in/narges-kari-dolatabadi-a30348291",
+      github: "https://github.com/NargesKari",
     },
   },
   {
@@ -566,6 +606,15 @@ export const AUTHORS: AuthorRecord[] = [
     socials: {
       linkedin: "https://www.linkedin.com/in/sara-younesi-660a79220",
       github: "https://github.com/Sarayounesi",
+    },
+  },
+  {
+    id: "SohaibSadeqi",
+    name: "صهیب صادقی",
+    title: "کارشناسی ۱۴۰۲",
+    image: "/img/staff/SohaibSadeqi.jpg",
+    socials: {
+      github: "https://github.com/sohaib-sadeqi",
     },
   },
   {

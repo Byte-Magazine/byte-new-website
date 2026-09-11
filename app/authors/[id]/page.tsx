@@ -27,7 +27,17 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: author.name,
-    description: `${author.name}${author.title ? `، ${author.title}` : ""} — ${toPersianDigits(author.articleCount)} مطلب در نشریه‌ی بایت`,
+    description: [
+      author.name,
+      author.title,
+      author.articleCount > 0
+        ? `${toPersianDigits(author.articleCount)} مطلب در نشریه‌ی بایت`
+        : author.isStaff
+          ? `عضو مرکزی نشریه‌ی بایت`
+          : null,
+    ]
+      .filter(Boolean)
+      .join(" — "),
     path: author.url,
     image: ogImage.author(author.id),
     type: "profile",

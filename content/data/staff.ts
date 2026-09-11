@@ -114,6 +114,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
         socials: {},
       },
       {
+        authorId: "SohaibSadeqi",
         name: "صهیب صادقی",
         title: "کارشناسی ۱۴۰۲",
         image: "/img/staff/SohaibSadeqi.jpg",
@@ -137,6 +138,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
         },
       },
       {
+        authorId: "AmirrezaInanloo",
         name: "امیررضا اینانلو",
         title: "کارشناسی ۱۴۰۱",
         image: "/img/staff/AmirrezaInanloo.jpg",
@@ -165,6 +167,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
         },
       },
       {
+        authorId: "NargesKari",
         name: "نرگس کاری",
         title: "کارشناسی ۱۴۰۲",
         image: "/img/staff/nargesKari.jpg",
@@ -175,12 +178,14 @@ export const STAFF_SECTIONS: StaffSection[] = [
         },
       },
       {
+        authorId: "AmirrezaJafari",
         name: "امیررضا جعفری",
         title: "کارشناسی ۱۴۰۲",
         image: "/img/staff/jafar.png",
         socials: {},
       },
       {
+        authorId: "MohammadParsaArani",
         name: "محمدپارسا آرانی",
         title: "کارشناسی ۱۴۰۳",
         image: "/img/staff/arani.png",

@@ -1,96 +1,121 @@
-# نشریه‌ی علمی فرهنگی بایت — وب‌سایت
+# Byte
 
-Website of Byte, the scientific and cultural magazine of the Computer
-Engineering department at Sharif University of Technology.
+The website for **Byte** (نشریه‌ی علمی فرهنگی بایت) — the scientific and cultural
+magazine of the Computer Engineering department at Sharif University of
+Technology.
 
-A statically-exported Next.js application. It replaces the previous Docusaurus
-site, preserving every published URL.
+This is a **statically exported** Next.js app. It replaces the previous
+Docusaurus site while preserving every published URL. There is no server
+runtime: the build produces a directory of HTML/CSS/JS that any static host can
+serve.
+
+Live site: [byte-mag.ir](https://byte-mag.ir)
+
+---
+
+## Principles
+
+These constraints drive the architecture. Do not fight them.
+
+| Constraint | Implication |
+|---|---|
+| Fully static (`output: "export"`) | No API routes, no ISR, no request-time data fetching |
+| Build-time content graph | Counts, relations, search index, and OG images are computed in `prebuild` / module init — never in the browser |
+| Persian-first, RTL | `lang="fa" dir="rtl"`; use logical CSS (`ms`/`me`/`ps`/`pe`); isolate Latin/code with `dir="ltr"` |
+| Legacy URLs stay exact | New routes are additive only; inbound links must not break |
+
+---
 
 ## Stack
 
-| Concern | Choice |
-|---|---|
-| Framework | Next.js 16 (App Router), `output: "export"` |
-| UI | React 19, TypeScript strict |
-| Styling | Tailwind CSS v4 |
-| Type | Pinar (Persian, variable) + JetBrains Mono, self-hosted |
-| Components | shadcn v4 (`base-lyra`, zinc, RTL) |
-| Motion | `motion` v13 + React Bits |
-| Content | MDX, `gray-matter`, Zod validation |
-| State | zustand (persisted) |
-| Highlighting | Shiki via `rehype-pretty-code` (dual theme) |
-| Math | KaTeX |
-| Testing | Vitest |
-| Package manager | pnpm 10 |
+- **Next.js 16** (App Router) + React 19 + TypeScript (strict)
+- **Tailwind CSS v4** + shadcn (`base-lyra`, RTL)
+- **MDX** via `next-mdx-remote-client`, frontmatter via `gray-matter` + **Zod**
+- **Shiki** (`rehype-pretty-code`) for code, **KaTeX** for math, **Mermaid** (lazy)
+- **Vitest** for pure logic; **pnpm** as the package manager
 
-## Getting started
+---
+
+## Quick start
 
 ```bash
 pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
-To produce the static site:
-
 ```bash
-pnpm build        # writes ./out
+pnpm build        # runs prebuild, then writes ./out
 ```
 
-`pnpm build` runs `prebuild` first, which syncs content assets into `public/`,
-writes the search index, and renders Open Graph images.
+`prebuild` syncs co-located content assets into `public/`, builds the client
+search index, and regenerates Open Graph images.
 
 ### Scripts
 
-| Script | Purpose |
+| Script | What it does |
 |---|---|
-| `pnpm dev` | development server |
-| `pnpm build` | static export to `out/` |
-| `pnpm test` | Vitest suite |
+| `pnpm dev` | Dev server |
+| `pnpm build` | Static export → `out/` |
+| `pnpm test` | Vitest |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint |
-| `pnpm sync:assets` | copy co-located content images into `public/` |
-| `pnpm generate:og` | regenerate Open Graph images |
+| `pnpm prettier` | Format the repo (`*.mdx` is ignored) |
+| `pnpm prettier:check` | Prettier check only |
+| `pnpm sync:assets` | Copy content images into `public/` |
+| `pnpm generate:og` | Regenerate OG images |
 
 ### Environment
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | Base URL for issue and codenameh PDFs |
+| `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | CDN base for issue / codenameh PDFs |
 
-Issue PDFs are expected at `<base>/mags/<issue>.pdf`, codenameh at
-`<base>/codenameh/<id>.pdf`.
+Expected layout on the CDN:
 
-## Architecture
+- Issues: `<base>/mags/<issue>.pdf`
+- Codenameh: `<base>/codenameh/<id>.pdf`
 
-Everything derived — article counts per author, per tag, and per issue, the
-search index, reading times, related articles — is computed **once at build
-time**. Nothing is derived in the browser or at request time.
+---
+
+## Repository map
 
 ```
-content/            MDX and typed data; the source of truth
-content/data/       authors, staff, codenameh, workshops as TypeScript
-lib/content/        schema, filesystem reader, and the resolved content graph
-lib/mdx/            remark/rehype pipeline and the global MDX component scope
-components/         ui (shadcn), content, cards, layout, sections, motion
-app/                routes
-scripts/            asset sync, search index, OG images
-assets/fonts/       static Pinar instances used only to render OG images
+app/                 Routes (App Router)
+components/          UI, layout, cards, landing sections, motion, MDX widgets
+content/             Source of truth — MDX + typed data
+content/data/        authors, staff, codenameh, workshops (TypeScript modules)
+lib/content/         Zod schemas, filesystem reader, resolved content graph
+lib/mdx/             Remark/rehype pipeline + global MDX component map
+lib/persian.ts       Digits, Jalali formatting, search normalization
+scripts/             Asset sync, search index, OG generation
+public/              Static assets (synced images, search index, OG, fonts)
 ```
 
-### The content graph
+---
 
-`lib/content/graph.ts` reads `content/` once per process and returns a frozen
-object graph in which the inverse relations are already populated:
-`author.articles`, `issue.articles`, `tag.articles`. Counting an author's
-articles is therefore a property read, not a scan.
+## Content graph
 
-Frontmatter is validated with Zod. An invalid field fails the build with a
-message naming the file, rather than rendering something wrong.
+`lib/content/graph.ts` loads `content/` **once per process** and returns a
+frozen object graph with inverse relations already filled in:
+
+- `author.articles` / `author.articleCount`
+- `issue.articles` (ordered)
+- `tag.articles` / `tag.count`
+- related articles, prev/next within an issue
+
+Invalid frontmatter **fails the build** with the file and field named. Prefer
+fixing the graph over re-deriving counts in UI code.
+
+Author credits come from frontmatter `authors` **and** `<AuthorCallout>` tags
+in the MDX body (some multi-voice pieces leave frontmatter empty). Placeholder
+avatars (`/img/authors/noone.svg`) and blank titles are normalized away so
+grids sort by real profile signal: article count → real photo → entry year.
+
+---
 
 ## Authoring
 
-Content lives in `content/`, and every document is an `index.mdx` beside its
-own assets.
+Every document is an `index.mdx` next to its assets:
 
 ```
 content/issues/00001000/my-article/
@@ -98,106 +123,109 @@ content/issues/00001000/my-article/
   img/diagram.png
 ```
 
-### Frontmatter
-
-Articles (`content/issues/<issue>/<slug>/index.mdx`):
+### Article frontmatter
 
 ```yaml
 ---
 title: عنوان مقاله
-description: خلاصهٔ یک‌خطی
+description: One-line summary
 authors: [AuthorId]
-tags: [برچسب, Tag]
-date: "2025-09-22"     # ISO; rendered as Jalali in the UI
+tags: [برچسب]
+date: "2025-09-22"   # ISO; UI renders Jalali
 issue: "00000101"
-order: 1               # position within the issue
-cover: ./img/1.png     # optional
+order: 1             # position within the issue
+cover: ./img/1.png   # optional
 ---
 ```
 
-Blog posts take the same fields without `issue` and `order`. Workshop docs take
-`title`, `description`, `order`, and `workshop`.
+Blog posts omit `issue` / `order`. Workshop docs use `title`, `description`,
+`order`, and `workshop`.
 
-Dates are stored ISO and rendered as Jalali via `Intl`, so sorting, sitemaps,
-and structured data all work while readers see `۱۴۰۴/۰۶/۳۱`.
+Dates stay ISO in source (sitemaps, sorting, JSON-LD). Readers see Jalali via
+`Intl.DateTimeFormat` with the `persian` calendar — no date library.
 
-### Components available in MDX
-
-No imports are needed; these are provided globally.
+### MDX components (global — no imports)
 
 ```mdx
 <Tooltip tip="Quantum Computing">رایانش کوانتومی</Tooltip>
 
-<Callout type="tip" title="نکته">متن</Callout>
+<Callout type="tip" title="نکته">…</Callout>
 
 :::warning هشدار
-شکل کوتاه، همچنان پشتیبانی می‌شود.
+Short admonition form is still supported.
 :::
 
-<AuthorCallout authors={["Moeein"]} />
+<AuthorCallout author="AuthorId">…</AuthorCallout>
 
 <Timeline>
-  <TimelineItem title="عنوان" date="۱۴۰۴">توضیح</TimelineItem>
+  <TimelineItem title="…" date="۱۴۰۴">…</TimelineItem>
 </Timeline>
 ```
 
-Callout types: `note`, `info`, `tip`, `warning`, `danger`. Math uses `$…$` and
-`$$…$$`. Mermaid diagrams use a ```` ```mermaid ```` fence and load lazily.
+Callout types: `note`, `info`, `tip`, `warning`, `danger`.  
+Math: `$…$` / `$$…$$`. Mermaid: fenced ` ```mermaid ` blocks (lazy-loaded).
 
-### Adding an issue
+### New issue checklist
 
-1. Create `content/issues/<binary>/meta.json` with `number`, `title`,
-   `description`, `date` (ISO), `cover`, and `themeColor`.
-2. Add the cover to `public/img/`.
-3. Add article directories under it.
+1. Add `content/issues/<binary>/meta.json` (`number`, `title`, `description`,
+   ISO `date`, `cover`, `themeColor`).
+2. Put the cover under `public/img/` (or sync path used by the issue).
+3. Add article folders under the issue.
 4. Upload the PDF to the CDN as `mags/<binary>.pdf`.
 
-The issue's `themeColor` becomes the accent for its own pages.
+`themeColor` becomes the accent on that issue’s pages.
 
-### Adding an author
+### New author checklist
 
-Add an entry to `content/data/authors.ts`:
+Append to `content/data/authors.ts`:
 
 ```ts
 {
   id: "AuthorId",
   name: "نام نویسنده",
-  title: "کارشناسی ۱۴۰۲",
-  image: "/img/authors/AuthorId.png",
-  socials: { github: "https://github.com/handle" },
+  title: "کارشناسی ۱۴۰۲",          // entry / class year when known
+  image: "/img/authors/AuthorId.png", // real headshot only — not noone.svg
+  socials: { github: "https://github.com/…" },
 }
 ```
 
-Reference the `id` from article frontmatter. Their page, article list, and
-counts are generated automatically.
+Reference `id` from frontmatter (or `AuthorCallout`). The author page, lists,
+and counts are generated from the graph.
 
-## Content
+---
 
-Structured data — authors, staff, codenameh, workshops — lives in typed
-TypeScript modules under `content/data/`, so a typo is a compile error rather
-than a runtime surprise. Articles, blog posts, and workshop lessons are MDX
-under `content/`.
+## RTL & Persian search
 
-The site was imported from a Docusaurus codebase; those one-time migration
-scripts have been removed now that `content/` is the source of truth.
+- Prefer logical Tailwind utilities; avoid physical `ml` / `mr` / `left` /
+  `right` unless the property is truly physical (e.g. cover docked to the
+  visual left edge).
+- Search normalization in `lib/persian.ts` folds Arabic/Persian yeh & kaf,
+  ZWNJ, diacritics, and digit sets so queries match regardless of input variant.
 
-## RTL
+---
 
-The document is `lang="fa" dir="rtl"`. All spacing uses logical properties
-(`ms-`, `me-`, `ps-`, `pe-`, `start-`, `end-`), never `ml-`/`mr-`/`left-`/
-`right-`. Code blocks and Latin technical terms are isolated with `dir="ltr"`.
+## Theme
 
-Persian text matching folds Arabic/Persian yeh and kaf, ZWNJ, diacritics, and
-digit sets — see `lib/persian.ts` — so search works regardless of how a query
-is typed.
+Dark is the **default**. Visitors can switch to light (or system) via the
+header toggle; the choice is persisted. A blocking head script applies the
+stored theme before first paint to avoid a flash.
+
+---
 
 ## Deployment
 
-`pnpm build` produces `out/`, which any static host can serve. The included
-GitHub Actions workflow publishes it to GitHub Pages on push to `main`.
+```bash
+pnpm build   # → out/
+```
 
-Set `NEXT_PUBLIC_PDF_BASE_URL` in the build environment if the PDFs move.
+Serve `out/` from any static host. The repo’s GitHub Actions workflow publishes
+to GitHub Pages on push to `main`.
+
+Override `NEXT_PUBLIC_PDF_BASE_URL` in the build environment if the PDF CDN
+moves.
+
+---
 
 ## License
 
-Content © Byte magazine. See the repository for details.
+Magazine content © Byte / Sharif CE. See the repository for details.

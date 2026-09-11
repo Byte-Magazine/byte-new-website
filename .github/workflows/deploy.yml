@@ -5,8 +5,8 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Pushes the static export to Byte-Magazine/Byte-Magazine.github.io (org Pages /
-# byte-mag.ir). That repo publishes whatever is on its `main` branch.
+# 1) Build and force-push static export to Byte-Magazine.github.io
+# 2) SSH to production: pull that repo and restart nginx
 permissions:
   contents: read
 
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,8 +50,25 @@ jobs:
           external_repository: Byte-Magazine/Byte-Magazine.github.io
           publish_branch: main
           publish_dir: ./out
-          # Single deploy commit; the github.io repo is an artifact, not history.
-          force_orphan: true
+          force_orphan: false
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
           commit_message: "deploy: byte-new-website@${{ github.sha }}"
+
+  production:
+    needs: build-and-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull on server and restart nginx
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          port: ${{ secrets.PROD_SSH_PORT || 22 }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd "${{ secrets.PROD_DEPLOY_PATH }}"
+            git pull --ff-only origin main
+            sudo systemctl restart nginx

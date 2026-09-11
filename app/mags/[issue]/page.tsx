@@ -127,11 +127,6 @@ export default async function IssuePage({
                         {article.description}
                       </span>
                     ) : null}
-                    {article.authors.length > 0 ? (
-                      <span className="mt-1 block text-xs text-muted-foreground">
-                        {article.authors.map((a) => a.name).join("، ")}
-                      </span>
-                    ) : null}
                   </span>
                 </Link>
               </li>

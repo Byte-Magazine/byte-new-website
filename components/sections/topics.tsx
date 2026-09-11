@@ -44,10 +44,10 @@ export function Topics({ tags }: { tags: Tag[] }) {
                 <Link
                   href={tag.url}
                   style={{ fontSize: `${size}rem` }}
-                  className="text-muted-foreground transition-colors hover:text-accent"
+                  className="inline-flex items-start gap-x-1 text-muted-foreground transition-colors hover:text-accent"
                 >
-                  {tag.name}
-                  <span className="ms-1 align-super text-[0.62rem] opacity-60">
+                  <span className="isolate">{tag.name}</span>
+                  <span className="isolate -translate-y-px font-mono text-[0.72em] leading-none opacity-70">
                     {toPersianDigits(tag.count)}
                   </span>
                 </Link>

@@ -55,9 +55,26 @@ export function BlogCard({
         ) : null}
 
         {post.authors.length > 0 ? (
-          <p className="mt-auto pt-3 text-xs text-muted-foreground">
-            {post.authors.map((a) => a.name).join("، ")}
-          </p>
+          <ul className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-3">
+            {post.authors.map((author) => (
+              <li
+                key={author.id}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground"
+              >
+                {author.image ? (
+                  <Image
+                    src={author.image}
+                    alt=""
+                    width={20}
+                    height={20}
+                    unoptimized
+                    className="size-5 shrink-0 rounded-full border object-cover"
+                  />
+                ) : null}
+                <span>{author.name}</span>
+              </li>
+            ))}
+          </ul>
         ) : null}
       </Link>
     </article>

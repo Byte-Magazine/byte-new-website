@@ -8,6 +8,7 @@ import { MetaLine } from "@/components/content/meta-line";
 import { Button } from "@/components/ui/button";
 import { getAllIssues, getIssue } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
+import { issueAccentVars } from "@/lib/brand";
 import { buildMetadata, issueJsonLd, JsonLd, ogImage } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -46,7 +47,7 @@ export default async function IssuePage({
   return (
     <main
       className="mx-auto max-w-6xl px-4 py-10"
-      style={{ ["--issue-accent" as string]: issue.themeColor }}
+      style={issueAccentVars(issue.themeColor) as React.CSSProperties}
     >
       <JsonLd
         data={issueJsonLd({

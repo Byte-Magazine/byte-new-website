@@ -105,6 +105,28 @@ export function siteAccent(): BrandAccent {
   return latest ? accentFromColor(latest.themeColor) : FALLBACK;
 }
 
+/**
+ * Inline CSS variables that retint a subtree to one issue's colour.
+ *
+ * An issue's own pages should carry that issue's identity, not the site-wide
+ * accent taken from the newest issue. Both light and dark values are set, and
+ * the browser picks via `light-dark()`, so a theme switch needs no JavaScript.
+ */
+export function issueAccentVars(
+  themeColor: string,
+): Record<string, string> {
+  const accent = accentFromColor(themeColor);
+  return {
+    "--issue-accent": themeColor,
+    "--accent": `light-dark(${accent.light}, ${accent.dark})`,
+    "--accent-foreground": `light-dark(${accent.onLight}, ${accent.onDark})`,
+    "--accent-soft": `light-dark(${accent.softLight}, ${accent.softDark})`,
+    "--primary": `light-dark(${accent.light}, ${accent.dark})`,
+    "--primary-foreground": `light-dark(${accent.onLight}, ${accent.onDark})`,
+    "--ring": `light-dark(${accent.light}, ${accent.dark})`,
+  };
+}
+
 /** CSS custom properties that override the static accent tokens. */
 export function accentStyleTag(accent: BrandAccent): string {
   return `

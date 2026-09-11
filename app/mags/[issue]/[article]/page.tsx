@@ -18,6 +18,7 @@ import {
   getRelatedArticles,
 } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
+import { issueAccentVars } from "@/lib/brand";
 import {
   articleJsonLd,
   breadcrumbJsonLd,
@@ -78,7 +79,7 @@ export default async function ArticlePage({
   return (
     <main
       className="mx-auto max-w-7xl px-4 py-10"
-      style={{ ["--issue-accent" as string]: article.issue.themeColor }}
+      style={issueAccentVars(article.issue.themeColor) as React.CSSProperties}
     >
       <JsonLd
         data={articleJsonLd({

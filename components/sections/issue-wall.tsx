@@ -62,7 +62,7 @@ export function IssueWall({ issues }: { issues: WallIssue[] }) {
 
   return (
     <section className="border-y bg-muted/30">
-      <div className="mx-auto max-w-6xl px-4 py-16">
+      <div className="mx-auto max-w-6xl px-4 pb-2 pt-14">
         <Reveal className="mb-8 flex items-end justify-between gap-4">
           <div>
             <h2 className="text-2xl font-black">آرشیو</h2>
@@ -82,7 +82,7 @@ export function IssueWall({ issues }: { issues: WallIssue[] }) {
 
       {enabled ? (
         <>
-          <div className="h-108 w-full md:h-128">
+          <div className="-mt-14 h-92 w-full md:-mt-16 md:h-108">
             <CircularGallery
               items={items}
               bend={2.4}
@@ -96,7 +96,7 @@ export function IssueWall({ issues }: { issues: WallIssue[] }) {
               plain links; this is the keyboard and screen-reader path. */}
           <nav
             aria-label="شماره‌ها"
-            className="mx-auto max-w-6xl px-4 pb-14 pt-6"
+            className="mx-auto max-w-6xl px-4 pb-14 pt-2"
           >
             <ul className="flex flex-wrap justify-center gap-2">
               {issues.map((issue) => (

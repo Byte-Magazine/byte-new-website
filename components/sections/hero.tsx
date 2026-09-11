@@ -7,7 +7,6 @@ import { HeroBackdrop } from "@/components/motion/hero-backdrop";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Reveal } from "@/components/motion/reveal";
 import { SplitText } from "@/components/motion/split-text";
-import { TiltCard } from "@/components/motion/tilt-card";
 import { Button } from "@/components/ui/button";
 import { grainientPalette } from "@/lib/brand";
 import type { Issue } from "@/lib/content";
@@ -29,13 +28,16 @@ export function Hero({ latest }: { latest?: Issue }) {
     <section className="relative overflow-hidden border-b">
       <HeroBackdrop palette={palette} />
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-8 md:py-24 lg:grid-cols-[1.15fr_minmax(0,19rem)] lg:gap-14">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 md:py-16 lg:grid-cols-[1.15fr_minmax(0,19rem)] lg:gap-14 lg:py-24">
         <div>
           <Reveal>
             <p className="text-sm text-muted-foreground">{SITE.tagline}</p>
           </Reveal>
 
-          <h1 className="mt-5 max-w-3xl text-[clamp(1.45rem,0.4rem+5vw,3.75rem)] font-black leading-[1.35] md:leading-[1.28]">
+          {/* Persian needs generous leading: descenders and diacritics
+              collide below about 1.5 at display sizes. The clamp grows at
+              2.6vw so the jump through the md breakpoint stays gentle. */}
+          <h1 className="mt-5 max-w-3xl text-[clamp(1.75rem,1.1rem+2.6vw,3.25rem)] font-black leading-[1.62] md:leading-[1.5]">
             <span className="inline-flex max-w-full flex-wrap items-baseline gap-x-[0.3em]">
               <span className="max-w-full whitespace-nowrap">
                 <SplitText text="نشریه‌ی علمی فرهنگی" />
@@ -48,7 +50,7 @@ export function Hero({ latest }: { latest?: Issue }) {
 
           <Reveal delay={280}>
             <p className="mt-6 max-w-xl text-lg leading-9 text-muted-foreground">
-              نوشته‌های دانشجویی دربارهٔ علوم و مهندسی کامپیوتر 
+              نوشته‌های دانشجویی دربارهٔ علوم و مهندسی کامپیوتر
             </p>
           </Reveal>
 
@@ -78,22 +80,23 @@ export function Hero({ latest }: { latest?: Issue }) {
 
         {latest ? (
           <Reveal delay={200}>
-            <div style={{ ["--issue-accent" as string]: latest.themeColor }}>
-              <TiltCard>
-                <Link href={latest.url} className="group block">
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border shadow-[0_30px_80px_-40px_var(--issue-accent)]">
-                    <Image
-                      src={latest.cover}
-                      alt={`جلد شمارهٔ ${latest.number}`}
-                      fill
-                      priority
-                      unoptimized
-                      sizes="(max-width: 1024px) 70vw, 20rem"
-                      className="object-cover"
-                    />
-                  </div>
-                </Link>
-              </TiltCard>
+            <div
+              className="mx-auto w-full max-w-[15rem] lg:mx-0 lg:max-w-none"
+              style={{ ["--issue-accent" as string]: latest.themeColor }}
+            >
+              <Link href={latest.url} className="group block">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border shadow-[0_30px_80px_-40px_var(--issue-accent)] transition-transform duration-500 group-hover:-translate-y-1">
+                  <Image
+                    src={latest.cover}
+                    alt={`جلد شمارهٔ ${latest.number}`}
+                    fill
+                    priority
+                    unoptimized
+                    sizes="(max-width: 1024px) 70vw, 20rem"
+                    className="object-cover"
+                  />
+                </div>
+              </Link>
 
               <div className="mt-4 flex items-center justify-between gap-3">
                 <div>

@@ -89,7 +89,7 @@ export function Hero({ latest }: { latest?: Issue }) {
               }}
             >
               <Link href={latest.url} className="group block">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border shadow-[0_30px_80px_-40px_var(--issue-accent)] transition-transform duration-500 group-hover:-translate-y-1">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border transition-transform duration-500 group-hover:-translate-y-1">
                   <Image
                     src={latest.cover}
                     alt={`جلد شمارهٔ ${latest.number}`}

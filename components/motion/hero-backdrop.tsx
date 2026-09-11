@@ -10,19 +10,11 @@ const Grainient = dynamic(() => import("./grainient"), { ssr: false });
 const DotGrid = dynamic(() => import("./dot-grid"), { ssr: false });
 
 /**
- * The hero backdrop: a slow grainy gradient in the site's own accent.
+ * The hero backdrop: a slow grainy field in the site's own accent.
  *
- * Two layers, deliberately not one:
- *
- *   · A CSS foundation that always paints — a soft pool of accent behind the
- *     cover plus a scrim that protects contrast under the headline. Pure
- *     gradients, so it cannot fail.
- *   · The Grainient field on top. It needs WebGL, so it is loaded only on a
- *     wide viewport, only when motion is welcome, and never during SSR. If the
- *     GL context is refused the hero still reads as designed.
- *
- * The palette comes from the newest issue, so the backdrop changes colour with
- * each release rather than being a fixed decoration.
+ * Grainient + DotGrid need WebGL, so they load only on a wide viewport when
+ * motion is welcome. No coloured glow behind the cover — the poster stands
+ * on its own edge.
  */
 export function HeroBackdrop({ palette }: { palette: GrainientPalette }) {
   const resolvedTheme = useThemeStore((state) => state.resolvedTheme);
@@ -47,14 +39,6 @@ export function HeroBackdrop({ palette }: { palette: GrainientPalette }) {
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-      {/* Foundation: always painted, so the hero never depends on WebGL. */}
-      <div
-        className="absolute inset-0 opacity-70"
-        style={{
-          background: `radial-gradient(90% 70% at 78% 0%, ${palette.accent}22, transparent 70%)`,
-        }}
-      />
-
       {enabled ? (
         <div className="absolute inset-0 opacity-[0.55] mix-blend-soft-light dark:opacity-40">
           <Grainient
@@ -83,7 +67,7 @@ export function HeroBackdrop({ palette }: { palette: GrainientPalette }) {
           <DotGrid
             dotSize={2.5}
             gap={28}
-            baseColor={light ? "#c4c9d6" : "#3a4152"}
+            baseColor={light ? "#a8b0c2" : "#3a4152"}
             activeColor={palette.accent}
             proximity={110}
             shockRadius={190}
@@ -95,7 +79,7 @@ export function HeroBackdrop({ palette }: { palette: GrainientPalette }) {
       ) : null}
 
       {/* Scrim last: keeps the headline legible over whatever moves beneath. */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/25 via-transparent to-background" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
     </div>
   );
 }

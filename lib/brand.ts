@@ -13,7 +13,11 @@ function toLinear(channel: number): number {
  * shifting hue — which is what makes an arbitrary issue colour usable as an
  * accent in both a light and a dark theme.
  */
-function rgbToOklch(r: number, g: number, b: number): {
+function rgbToOklch(
+  r: number,
+  g: number,
+  b: number,
+): {
   l: number;
   c: number;
   h: number;
@@ -22,9 +26,15 @@ function rgbToOklch(r: number, g: number, b: number): {
   const lg = toLinear(g);
   const lb = toLinear(b);
 
-  const l = Math.cbrt(0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb);
-  const m = Math.cbrt(0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb);
-  const s = Math.cbrt(0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb);
+  const l = Math.cbrt(
+    0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb,
+  );
+  const m = Math.cbrt(
+    0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb,
+  );
+  const s = Math.cbrt(
+    0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb,
+  );
 
   const okL = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
   const okA = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
@@ -172,9 +182,7 @@ export function grainientPalette(color?: string): GrainientPalette {
  * accent taken from the newest issue. Both light and dark values are set, and
  * the browser picks via `light-dark()`, so a theme switch needs no JavaScript.
  */
-export function issueAccentVars(
-  themeColor: string,
-): Record<string, string> {
+export function issueAccentVars(themeColor: string): Record<string, string> {
   const accent = accentFromColor(themeColor);
   return {
     "--issue-accent": themeColor,

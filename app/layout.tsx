@@ -65,7 +65,9 @@ export default function RootLayout({
         <ThemeScript />
         {/* The accent is taken from the newest issue at build time, so the
             whole site carries the colour of the current cover. */}
-        <style dangerouslySetInnerHTML={{ __html: accentStyleTag(siteAccent()) }} />
+        <style
+          dangerouslySetInnerHTML={{ __html: accentStyleTag(siteAccent()) }}
+        />
       </head>
       <body className="min-h-dvh antialiased">
         <TooltipProvider>

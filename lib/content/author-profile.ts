@@ -5,9 +5,7 @@
  * blank string as `title`. Those must not count as a real photo / entry year.
  */
 
-const PLACEHOLDER_IMAGES = new Set([
-  "/img/authors/noone.svg",
-]);
+const PLACEHOLDER_IMAGES = new Set(["/img/authors/noone.svg"]);
 
 /** True when the author has a real headshot, not the shared placeholder. */
 export function authorHasPhoto(image?: string): boolean {

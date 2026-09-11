@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -51,12 +51,10 @@ function loadIndex(): Promise<SearchDoc[]> {
 /**
  * Site-wide search.
  *
- * Built on the plain Dialog rather than cmdk: cmdk depends on Radix's dialog,
- * which conflicts with the Base UI primitives this project uses and throws at
- * runtime. The list behaviour here is small enough to own.
+ * Results are real `<Link>`s so crawlers and “open in new tab” work. Built on
+ * the plain Dialog rather than cmdk (cmdk conflicts with Base UI here).
  */
 export function SearchDialog() {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [loaded, setLoaded] = useState(indexCache !== null);
@@ -86,6 +84,11 @@ export function SearchDialog() {
     };
   }, [open, loaded]);
 
+  const close = useCallback(() => {
+    setOpen(false);
+    setQuery("");
+  }, []);
+
   const grouped = useMemo(() => {
     const docs = loaded ? (indexCache ?? []) : [];
     const results = searchDocs(docs, query, 24);
@@ -105,15 +108,6 @@ export function SearchDialog() {
   /** Flattened in render order, so arrow keys follow what is on screen. */
   const flat = useMemo(() => grouped.flatMap((group) => group.docs), [grouped]);
 
-  const go = useCallback(
-    (url: string) => {
-      setOpen(false);
-      setQuery("");
-      router.push(url);
-    },
-    [router],
-  );
-
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
@@ -123,7 +117,10 @@ export function SearchDialog() {
       setActive((index) => Math.max(index - 1, 0));
     } else if (event.key === "Enter" && flat[active]) {
       event.preventDefault();
-      go(flat[active].url);
+      const link = listRef.current?.querySelector<HTMLAnchorElement>(
+        '[data-active="true"]',
+      );
+      link?.click();
     }
   };
 
@@ -210,25 +207,27 @@ export function SearchDialog() {
                       const isActive = position === active;
                       return (
                         <li key={doc.url}>
-                          <button
-                            type="button"
+                          <Link
+                            href={doc.url}
                             role="option"
                             aria-selected={isActive}
                             data-active={isActive}
-                            onClick={() => go(doc.url)}
+                            onClick={close}
                             onMouseMove={() => setActive(position)}
                             className={cn(
-                              "flex w-full flex-col items-start gap-0.5 rounded-md px-3 py-2 text-start transition-colors",
+                              "flex w-full flex-col items-start gap-0.5 rounded-md px-3 py-2 text-start no-underline transition-colors",
                               isActive ? "bg-muted" : "hover:bg-muted/60",
                             )}
                           >
-                            <span className="font-medium">{doc.title}</span>
+                            <span className="font-medium text-foreground">
+                              {doc.title}
+                            </span>
                             {doc.description ? (
                               <span className="line-clamp-1 text-xs text-muted-foreground">
                                 {doc.description}
                               </span>
                             ) : null}
-                          </button>
+                          </Link>
                         </li>
                       );
                     })}

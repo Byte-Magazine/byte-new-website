@@ -44,7 +44,10 @@ export default function HomePage() {
       <Topics tags={getAllTags().slice(0, 28)} />
       <BlogTeaser posts={getAllBlogPosts().slice(0, 2)} />
       <VelocityDivider />
-      <Contributors authors={authors.slice(0, 24)} totalAuthors={authors.length} />
+      <Contributors
+        authors={authors.slice(0, 24)}
+        totalAuthors={authors.length}
+      />
       <WorkshopsTeaser workshops={getAllWorkshops()} />
     </>
   );

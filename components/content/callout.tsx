@@ -19,7 +19,8 @@ const callout = cva(
         info: "border-info/25 border-s-info bg-info/[0.07]",
         tip: "border-success/25 border-s-success bg-success/[0.07]",
         warning: "border-warning/30 border-s-warning bg-warning/[0.09]",
-        danger: "border-destructive/25 border-s-destructive bg-destructive/[0.07]",
+        danger:
+          "border-destructive/25 border-s-destructive bg-destructive/[0.07]",
       },
     },
     defaultVariants: { type: "note" },

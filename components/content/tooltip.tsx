@@ -51,10 +51,7 @@ export function Tooltip({ tip, children }: TooltipProps) {
   if (isTouch) {
     return (
       <Popover>
-        <PopoverTrigger
-          className={TRIGGER_CLASS}
-          aria-label={`توضیح: ${tip}`}
-        >
+        <PopoverTrigger className={TRIGGER_CLASS} aria-label={`توضیح: ${tip}`}>
           {children}
         </PopoverTrigger>
         <PopoverContent className="w-auto max-w-[16rem] px-3 py-1.5">

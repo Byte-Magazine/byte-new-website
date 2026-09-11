@@ -310,7 +310,8 @@ async function main() {
       {
         title: post.title,
         subtitle: post.description,
-        meta: post.authors.map((a) => a.name).join("، ") || formatJalali(post.date),
+        meta:
+          post.authors.map((a) => a.name).join("، ") || formatJalali(post.date),
         accent: "#6b8afd",
         badge: "وبلاگ",
       },
@@ -342,6 +343,9 @@ async function main() {
 }
 
 // Only run when invoked directly; the helpers above are imported by tests.
-if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split("/").pop()!)) {
+if (
+  process.argv[1] &&
+  import.meta.url.endsWith(process.argv[1].split("/").pop()!)
+) {
   void main();
 }

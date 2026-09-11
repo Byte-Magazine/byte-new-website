@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  authorIdsFromCallouts,
-  mergeArticleAuthorIds,
-} from "./author-credit";
+import { authorIdsFromCallouts, mergeArticleAuthorIds } from "./author-credit";
 
 describe("author credit from callouts", () => {
   it("reads singular author= props", () => {

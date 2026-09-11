@@ -149,7 +149,8 @@ export function ArticleBrowser({
     let list = articles;
 
     if (tag) list = list.filter((a) => a.tags.includes(tag));
-    if (author) list = list.filter((a) => a.authors.some((x) => x.id === author));
+    if (author)
+      list = list.filter((a) => a.authors.some((x) => x.id === author));
     if (issue) list = list.filter((a) => a.issueNumber === issue);
 
     if (query.trim()) {

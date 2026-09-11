@@ -39,7 +39,9 @@ export function Logo({
     >
       <LogoMark className="size-7 shrink-0 text-foreground transition-colors group-hover:text-accent" />
       <span className="flex items-baseline gap-2">
-        <span className="text-lg font-black tracking-tight group-hover:text-accent">بایت</span>
+        <span className="text-lg font-black tracking-tight group-hover:text-accent">
+          بایت
+        </span>
         {showBinary ? (
           <span
             dir="ltr"

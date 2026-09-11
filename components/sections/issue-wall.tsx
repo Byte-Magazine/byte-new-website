@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -37,9 +36,9 @@ export interface WallIssue {
  * reachable as a real link either way.
  */
 export function IssueWall({ issues }: { issues: WallIssue[] }) {
-  const router = useRouter();
   const resolvedTheme = useThemeStore((state) => state.resolvedTheme);
   const [enabled, setEnabled] = useState(false);
+  const linkRefs = useRef(new Map<string, HTMLAnchorElement>());
 
   useEffect(() => {
     const wide = window.matchMedia("(min-width: 768px)");
@@ -93,26 +92,29 @@ export function IssueWall({ issues }: { issues: WallIssue[] }) {
               scrollEase={0.05}
               onItemClick={(index) => {
                 const issue = issues[index];
-                if (issue) router.push(issue.url);
+                if (!issue) return;
+                linkRefs.current.get(issue.url)?.click();
               }}
             />
           </div>
 
-          {/*
-            The canvas cannot receive focus, so the same issues are listed
-            here for keyboard and screen-reader users. Visually hidden, since
-            clicking a cover now navigates directly.
-          */}
           <nav aria-label="شماره‌ها" className="sr-only">
             <ul>
               {issues.map((issue) => (
                 <li key={issue.number}>
-                  <Link href={issue.url}>شمارهٔ {issue.number}</Link>
+                  <Link
+                    href={issue.url}
+                    ref={(node) => {
+                      if (node) linkRefs.current.set(issue.url, node);
+                      else linkRefs.current.delete(issue.url);
+                    }}
+                  >
+                    شمارهٔ {issue.number}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
-
         </>
       ) : (
         <div className="mx-auto max-w-6xl px-4 pb-16">

@@ -24,18 +24,18 @@ derived data at build time.
 
 ## Stack
 
-| Concern | Choice |
-|---|---|
-| Framework | Next.js 16 (App Router), `output: "export"` |
-| UI | React 19, TypeScript (strict) |
-| Styling | Tailwind CSS v4 |
-| Components | shadcn v4 — style `base-lyra`, base color zinc, `rtl: true` |
-| Motion | `motion` v13 + React Bits (`@react-bits` registry) |
-| Content | MDX via `next-mdx-remote-client`, `gray-matter`, Zod validation |
-| Code highlighting | `rehype-pretty-code` + Shiki (dual light/dark theme) |
-| Math | `remark-math` + `rehype-katex` |
-| Testing | Vitest |
-| Package manager | pnpm 10.18.2 |
+| Concern           | Choice                                                          |
+| ----------------- | --------------------------------------------------------------- |
+| Framework         | Next.js 16 (App Router), `output: "export"`                     |
+| UI                | React 19, TypeScript (strict)                                   |
+| Styling           | Tailwind CSS v4                                                 |
+| Components        | shadcn v4 — style `base-lyra`, base color zinc, `rtl: true`     |
+| Motion            | `motion` v13 + React Bits (`@react-bits` registry)              |
+| Content           | MDX via `next-mdx-remote-client`, `gray-matter`, Zod validation |
+| Code highlighting | `rehype-pretty-code` + Shiki (dual light/dark theme)            |
+| Math              | `remark-math` + `rehype-katex`                                  |
+| Testing           | Vitest                                                          |
+| Package manager   | pnpm 10.18.2                                                    |
 
 Mirrors the stack of `/Users/moeein/Documents/MoeeinAali/me-frontend`.
 
@@ -67,16 +67,16 @@ These were settled during brainstorming and are not open questions:
 
 Measured from `byte-site/`:
 
-| Content | Count | Location |
-|---|---|---|
-| Mag issues | 8 | `mags/000000{01..1000}/` |
-| Mag articles | 95 | `mags/<issue>/<NN-slug>/index.mdx` |
-| Articles with images | 53 | co-located `img/` folders |
-| Blog posts | 2 | `blog/2025/<MM-DD-slug>/index.mdx` |
-| Workshop docs | 6 | `workshops/git/` |
-| Authors | 70 | `mags/authors.json`, `blog/authors.yml` |
-| Staff | 23 | `src/data/STAFF_SECTION_LIST.ts` |
-| Codenameh issues | 13 | `src/data/FEATURE_LIST.ts` |
+| Content              | Count | Location                                |
+| -------------------- | ----- | --------------------------------------- |
+| Mag issues           | 8     | `mags/000000{01..1000}/`                |
+| Mag articles         | 95    | `mags/<issue>/<NN-slug>/index.mdx`      |
+| Articles with images | 53    | co-located `img/` folders               |
+| Blog posts           | 2     | `blog/2025/<MM-DD-slug>/index.mdx`      |
+| Workshop docs        | 6     | `workshops/git/`                        |
+| Authors              | 70    | `mags/authors.json`, `blog/authors.yml` |
+| Staff                | 23    | `src/data/STAFF_SECTION_LIST.ts`        |
+| Codenameh issues     | 13    | `src/data/FEATURE_LIST.ts`              |
 
 Docusaurus-specific syntax in content: `<Tooltip>` (438 uses),
 `<AuthorCallout>` (11), `<Timeline>` (1), `:::` admonitions (52 across
@@ -140,26 +140,26 @@ contain no imports. Mermaid renders client-side, lazily, only where used.
 
 ### Preserved
 
-| Route | Source |
-|---|---|
-| `/mags/intro` | migrated `mags/intro.mdx` |
-| `/mags/[issue]` | `content/issues/*/meta.json` |
-| `/mags/[issue]/[article]` | 95 MDX files |
-| `/blog` | blog index |
-| `/blog/[...slug]` | blog posts |
-| `/workshops/[workshop]/[...slug]` | workshop docs |
-| `/staff` | `people/staff.json` |
-| `/authors` | `people/authors.json` |
-| `/codenameh` | `codenameh.json` |
+| Route                             | Source                       |
+| --------------------------------- | ---------------------------- |
+| `/mags/intro`                     | migrated `mags/intro.mdx`    |
+| `/mags/[issue]`                   | `content/issues/*/meta.json` |
+| `/mags/[issue]/[article]`         | 95 MDX files                 |
+| `/blog`                           | blog index                   |
+| `/blog/[...slug]`                 | blog posts                   |
+| `/workshops/[workshop]/[...slug]` | workshop docs                |
+| `/staff`                          | `people/staff.json`          |
+| `/authors`                        | `people/authors.json`        |
+| `/codenameh`                      | `codenameh.json`             |
 
 ### New
 
-| Route | Purpose |
-|---|---|
-| `/` | landing |
-| `/articles` | flat filterable index of all articles |
-| `/authors/[id]` | per-author page with their articles |
-| `/tags/[tag]` | per-tag archive |
+| Route           | Purpose                               |
+| --------------- | ------------------------------------- |
+| `/`             | landing                               |
+| `/articles`     | flat filterable index of all articles |
+| `/authors/[id]` | per-author page with their articles   |
+| `/tags/[tag]`   | per-tag archive                       |
 
 ### Static export mechanics
 
@@ -204,10 +204,10 @@ the build never reads the legacy repo.
    description: string
    authors: [author-id]
    tags: [normalized-tag]
-   date: 2025-09-22        # inherited from issue
+   date: 2025-09-22 # inherited from issue
    issue: "00000101"
-   order: 1                # from NN- filename prefix
-   cover: ./img/1.png      # first co-located image, if present
+   order: 1 # from NN- filename prefix
+   cover: ./img/1.png # first co-located image, if present
    ```
 5. Copy co-located `img/` folders; rewrite image references.
 6. Merge `mags/authors.json`, `blog/authors.yml`, and `STAFF_SECTION_LIST.ts`
@@ -233,12 +233,12 @@ mechanically detectable.
 
 ### Rebuilt from Docusaurus
 
-| Legacy | New | Improvement |
-|---|---|---|
-| `Tooltip` | shadcn Tooltip + Popover | works on touch; legacy is hover-only, a real bug across 438 uses |
-| `:::` admonitions | `<Callout>` | 5 typed variants, themed for light and dark |
-| `AuthorCallout` | author chip | avatar, links to `/authors/[id]` |
-| `Timeline` | animated timeline | scroll-reveal |
+| Legacy            | New                      | Improvement                                                      |
+| ----------------- | ------------------------ | ---------------------------------------------------------------- |
+| `Tooltip`         | shadcn Tooltip + Popover | works on touch; legacy is hover-only, a real bug across 438 uses |
+| `:::` admonitions | `<Callout>`              | 5 typed variants, themed for light and dark                      |
+| `AuthorCallout`   | author chip              | avatar, links to `/authors/[id]`                                 |
+| `Timeline`        | animated timeline        | scroll-reveal                                                    |
 
 ### Design system
 

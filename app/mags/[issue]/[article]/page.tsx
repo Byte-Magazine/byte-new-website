@@ -106,10 +106,7 @@ export default async function ArticlePage({
           آرشیو
         </Link>
         <span aria-hidden>/</span>
-        <Link
-          href={article.issue.url}
-          className="hover:text-foreground"
-        >
+        <Link href={article.issue.url} className="hover:text-foreground">
           <span dir="ltr" className="font-mono">
             {article.issueNumber}
           </span>

@@ -19,14 +19,54 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const today = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: url("/"), priority: 1, changeFrequency: "weekly", lastModified: today },
-    { url: url("/articles"), priority: 0.9, changeFrequency: "weekly", lastModified: today },
-    { url: url("/mags/intro"), priority: 0.9, changeFrequency: "monthly", lastModified: today },
-    { url: url("/blog"), priority: 0.7, changeFrequency: "monthly", lastModified: today },
-    { url: url("/workshops"), priority: 0.7, changeFrequency: "monthly", lastModified: today },
-    { url: url("/codenameh"), priority: 0.6, changeFrequency: "yearly", lastModified: today },
-    { url: url("/staff"), priority: 0.6, changeFrequency: "monthly", lastModified: today },
-    { url: url("/authors"), priority: 0.7, changeFrequency: "monthly", lastModified: today },
+    {
+      url: url("/"),
+      priority: 1,
+      changeFrequency: "weekly",
+      lastModified: today,
+    },
+    {
+      url: url("/articles"),
+      priority: 0.9,
+      changeFrequency: "weekly",
+      lastModified: today,
+    },
+    {
+      url: url("/mags/intro"),
+      priority: 0.9,
+      changeFrequency: "monthly",
+      lastModified: today,
+    },
+    {
+      url: url("/blog"),
+      priority: 0.7,
+      changeFrequency: "monthly",
+      lastModified: today,
+    },
+    {
+      url: url("/workshops"),
+      priority: 0.7,
+      changeFrequency: "monthly",
+      lastModified: today,
+    },
+    {
+      url: url("/codenameh"),
+      priority: 0.6,
+      changeFrequency: "yearly",
+      lastModified: today,
+    },
+    {
+      url: url("/staff"),
+      priority: 0.6,
+      changeFrequency: "monthly",
+      lastModified: today,
+    },
+    {
+      url: url("/authors"),
+      priority: 0.7,
+      changeFrequency: "monthly",
+      lastModified: today,
+    },
   ];
 
   const articles: MetadataRoute.Sitemap = getAllArticles().map((article) => ({

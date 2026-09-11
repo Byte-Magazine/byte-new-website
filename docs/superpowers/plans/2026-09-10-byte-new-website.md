@@ -78,10 +78,12 @@ byte-new-website/
 ### Task 1: Project scaffold and toolchain
 
 **Files:**
+
 - Create: `package.json`, `tsconfig.json`, `next.config.ts`, `postcss.config.mjs`, `eslint.config.mjs`, `vitest.config.ts`, `components.json`, `.gitignore`, `app/globals.css`, `app/layout.tsx`, `app/page.tsx`, `lib/utils.ts`
 - Test: `lib/utils.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing (first task)
 - Produces: `cn(...inputs: ClassValue[]): string` from `@/lib/utils`; a buildable Next.js app; `pnpm dev|build|test|typecheck|lint` scripts
 
@@ -204,7 +206,9 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 
-const compat = new FlatCompat({ baseDirectory: dirname(fileURLToPath(import.meta.url)) });
+const compat = new FlatCompat({
+  baseDirectory: dirname(fileURLToPath(import.meta.url)),
+});
 
 export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
@@ -336,7 +340,11 @@ export const metadata: Metadata = {
   description: "دانشکده‌ی مهندسی کامپیوتر دانشگاه صنعتی شریف",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
       <body>{children}</body>
@@ -369,10 +377,12 @@ git commit -m "feat: scaffold Next.js 16 static-export project"
 ### Task 2: Persian text utilities
 
 **Files:**
+
 - Create: `lib/persian.ts`
 - Test: `lib/persian.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing
 - Produces:
   - `toPersianDigits(input: string | number): string`
@@ -383,7 +393,7 @@ git commit -m "feat: scaffold Next.js 16 static-export project"
 
 - [ ] **Step 1: Write the failing tests**
 
-```ts
+````ts
 // lib/persian.test.ts
 import { describe, it, expect } from "vitest";
 import {
@@ -417,7 +427,9 @@ describe("normalizePersian", () => {
     expect(normalizePersian("می‌شود")).toBe("میشود");
   });
   it("collapses whitespace and lowercases latin", () => {
-    expect(normalizePersian("  Quantum   Computing ")).toBe("quantum computing");
+    expect(normalizePersian("  Quantum   Computing ")).toBe(
+      "quantum computing",
+    );
   });
 });
 
@@ -443,11 +455,14 @@ describe("readingTimeMinutes", () => {
     expect(readingTimeMinutes(text)).toBe(3);
   });
   it("ignores markdown syntax and code fences", () => {
-    const withCode = "سلام\n\n```js\n" + Array.from({ length: 600 }, () => "word").join(" ") + "\n```\n";
+    const withCode =
+      "سلام\n\n```js\n" +
+      Array.from({ length: 600 }, () => "word").join(" ") +
+      "\n```\n";
     expect(readingTimeMinutes(withCode)).toBe(1);
   });
 });
-```
+````
 
 - [ ] **Step 2: Run test to verify it fails**
 
@@ -456,7 +471,7 @@ Expected: FAIL — cannot resolve `./persian`
 
 - [ ] **Step 3: Implement lib/persian.ts**
 
-```ts
+````ts
 const PERSIAN_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
 
 export function toPersianDigits(input: string | number): string {
@@ -518,7 +533,7 @@ export function readingTimeMinutes(text: string): number {
   const words = plain.split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
-```
+````
 
 - [ ] **Step 4: Run test to verify it passes**
 
@@ -537,10 +552,12 @@ git commit -m "feat: add Persian text, date, and reading-time utilities"
 ### Task 3: Content schema and site config
 
 **Files:**
+
 - Create: `lib/content/schema.ts`, `lib/site.ts`
 - Test: `lib/content/schema.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing
 - Produces:
   - `articleFrontmatterSchema`, `blogFrontmatterSchema`, `workshopFrontmatterSchema`, `issueMetaSchema`, `authorSchema`, `staffSectionSchema`, `codenamehSchema` (Zod schemas)
@@ -553,7 +570,11 @@ git commit -m "feat: add Persian text, date, and reading-time utilities"
 ```ts
 // lib/content/schema.test.ts
 import { describe, it, expect } from "vitest";
-import { articleFrontmatterSchema, issueMetaSchema, authorSchema } from "./schema";
+import {
+  articleFrontmatterSchema,
+  issueMetaSchema,
+  authorSchema,
+} from "./schema";
 
 describe("articleFrontmatterSchema", () => {
   const valid = {
@@ -578,7 +599,9 @@ describe("articleFrontmatterSchema", () => {
   });
 
   it("rejects a non-ISO date", () => {
-    expect(() => articleFrontmatterSchema.parse({ ...valid, date: "۱۴۰۴/۰۶/۳۱" })).toThrow();
+    expect(() =>
+      articleFrontmatterSchema.parse({ ...valid, date: "۱۴۰۴/۰۶/۳۱" }),
+    ).toThrow();
   });
 
   it("rejects a missing title", () => {
@@ -870,10 +893,12 @@ git commit -m "feat: add content schemas and site configuration"
 ### Task 4: Migration script — transforms
 
 **Files:**
+
 - Create: `scripts/lib/transform.ts`
 - Test: `scripts/lib/transform.test.ts`
 
 **Interfaces:**
+
 - Consumes: `normalizePersian` from `@/lib/persian`
 - Produces:
   - `stripSiteImports(body: string): string`
@@ -885,7 +910,7 @@ git commit -m "feat: add content schemas and site configuration"
 
 - [ ] **Step 1: Write the failing tests**
 
-```ts
+````ts
 // scripts/lib/transform.test.ts
 import { describe, it, expect } from "vitest";
 import {
@@ -917,7 +942,9 @@ describe("stripSiteImports", () => {
 describe("convertAdmonitions", () => {
   it("converts a simple tip", () => {
     const input = ":::tip\nمحتوا\n:::";
-    expect(convertAdmonitions(input)).toBe('<Callout type="tip">\nمحتوا\n</Callout>');
+    expect(convertAdmonitions(input)).toBe(
+      '<Callout type="tip">\nمحتوا\n</Callout>',
+    );
   });
 
   it("converts an admonition with a title", () => {
@@ -929,7 +956,9 @@ describe("convertAdmonitions", () => {
 
   it("converts all five types", () => {
     for (const type of ["danger", "info", "note", "tip", "warning"]) {
-      expect(convertAdmonitions(`:::${type}\nx\n:::`)).toContain(`type="${type}"`);
+      expect(convertAdmonitions(`:::${type}\nx\n:::`)).toContain(
+        `type="${type}"`,
+      );
     }
   });
 
@@ -977,10 +1006,16 @@ describe("buildTagMap", () => {
 
 describe("parseOrderFromDirname", () => {
   it("splits the NN- prefix into order and slug", () => {
-    expect(parseOrderFromDirname("01-quantum")).toEqual({ order: 1, slug: "quantum" });
+    expect(parseOrderFromDirname("01-quantum")).toEqual({
+      order: 1,
+      slug: "quantum",
+    });
   });
   it("handles a two-digit order", () => {
-    expect(parseOrderFromDirname("17-firmware")).toEqual({ order: 17, slug: "firmware" });
+    expect(parseOrderFromDirname("17-firmware")).toEqual({
+      order: 17,
+      slug: "firmware",
+    });
   });
   it("handles a missing prefix", () => {
     expect(parseOrderFromDirname("intro")).toEqual({ order: 0, slug: "intro" });
@@ -992,7 +1027,7 @@ describe("parseOrderFromDirname", () => {
     });
   });
 });
-```
+````
 
 - [ ] **Step 2: Run test to verify it fails**
 
@@ -1001,7 +1036,7 @@ Expected: FAIL — cannot resolve `./transform`
 
 - [ ] **Step 3: Implement scripts/lib/transform.ts**
 
-```ts
+````ts
 import { normalizePersian } from "../../lib/persian";
 
 export function stripSiteImports(body: string): string {
@@ -1010,7 +1045,14 @@ export function stripSiteImports(body: string): string {
     .replace(/\n{3,}/g, "\n\n");
 }
 
-const ADMONITION_TYPES = ["danger", "info", "note", "tip", "warning", "caution"] as const;
+const ADMONITION_TYPES = [
+  "danger",
+  "info",
+  "note",
+  "tip",
+  "warning",
+  "caution",
+] as const;
 
 /**
  * Walks the document line by line so fenced code blocks are skipped.
@@ -1103,7 +1145,10 @@ export function buildTagMap(tags: string[]): Map<string, string> {
   return map;
 }
 
-export function parseOrderFromDirname(dirname: string): { order: number; slug: string } {
+export function parseOrderFromDirname(dirname: string): {
+  order: number;
+  slug: string;
+} {
   const match = dirname.match(/^(\d+)-(.+)$/);
   if (!match) return { order: 0, slug: dirname };
   return { order: Number(match[1]), slug: match[2] };
@@ -1115,7 +1160,7 @@ export function rewriteImagePaths(body: string, articleSlug: string): string {
     .replace(/src=["']\.\/img\//g, `src="./img/`)
     .replace(/\]\(img\//g, `](./img/`);
 }
-```
+````
 
 - [ ] **Step 4: Run test to verify it passes**
 
@@ -1134,10 +1179,12 @@ git commit -m "feat: add content migration transforms"
 ### Task 5: Migration script — people merge
 
 **Files:**
+
 - Create: `scripts/lib/people.ts`
 - Test: `scripts/lib/people.test.ts`
 
 **Interfaces:**
+
 - Consumes: `AuthorRecord`, `StaffSection` from `@/lib/content/schema`
 - Produces:
   - `mergeAuthors(magsAuthors, blogAuthors, staffSections): { authors: AuthorRecord[]; staff: StaffSection[]; warnings: string[] }`
@@ -1152,10 +1199,14 @@ import { mergeAuthors, expandSocialUrl } from "./people";
 
 describe("expandSocialUrl", () => {
   it("expands a bare github handle", () => {
-    expect(expandSocialUrl("github", "spneshaei")).toBe("https://github.com/spneshaei");
+    expect(expandSocialUrl("github", "spneshaei")).toBe(
+      "https://github.com/spneshaei",
+    );
   });
   it("expands a bare linkedin handle", () => {
-    expect(expandSocialUrl("linkedin", "moeein")).toBe("https://www.linkedin.com/in/moeein");
+    expect(expandSocialUrl("linkedin", "moeein")).toBe(
+      "https://www.linkedin.com/in/moeein",
+    );
   });
   it("passes a full URL through unchanged", () => {
     expect(expandSocialUrl("github", "https://github.com/EmadEJ")).toBe(
@@ -1300,7 +1351,10 @@ export function mergeAuthors(
         name: person.name,
         title: person.title ?? existing?.title,
         image: person.image_url ?? existing?.image,
-        socials: { ...(existing?.socials ?? {}), ...expandSocials(person.socials) },
+        socials: {
+          ...(existing?.socials ?? {}),
+          ...expandSocials(person.socials),
+        },
       };
       byId.set(id, record);
     }
@@ -1358,11 +1412,13 @@ git commit -m "feat: add author and staff merge logic"
 ### Task 6: Migration script — runner
 
 **Files:**
+
 - Create: `scripts/migrate.ts`
 - Modify: none
 - Output: `content/**`, `public/img/**`, `public/fonts/**`, `migration-report.md`
 
 **Interfaces:**
+
 - Consumes: everything from Tasks 4 and 5, plus the schemas from Task 3
 - Produces: the populated `content/` directory. No exported API — this is a CLI.
 
@@ -1407,9 +1463,22 @@ function jalaliToGregorian(jy: number, jm: number, jd: number): string {
     days = (days - 1) % 365;
   }
   let gd = days + 1;
-  const leap =
-    (gy2 % 4 === 0 && gy2 % 100 !== 0) || gy2 % 400 === 0;
-  const monthDays = [0, 31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const leap = (gy2 % 4 === 0 && gy2 % 100 !== 0) || gy2 % 400 === 0;
+  const monthDays = [
+    0,
+    31,
+    leap ? 29 : 28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
+  ];
   let gm = 0;
   for (gm = 1; gm <= 12 && gd > monthDays[gm]; gm++) gd -= monthDays[gm];
   return `${gy2}-${String(gm).padStart(2, "0")}-${String(gd).padStart(2, "0")}`;
@@ -1447,10 +1516,12 @@ git commit -m "feat: migrate legacy Docusaurus content to content/"
 ### Task 7: Content graph
 
 **Files:**
+
 - Create: `lib/content/read.ts`, `lib/content/graph.ts`, `lib/content/index.ts`
 - Test: `lib/content/graph.test.ts`
 
 **Interfaces:**
+
 - Consumes: schemas and types from Task 3; the `content/` directory from Task 6
 - Produces (from `@/lib/content`):
   - `getGraph(): ContentGraph`
@@ -1474,7 +1545,7 @@ git commit -m "feat: migrate legacy Docusaurus content to content/"
 ```ts
 export interface ContentGraph {
   articles: Article[];
-  articlesByKey: Map<string, Article>;   // `${issue}/${slug}`
+  articlesByKey: Map<string, Article>; // `${issue}/${slug}`
   issues: Issue[];
   issuesByNumber: Map<string, Issue>;
   authors: Author[];
@@ -1624,6 +1695,7 @@ Filesystem layer only: `readIssueMetas()`, `readArticleFiles()`, `readBlogFiles(
 Builds the graph in dependency order: authors → issues → articles (linking both directions) → blog posts → workshops → tags. Freezes the result. Memoizes in a module-level variable.
 
 Slug rules — these must match the legacy URLs exactly:
+
 - article: `/mags/${issueNumber}/${slug}`
 - issue: `/mags/${number}`
 - blog: `/blog/${slug}`
@@ -1652,10 +1724,12 @@ git commit -m "feat: add build-time content graph with resolved relations"
 ### Task 8: MDX pipeline and content components
 
 **Files:**
+
 - Create: `lib/mdx/remark-admonition.ts`, `lib/mdx/options.ts`, `lib/mdx/components.tsx`, `components/content/callout.tsx`, `components/content/tooltip.tsx`, `components/content/timeline.tsx`, `components/content/author-chip.tsx`, `components/content/mermaid.tsx`, `components/content/mdx-image.tsx`, `components/mdx-content.tsx`
 - Test: `lib/mdx/remark-admonition.test.ts`
 
 **Interfaces:**
+
 - Consumes: `cn`, content graph types
 - Produces:
   - `mdxOptions` — the shared `{ remarkPlugins, rehypePlugins }` object
@@ -1718,10 +1792,13 @@ export const mdxOptions = {
   rehypePlugins: [
     rehypeSlug,
     [rehypeAutolinkHeadings, { behavior: "wrap" }],
-    [rehypePrettyCode, {
-      theme: { light: "github-light", dark: "github-dark-dimmed" },
-      keepBackground: false,
-    }],
+    [
+      rehypePrettyCode,
+      {
+        theme: { light: "github-light", dark: "github-dark-dimmed" },
+        keepBackground: false,
+      },
+    ],
     rehypeKatex,
   ],
 };
@@ -1757,10 +1834,12 @@ git commit -m "feat: add MDX pipeline and content components"
 ### Task 9: Design system, layout shell, and shadcn primitives
 
 **Files:**
+
 - Create: `app/globals.css` (replace), `app/layout.tsx` (replace), `components/layout/header.tsx`, `components/layout/footer.tsx`, `components/layout/mobile-nav.tsx`, `components/layout/theme-provider.tsx`, `components/layout/theme-toggle.tsx`, `lib/fonts.ts`
 - Add shadcn primitives: `button card badge avatar sheet dialog command tooltip popover separator skeleton input tabs scroll-area dropdown-menu`
 
 **Interfaces:**
+
 - Consumes: `SITE`, `NAV_ITEMS` from `@/lib/site`
 - Produces: `<Header />`, `<Footer />`, `<ThemeProvider />`, `<ThemeToggle />`, `fontVariables` string
 
@@ -1799,9 +1878,11 @@ git commit -m "feat: add design system, fonts, and layout shell"
 ### Task 10: Article, issue, and archive pages
 
 **Files:**
+
 - Create: `app/mags/intro/page.tsx`, `app/mags/[issue]/page.tsx`, `app/mags/[issue]/[article]/page.tsx`, `components/cards/article-card.tsx`, `components/cards/issue-card.tsx`, `components/content/table-of-contents.tsx`, `components/content/article-header.tsx`, `components/content/article-footer.tsx`
 
 **Interfaces:**
+
 - Consumes: content graph accessors, `MdxContent`, cards
 - Produces: `<ArticleCard article compact? />`, `<IssueCard issue />`, `<TableOfContents headings />`
 
@@ -1839,10 +1920,12 @@ git commit -m "feat: add article, issue, and archive pages"
 ### Task 11: Articles index with search and filters
 
 **Files:**
+
 - Create: `app/articles/page.tsx`, `components/articles/article-filters.tsx`, `components/articles/article-grid.tsx`, `lib/search.ts`, `scripts/lib/search-index.ts`
 - Test: `lib/search.test.ts`
 
 **Interfaces:**
+
 - Consumes: content graph, `normalizePersian`
 - Produces:
   - `buildSearchIndex(graph): SearchDoc[]` where `SearchDoc = { url, title, description, tags, authors, kind, issue? }`
@@ -1857,9 +1940,30 @@ import { describe, it, expect } from "vitest";
 import { searchDocs, type SearchDoc } from "./search";
 
 const docs: SearchDoc[] = [
-  { url: "/a", title: "رایانش کوانتومی", description: "کیوبیت", tags: ["Quantum"], authors: ["امیرمهدی"], kind: "article" },
-  { url: "/b", title: "برنامه‌نویسی وب", description: "ری‌اکت", tags: ["Web"], authors: ["معین"], kind: "article" },
-  { url: "/c", title: "DevOps چیست", description: "استقرار", tags: ["DevOps"], authors: ["معین"], kind: "blog" },
+  {
+    url: "/a",
+    title: "رایانش کوانتومی",
+    description: "کیوبیت",
+    tags: ["Quantum"],
+    authors: ["امیرمهدی"],
+    kind: "article",
+  },
+  {
+    url: "/b",
+    title: "برنامه‌نویسی وب",
+    description: "ری‌اکت",
+    tags: ["Web"],
+    authors: ["معین"],
+    kind: "article",
+  },
+  {
+    url: "/c",
+    title: "DevOps چیست",
+    description: "استقرار",
+    tags: ["DevOps"],
+    authors: ["معین"],
+    kind: "blog",
+  },
 ];
 
 describe("searchDocs", () => {
@@ -1880,7 +1984,11 @@ describe("searchDocs", () => {
   });
 
   it("matches an author name", () => {
-    expect(searchDocs(docs, "معین").map((d) => d.url).sort()).toEqual(["/b", "/c"]);
+    expect(
+      searchDocs(docs, "معین")
+        .map((d) => d.url)
+        .sort(),
+    ).toEqual(["/b", "/c"]);
   });
 
   it("ranks title matches above description matches", () => {
@@ -1937,10 +2045,12 @@ git commit -m "feat: add articles index with faceted filters and search"
 ### Task 12: Command palette search
 
 **Files:**
+
 - Create: `components/layout/search-dialog.tsx`, `hooks/use-search-index.ts`
 - Modify: `components/layout/header.tsx`
 
 **Interfaces:**
+
 - Consumes: `searchDocs`, `/search-index.json`
 - Produces: `<SearchDialog />` mounted in the header
 
@@ -1968,9 +2078,11 @@ git commit -m "feat: add command palette search"
 ### Task 13: Blog and workshops
 
 **Files:**
+
 - Create: `app/blog/page.tsx`, `app/blog/[...slug]/page.tsx`, `app/workshops/page.tsx`, `app/workshops/[workshop]/[...slug]/page.tsx`, `components/workshops/workshop-sidebar.tsx`
 
 **Interfaces:**
+
 - Consumes: `getAllBlogPosts`, `getBlogPost`, `getAllWorkshops`, `getWorkshop`, `getWorkshopDoc`, `MdxContent`
 - Produces: blog and workshop routes at legacy-compatible paths
 
@@ -2002,9 +2114,11 @@ git commit -m "feat: add blog and workshop pages"
 ### Task 14: People and codenameh pages
 
 **Files:**
+
 - Create: `app/authors/page.tsx`, `app/authors/[id]/page.tsx`, `app/staff/page.tsx`, `app/codenameh/page.tsx`, `app/tags/[tag]/page.tsx`, `components/cards/author-card.tsx`, `components/cards/staff-card.tsx`, `components/cards/codenameh-card.tsx`
 
 **Interfaces:**
+
 - Consumes: `getAllAuthors`, `getAuthor`, `getStaffSections`, `getCodenameh`, `getAllTags`, `getTag`
 - Produces: the people, tag, and codenameh routes
 
@@ -2048,9 +2162,11 @@ git commit -m "feat: add authors, staff, tags, and codenameh pages"
 ### Task 15: Landing page
 
 **Files:**
+
 - Create: `app/page.tsx` (replace), `components/sections/hero.tsx`, `components/sections/latest-issue.tsx`, `components/sections/featured-articles.tsx`, `components/sections/stats.tsx`, `components/sections/workshops-teaser.tsx`, `components/sections/staff-marquee.tsx`, `components/motion/*`
 
 **Interfaces:**
+
 - Consumes: `getStats`, `getAllIssues`, `getAllArticles`, `getAllWorkshops`, `getStaffSections`
 - Produces: the landing page
 
@@ -2096,10 +2212,12 @@ git commit -m "feat: add landing page"
 ### Task 16: SEO, OG images, sitemap, and 404
 
 **Files:**
+
 - Create: `app/sitemap.ts`, `app/robots.ts`, `app/not-found.tsx`, `app/manifest.ts`, `scripts/generate-og.ts`, `lib/seo.ts`
 - Test: `lib/seo.test.ts`
 
 **Interfaces:**
+
 - Consumes: content graph, `SITE`
 - Produces:
   - `buildMetadata(input): Metadata`
@@ -2115,13 +2233,21 @@ import { SITE } from "./site";
 
 describe("buildMetadata", () => {
   it("appends the site name to the title", () => {
-    const meta = buildMetadata({ title: "مقاله", description: "توضیح", path: "/x" });
+    const meta = buildMetadata({
+      title: "مقاله",
+      description: "توضیح",
+      path: "/x",
+    });
     expect(String(meta.title)).toContain("مقاله");
     expect(String(meta.title)).toContain(SITE.shortName);
   });
 
   it("sets an absolute canonical URL", () => {
-    const meta = buildMetadata({ title: "t", description: "d", path: "/mags/00000101" });
+    const meta = buildMetadata({
+      title: "t",
+      description: "d",
+      path: "/mags/00000101",
+    });
     expect(meta.alternates?.canonical).toBe(`${SITE.url}/mags/00000101`);
   });
 
@@ -2187,10 +2313,12 @@ git commit -m "feat: add SEO metadata, JSON-LD, sitemap, and OG images"
 ### Task 17: Final verification and documentation
 
 **Files:**
+
 - Create: `README.md`, `.github/workflows/deploy.yml`, `.env.example`
 - Test: `scripts/verify-urls.ts`
 
 **Interfaces:**
+
 - Consumes: the exported `out/` directory
 - Produces: a URL verification script and deployment config
 

@@ -43,7 +43,12 @@ export function Mermaid({ chart }: { chart: string }) {
     );
   }
 
-  return <div ref={ref} className="scroll-subtle my-6 flex justify-center overflow-x-auto" />;
+  return (
+    <div
+      ref={ref}
+      className="scroll-subtle my-6 flex justify-center overflow-x-auto"
+    />
+  );
 }
 
 export default Mermaid;

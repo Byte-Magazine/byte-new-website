@@ -134,9 +134,7 @@ function buildGraph(): ContentGraph {
     b.date.localeCompare(a.date),
   );
 
-  articles.sort(
-    (a, b) => b.date.localeCompare(a.date) || a.order - b.order,
-  );
+  articles.sort((a, b) => b.date.localeCompare(a.date) || a.order - b.order);
 
   // ---- Blog ---------------------------------------------------------------
   const blogPosts: BlogPost[] = [];
@@ -212,7 +210,8 @@ function buildGraph(): ContentGraph {
     if (b.articleCount !== a.articleCount) {
       return b.articleCount - a.articleCount;
     }
-    const photo = Number(authorHasPhoto(b.image)) - Number(authorHasPhoto(a.image));
+    const photo =
+      Number(authorHasPhoto(b.image)) - Number(authorHasPhoto(a.image));
     if (photo !== 0) return photo;
     const year =
       Number(authorHasEntryYear(b.title)) - Number(authorHasEntryYear(a.title));
@@ -222,7 +221,11 @@ function buildGraph(): ContentGraph {
 
   // ---- Tags ---------------------------------------------------------------
   const tagsBySlug = new Map<string, Tag>();
-  const addTag = (name: string, target: "articles" | "blogPosts", item: Article | BlogPost) => {
+  const addTag = (
+    name: string,
+    target: "articles" | "blogPosts",
+    item: Article | BlogPost,
+  ) => {
     const slug = tagSlug(name);
     let tag = tagsBySlug.get(slug);
     if (!tag) {

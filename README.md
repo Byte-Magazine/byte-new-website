@@ -17,12 +17,12 @@ Live site: [byte-mag.ir](https://byte-mag.ir)
 
 These constraints drive the architecture. Do not fight them.
 
-| Constraint | Implication |
-|---|---|
-| Fully static (`output: "export"`) | No API routes, no ISR, no request-time data fetching |
-| Build-time content graph | Counts, relations, search index, and OG images are computed in `prebuild` / module init — never in the browser |
-| Persian-first, RTL | `lang="fa" dir="rtl"`; use logical CSS (`ms`/`me`/`ps`/`pe`); isolate Latin/code with `dir="ltr"` |
-| Legacy URLs stay exact | New routes are additive only; inbound links must not break |
+| Constraint                        | Implication                                                                                                    |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Fully static (`output: "export"`) | No API routes, no ISR, no request-time data fetching                                                           |
+| Build-time content graph          | Counts, relations, search index, and OG images are computed in `prebuild` / module init — never in the browser |
+| Persian-first, RTL                | `lang="fa" dir="rtl"`; use logical CSS (`ms`/`me`/`ps`/`pe`); isolate Latin/code with `dir="ltr"`              |
+| Legacy URLs stay exact            | New routes are additive only; inbound links must not break                                                     |
 
 ---
 
@@ -52,24 +52,24 @@ search index, and regenerates Open Graph images.
 
 ### Scripts
 
-| Script | What it does |
-|---|---|
-| `pnpm dev` | Dev server |
-| `pnpm build` | Static export → `out/` |
-| `pnpm test` | Vitest |
-| `pnpm typecheck` | `tsc --noEmit` |
-| `pnpm lint` | ESLint |
-| `pnpm prettier` | Format the repo (`*.mdx` is ignored) |
-| `pnpm prettier:check` | Prettier check only |
-| `pnpm sync:assets` | Copy content images into `public/` |
-| `pnpm generate:og` | Regenerate OG images |
+| Script                | What it does                         |
+| --------------------- | ------------------------------------ |
+| `pnpm dev`            | Dev server                           |
+| `pnpm build`          | Static export → `out/`               |
+| `pnpm test`           | Vitest                               |
+| `pnpm typecheck`      | `tsc --noEmit`                       |
+| `pnpm lint`           | ESLint                               |
+| `pnpm prettier`       | Format the repo (`*.mdx` is ignored) |
+| `pnpm prettier:check` | Prettier check only                  |
+| `pnpm sync:assets`    | Copy content images into `public/`   |
+| `pnpm generate:og`    | Regenerate OG images                 |
 
 ### Environment
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | CDN base for issue / codenameh PDFs |
-| `NEXT_PUBLIC_BASE_PATH` | _(empty)_ | Only if the site is hosted under a subpath (not needed for `byte-mag.ir` / org `github.io`) |
+| Variable                   | Default                                          | Purpose                                                                                     |
+| -------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | CDN base for issue / codenameh PDFs                                                         |
+| `NEXT_PUBLIC_BASE_PATH`    | _(empty)_                                        | Only if the site is hosted under a subpath (not needed for `byte-mag.ir` / org `github.io`) |
 
 Expected layout on the CDN:
 
@@ -132,10 +132,10 @@ title: عنوان مقاله
 description: One-line summary
 authors: [AuthorId]
 tags: [برچسب]
-date: "2025-09-22"   # ISO; UI renders Jalali
+date: "2025-09-22" # ISO; UI renders Jalali
 issue: "00000101"
-order: 1             # position within the issue
-cover: ./img/1.png   # optional
+order: 1 # position within the issue
+cover: ./img/1.png # optional
 ---
 ```
 
@@ -150,7 +150,9 @@ Dates stay ISO in source (sitemaps, sorting, JSON-LD). Readers see Jalali via
 ```mdx
 <Tooltip tip="Quantum Computing">رایانش کوانتومی</Tooltip>
 
-<Callout type="tip" title="نکته">…</Callout>
+<Callout type="tip" title="نکته">
+  …
+</Callout>
 
 :::warning هشدار
 Short admonition form is still supported.
@@ -159,7 +161,9 @@ Short admonition form is still supported.
 <AuthorCallout author="AuthorId">…</AuthorCallout>
 
 <Timeline>
-  <TimelineItem title="…" date="۱۴۰۴">…</TimelineItem>
+  <TimelineItem title="…" date="۱۴۰۴">
+    …
+  </TimelineItem>
 </Timeline>
 ```
 
@@ -226,8 +230,8 @@ to [`Byte-Magazine/Byte-Magazine.github.io`](https://github.com/Byte-Magazine/By
 
 Required secret on **this** repo (`byte-new-website`):
 
-| Secret | Purpose |
-|---|---|
+| Secret           | Purpose                                                                                                  |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
 | `GH_PAGES_TOKEN` | Fine-grained or classic PAT with **Contents: Read and write** on `Byte-Magazine/Byte-Magazine.github.io` |
 
 Do **not** set `NEXT_PUBLIC_BASE_PATH` for this deploy — the site is served at the

@@ -73,7 +73,11 @@ export function Contributors({
 
       <div className="space-y-3">
         {rows.map((row, index) => (
-          <Marquee key={index} duration={index === 0 ? 52 : 64} reverse={index === 1}>
+          <Marquee
+            key={index}
+            duration={index === 0 ? 52 : 64}
+            reverse={index === 1}
+          >
             {row.map((author) => (
               <Chip key={author.id} author={author} />
             ))}

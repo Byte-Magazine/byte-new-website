@@ -4,12 +4,20 @@ import { SITE } from "./site";
 
 describe("buildMetadata", () => {
   it("keeps the page title", () => {
-    const meta = buildMetadata({ title: "مقاله", description: "توضیح", path: "/x" });
+    const meta = buildMetadata({
+      title: "مقاله",
+      description: "توضیح",
+      path: "/x",
+    });
     expect(String(meta.title)).toContain("مقاله");
   });
 
   it("sets an absolute canonical URL", () => {
-    const meta = buildMetadata({ title: "t", description: "d", path: "/mags/00000101" });
+    const meta = buildMetadata({
+      title: "t",
+      description: "d",
+      path: "/mags/00000101",
+    });
     expect(meta.alternates?.canonical).toBe(`${SITE.url}/mags/00000101`);
   });
 

@@ -18,7 +18,13 @@ export function resolveMdxSrc(src: string, baseUrl?: string): string {
   return baseUrl ? `${baseUrl}/${clean}` : `/${clean}`;
 }
 
-export function MdxImage({ src, alt, title, baseUrl, className }: MdxImageProps) {
+export function MdxImage({
+  src,
+  alt,
+  title,
+  baseUrl,
+  className,
+}: MdxImageProps) {
   if (!src) return null;
   const resolved = resolveMdxSrc(src, baseUrl);
 

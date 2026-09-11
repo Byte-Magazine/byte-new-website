@@ -14,7 +14,9 @@ describe("resolveMdxSrc", () => {
     expect(resolveMdxSrc("/img/logo.svg", base)).toBe("/img/logo.svg");
   });
   it("leaves a remote URL untouched", () => {
-    expect(resolveMdxSrc("https://x.test/a.png", base)).toBe("https://x.test/a.png");
+    expect(resolveMdxSrc("https://x.test/a.png", base)).toBe(
+      "https://x.test/a.png",
+    );
   });
   it("falls back to root when no base is given", () => {
     expect(resolveMdxSrc("./img/1.png")).toBe("/img/1.png");

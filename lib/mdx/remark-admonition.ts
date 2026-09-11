@@ -28,9 +28,7 @@ function attribute(name: string, value: string): MdxJsxAttribute {
 }
 
 /** Reads the `:::type title` marker from the first text node of a paragraph. */
-function readOpener(
-  node: RootContent,
-): { type: string; title: string } | null {
+function readOpener(node: RootContent): { type: string; title: string } | null {
   if (node.type !== "paragraph" || node.children.length === 0) return null;
   const first = node.children[0];
   if (first.type !== "text") return null;
@@ -68,7 +66,9 @@ export function remarkAdmonition() {
       if (textNode.type !== "text") return;
 
       const lines = textNode.value.split("\n");
-      const closing = lines.findIndex((line, i) => i > 0 && /^:::\s*$/.test(line));
+      const closing = lines.findIndex(
+        (line, i) => i > 0 && /^:::\s*$/.test(line),
+      );
 
       const inner = (closing === -1 ? lines.slice(1) : lines.slice(1, closing))
         .join("\n")

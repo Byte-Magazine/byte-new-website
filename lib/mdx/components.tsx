@@ -28,9 +28,15 @@ function MdxParagraph({ children, ...props }: ComponentPropsWithoutRef<"p">) {
     if (!isValidElement(child)) return false;
     const type = child.type;
     if (typeof type === "string") {
-      return ["div", "figure", "pre", "table", "ul", "ol", "blockquote"].includes(
-        type,
-      );
+      return [
+        "div",
+        "figure",
+        "pre",
+        "table",
+        "ul",
+        "ol",
+        "blockquote",
+      ].includes(type);
     }
     // Our own components that render a block wrapper.
     return type === MdxImage || type === Callout || type === Timeline;
@@ -43,8 +49,7 @@ function MdxParagraph({ children, ...props }: ComponentPropsWithoutRef<"p">) {
 /** Renders ```mermaid fences as diagrams and everything else as code. */
 function MdxPre(props: ComponentPropsWithoutRef<"pre">) {
   const child = props.children as
-    | { props?: { className?: string; children?: string } }
-    | undefined;
+    { props?: { className?: string; children?: string } } | undefined;
   const className = child?.props?.className ?? "";
 
   if (className.includes("language-mermaid")) {

@@ -31,7 +31,9 @@ describe("normalizePersian", () => {
     expect(normalizePersian("می‌شود")).toBe("میشود");
   });
   it("collapses whitespace and lowercases latin", () => {
-    expect(normalizePersian("  Quantum   Computing ")).toBe("quantum computing");
+    expect(normalizePersian("  Quantum   Computing ")).toBe(
+      "quantum computing",
+    );
   });
   it("normalizes Persian digits to ASCII", () => {
     expect(normalizePersian("۱۴۰۴")).toBe("1404");

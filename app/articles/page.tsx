@@ -4,7 +4,12 @@ import {
   ArticleBrowser,
   type BrowserArticle,
 } from "@/components/articles/article-browser";
-import { getAllArticles, getAllAuthors, getAllIssues, getAllTags } from "@/lib/content";
+import {
+  getAllArticles,
+  getAllAuthors,
+  getAllIssues,
+  getAllTags,
+} from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { buildMetadata } from "@/lib/seo";
 

@@ -25,7 +25,9 @@ const TARGET = join(ROOT, "public", "content");
 
 /** Everything except the documents themselves counts as an asset. */
 function isDocument(name: string): boolean {
-  return /^index\.mdx?$/.test(name) || name.endsWith(".md") || name.endsWith(".mdx");
+  return (
+    /^index\.mdx?$/.test(name) || name.endsWith(".md") || name.endsWith(".mdx")
+  );
 }
 
 /**

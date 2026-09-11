@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "prettier": "prettier --write .",
+    "prettier:check": "prettier --check .",
     "prebuild": "tsx scripts/sync-assets.ts && tsx scripts/build-search-index.ts && tsx scripts/generate-og.ts",
     "sync:assets": "tsx scripts/sync-assets.ts",
     "generate:og": "tsx scripts/generate-og.ts"
@@ -58,6 +60,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
     "playwright": "^1.63.0",
+    "prettier": "^3.9.6",
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",
     "satori": "^0.33.4",

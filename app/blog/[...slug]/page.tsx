@@ -71,13 +71,16 @@ export default async function BlogPostPage({
       </nav>
 
       <div className="lg:flex lg:gap-12">
-        <article className="min-w-0 flex-1">
+        <article className="min-w-0 flex-1" data-iv="article">
           <header className="mb-8 border-b pb-8">
             <h1 className="text-balance text-3xl font-black leading-[1.6]">
               {post.title}
             </h1>
             {post.description ? (
-              <p className="mt-4 text-lg leading-9 text-muted-foreground">
+              <p
+                data-iv="subtitle"
+                className="mt-4 text-lg leading-9 text-muted-foreground"
+              >
                 {post.description}
               </p>
             ) : null}
@@ -85,7 +88,7 @@ export default async function BlogPostPage({
               <AuthorList authors={post.authors} />
               <MetaLine
                 items={[
-                  <time key="date" dateTime={post.date}>
+                  <time key="date" dateTime={post.date} data-iv="date">
                     {formatJalaliLong(post.date)}
                   </time>,
                   `${toPersianDigits(post.readingTime)} دقیقه مطالعه`,
@@ -94,7 +97,7 @@ export default async function BlogPostPage({
             </div>
           </header>
 
-          <div className="prose max-w-none">
+          <div className="prose max-w-none" data-iv="body">
             <MdxContent
               source={post.body}
               baseUrl={`/content/blog/${post.slug}`}
@@ -102,7 +105,10 @@ export default async function BlogPostPage({
           </div>
 
           {headings.length >= 2 ? (
-            <details className="mb-8 rounded-lg border bg-muted/40 p-4 lg:hidden">
+            <details
+              data-iv="ignore"
+              className="mb-8 rounded-lg border bg-muted/40 p-4 lg:hidden"
+            >
               <summary className="cursor-pointer font-bold">فهرست مطلب</summary>
               <div className="mt-3">
                 <TableOfContents headings={headings} />
@@ -110,7 +116,9 @@ export default async function BlogPostPage({
             </details>
           ) : null}
 
-          <TagList tags={post.tags} className="mt-10" />
+          <div data-iv="ignore">
+            <TagList tags={post.tags} className="mt-10" />
+          </div>
         </article>
 
         {headings.length >= 2 ? (

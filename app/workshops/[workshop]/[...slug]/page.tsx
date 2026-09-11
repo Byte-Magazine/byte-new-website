@@ -78,13 +78,16 @@ export default async function WorkshopDocPage({
           </div>
         </aside>
 
-        <article className="min-w-0 flex-1">
+        <article className="min-w-0 flex-1" data-iv="article">
           <header className="mb-8 border-b pb-6">
             <h1 className="text-balance text-3xl font-black leading-[1.6]">
               {doc.title}
             </h1>
             {doc.description ? (
-              <p className="mt-3 text-lg leading-9 text-muted-foreground">
+              <p
+                data-iv="subtitle"
+                className="mt-3 text-lg leading-9 text-muted-foreground"
+              >
                 {doc.description}
               </p>
             ) : null}
@@ -95,7 +98,7 @@ export default async function WorkshopDocPage({
             ) : null}
           </header>
 
-          <div className="prose max-w-none">
+          <div className="prose max-w-none" data-iv="body">
             <MdxContent
               source={doc.body}
               baseUrl={`/content/workshops/${workshop.slug}/${doc.slug}`}
@@ -104,6 +107,7 @@ export default async function WorkshopDocPage({
 
           {prev || next ? (
             <nav
+              data-iv="ignore"
               className="mt-12 grid gap-4 border-t pt-8 sm:grid-cols-2"
               aria-label="درس‌های کارگاه"
             >

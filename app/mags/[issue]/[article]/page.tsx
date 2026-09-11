@@ -101,7 +101,10 @@ export default async function ArticlePage({
         ])}
       />
 
-      <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
+      <nav
+        data-iv="ignore"
+        className="mb-6 flex items-center gap-2 text-sm text-muted-foreground"
+      >
         <Link href="/mags/intro" className="hover:text-foreground">
           آرشیو
         </Link>
@@ -126,14 +129,17 @@ export default async function ArticlePage({
           </div>
         </aside>
 
-        <article className="min-w-0">
+        <article className="min-w-0" data-iv="article">
           <header className="mb-8 border-b pb-8">
             <h1 className="text-balance text-3xl font-black leading-[1.6] md:text-[2.1rem]">
               {article.title}
             </h1>
 
             {article.description ? (
-              <p className="mt-4 text-lg leading-9 text-muted-foreground">
+              <p
+                data-iv="subtitle"
+                className="mt-4 text-lg leading-9 text-muted-foreground"
+              >
                 {article.description}
               </p>
             ) : null}
@@ -142,7 +148,7 @@ export default async function ArticlePage({
               <AuthorList authors={article.authors} />
               <MetaLine
                 items={[
-                  <time key="date" dateTime={article.date}>
+                  <time key="date" dateTime={article.date} data-iv="date">
                     {formatJalaliLong(article.date)}
                   </time>,
                   `${toPersianDigits(article.readingTime)} دقیقه مطالعه`,
@@ -152,7 +158,7 @@ export default async function ArticlePage({
           </header>
 
           {/* Both rails collapse into disclosures on small screens. */}
-          <div className="mb-8 grid gap-3 lg:hidden">
+          <div className="mb-8 grid gap-3 lg:hidden" data-iv="ignore">
             <details className="rounded-lg border bg-muted/40 p-4">
               <summary className="cursor-pointer font-bold">
                 مطالب این شماره
@@ -179,17 +185,20 @@ export default async function ArticlePage({
             ) : null}
           </div>
 
-          <div className="prose max-w-none">
+          <div className="prose max-w-none" data-iv="body">
             <MdxContent
               source={article.body}
               baseUrl={articleAssetBase(article)}
             />
           </div>
 
-          <TagList tags={article.tags} className="mt-10" />
+          <div data-iv="ignore">
+            <TagList tags={article.tags} className="mt-10" />
+          </div>
 
           {prev || next ? (
             <nav
+              data-iv="ignore"
               className="mt-12 grid gap-4 border-t pt-8 sm:grid-cols-2"
               aria-label="مطالب این شماره"
             >
@@ -238,7 +247,7 @@ export default async function ArticlePage({
       </div>
 
       {related.length > 0 ? (
-        <section className="mt-16 border-t pt-10">
+        <section className="mt-16 border-t pt-10" data-iv="ignore">
           <h2 className="mb-6 text-xl font-bold">مطالب مرتبط</h2>
           <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((item, index) => (

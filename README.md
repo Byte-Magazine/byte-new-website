@@ -240,6 +240,15 @@ the custom domain on each publish.
 
 Override `NEXT_PUBLIC_PDF_BASE_URL` (repo variable) if the PDF CDN moves.
 
+### Telegram Instant View
+
+Link previews alone are not enough — Instant View needs a domain template on
+[instantview.telegram.org](https://instantview.telegram.org/). Article, blog,
+and workshop pages expose stable `data-iv` markers. Paste the rules from
+[`docs/telegram-instant-view.md`](./docs/telegram-instant-view.md) into the
+editor for `byte-mag.ir`, track ~15 URLs, then submit for Telegram review.
+Until approval, only the personal `t.me/iv?url=…&rhash=…` test link works.
+
 ---
 
 ## License

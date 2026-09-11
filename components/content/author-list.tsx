@@ -8,11 +8,15 @@ export function AuthorList({ authors }: { authors: Author[] }) {
   if (authors.length === 0) return null;
 
   return (
-    <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <ul
+      data-iv="authors"
+      className="flex flex-wrap items-center gap-x-4 gap-y-2"
+    >
       {authors.map((author) => (
         <li key={author.id}>
           <Link
             href={author.url}
+            data-iv="author"
             className="flex items-center gap-2 text-sm transition-colors hover:text-issue"
           >
             {author.image ? (

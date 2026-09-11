@@ -33,7 +33,7 @@ export function Topics({ tags }: { tags: Tag[] }) {
       </Reveal>
 
       <Reveal delay={120}>
-        <ul className="flex flex-wrap items-baseline gap-x-4 gap-y-3">
+        <ul className="flex flex-wrap items-baseline gap-x-4 gap-y-3 ">
           {tags.map((tag) => {
             // Map counts onto a restrained range: a cloud where the largest
             // term dwarfs the rest becomes unreadable.

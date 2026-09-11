@@ -5,8 +5,8 @@ import type { SiteStats } from "@/lib/content";
 const LABELS: Array<{ key: keyof SiteStats; label: string }> = [
   { key: "articles", label: "مقاله" },
   { key: "authors", label: "نویسنده" },
-  { key: "issues", label: "شماره" },
-  { key: "codenameh", label: "کدنامه" },
+  { key: "issues", label: "شماره بایت" },
+  { key: "codenameh", label: "شماره کدنامه" },
 ];
 
 /** Every number here is counted at build time from the content graph. */

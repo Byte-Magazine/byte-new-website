@@ -43,14 +43,17 @@ export function AuthorChip({ id, className }: AuthorChipProps) {
 /** Block form used where the legacy content wrote <AuthorCallout>. */
 export function AuthorCallout({
   id,
+  author,
   authors,
   children,
 }: {
   id?: string;
+  /** Legacy singular prop used throughout migrated MDX. */
+  author?: string;
   authors?: string[];
   children?: React.ReactNode;
 }) {
-  const ids = authors ?? (id ? [id] : []);
+  const ids = authors ?? (id ? [id] : author ? [author] : []);
   if (ids.length === 0) return <>{children}</>;
 
   return (

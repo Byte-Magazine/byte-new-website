@@ -6,6 +6,7 @@ import {
   authorHasPhoto,
   authorHasEntryYear,
 } from "./author-profile";
+import { mergeArticleAuthorIds } from "./author-credit";
 import {
   readArticles,
   readAuthorRecords,
@@ -110,7 +111,9 @@ function buildGraph(): ContentGraph {
       cover: raw.frontmatter.cover,
       body: raw.body,
       readingTime: readingTimeMinutes(raw.body),
-      authors: resolveAuthors(raw.frontmatter.authors),
+      authors: resolveAuthors(
+        mergeArticleAuthorIds(raw.frontmatter.authors, raw.body),
+      ),
       issue,
     };
 

@@ -29,7 +29,7 @@ export function Footer() {
               <p className="text-lg font-black">{SITE.shortName}</p>
             </div>
             <p className="mt-3 text-sm leading-8 text-muted-foreground">
-              {SITE.name} — {SITE.tagline}
+              {SITE.name} <br/> {SITE.tagline}
             </p>
             <p className="mt-4 text-xs text-muted-foreground">
               {toPersianDigits(stats.articles)} مقاله ·{" "}

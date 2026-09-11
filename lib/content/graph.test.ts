@@ -185,10 +185,26 @@ describe("content graph", () => {
   });
 
   it("strips the placeholder author avatar", () => {
-    const bare = getAllAuthors().find((a) => a.id === "FatemeHarirforoush");
+    const bare = getAuthor("FatemeHarirforoush");
     expect(bare).toBeTruthy();
     expect(bare!.image).toBeUndefined();
     expect(bare!.title).toBeUndefined();
+  });
+
+  it("credits AuthorCallout authors when frontmatter authors is empty", () => {
+    const ravan = getAuthor("AmirHosseinRavanNakhjavani");
+    expect(ravan).toBeTruthy();
+    expect(ravan!.articleCount).toBeGreaterThan(0);
+    expect(ravan!.image).toBeTruthy();
+
+    const hasan = getAuthor("AmirHosseinHasanZadeh")!;
+    // Same contribution volume, but Hasan has no photo — photo ranks first.
+    expect(hasan.articleCount).toBe(1);
+    expect(hasan.image).toBeUndefined();
+    if (ravan!.articleCount === hasan.articleCount) {
+      const authors = getAllAuthors();
+      expect(authors.indexOf(ravan!)).toBeLessThan(authors.indexOf(hasan));
+    }
   });
 
   it("marks authors who appear in the staff list", () => {

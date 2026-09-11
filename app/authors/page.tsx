@@ -12,16 +12,14 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function AuthorsPage() {
-  const authors = getAllAuthors();
-  const contributors = authors.filter((author) => author.articleCount > 0);
+  const authors = getAllAuthors().filter((author) => author.articleCount > 0);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
       <header className="mb-10 max-w-2xl">
         <h1 className="text-3xl font-black md:text-4xl">نویسندگان</h1>
         <p className="mt-4 text-lg leading-9 text-muted-foreground">
-          {toPersianDigits(contributors.length)} نفر تا امروز برای بایت
-          نوشته‌اند.
+          {toPersianDigits(authors.length)} نفر تا امروز برای بایت نوشته‌اند.
         </p>
       </header>
 

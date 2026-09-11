@@ -30,12 +30,8 @@ export default function TagsPage() {
         <ul className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <li key={tag.slug}>
-              {/* Prefetch is off: static export does not emit RSC payloads
-                  for percent-encoded Persian slugs, so prefetching a wall of
-                  them only produces 404 noise. */}
               <Link
                 href={tag.url}
-                prefetch={false}
                 className="group flex items-center gap-2 rounded-full border bg-card px-3.5 py-2 text-sm transition-colors hover:border-accent"
               >
                 <span>{tag.name}</span>

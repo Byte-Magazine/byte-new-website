@@ -5,6 +5,7 @@ import {
   formatJalali,
   formatJalaliLong,
   readingTimeMinutes,
+  transliterate,
 } from "./persian";
 
 describe("toPersianDigits", () => {
@@ -67,5 +68,26 @@ describe("readingTimeMinutes", () => {
       Array.from({ length: 600 }, () => "word").join(" ") +
       "\n```\n";
     expect(readingTimeMinutes(withCode)).toBe(1);
+  });
+});
+
+describe("transliterate", () => {
+  it("converts Persian to an ASCII slug", () => {
+    expect(transliterate("دانشگاه")).toBe("danshgah");
+  });
+  it("joins words with hyphens", () => {
+    expect(transliterate("هوش مصنوعی")).toBe("hvsh-msnvai");
+  });
+  it("leaves Latin text alone", () => {
+    expect(transliterate("Machine Learning")).toBe("machine-learning");
+  });
+  it("produces only URL-safe characters", () => {
+    expect(transliterate("تحصیلات تکمیلی؟")).toMatch(/^[a-z0-9-]+$/);
+  });
+  it("folds yeh and kaf variants to the same slug", () => {
+    expect(transliterate("برنامه‌نويسی")).toBe(transliterate("برنامه نویسی"));
+  });
+  it("trims stray hyphens", () => {
+    expect(transliterate("  وب  ")).toBe("vb");
   });
 });

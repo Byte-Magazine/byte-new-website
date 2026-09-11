@@ -46,8 +46,21 @@ export function getAllTags(): Tag[] {
   return getGraph().tags;
 }
 
+/**
+ * Looks a tag up by slug, accepting either the raw slug or a percent-encoded
+ * one: route params arrive decoded in some paths and encoded in others, and a
+ * Persian slug differs sharply between the two forms.
+ */
 export function getTag(slug: string): Tag | undefined {
-  return getGraph().tagsBySlug.get(slug);
+  const tags = getGraph().tagsBySlug;
+  const direct = tags.get(slug);
+  if (direct) return direct;
+
+  try {
+    return tags.get(decodeURIComponent(slug));
+  } catch {
+    return undefined;
+  }
 }
 
 export function getAllBlogPosts(): BlogPost[] {

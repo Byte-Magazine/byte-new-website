@@ -86,6 +86,41 @@ export function formatJalaliLong(iso: string): string {
   );
 }
 
+/**
+ * Persian letters to a Latin approximation, for URL slugs.
+ *
+ * Non-ASCII path segments are legal but awkward: they must be percent-encoded
+ * in links and sitemaps, and Next's dev server does not resolve them reliably
+ * as static params. An ASCII slug keeps every tag URL readable and routable.
+ */
+const TRANSLITERATION: Record<string, string> = {
+  ا: "a", آ: "a", أ: "a", إ: "a", ب: "b", پ: "p", ت: "t", ث: "s",
+  ج: "j", چ: "ch", ح: "h", خ: "kh", د: "d", ذ: "z", ر: "r", ز: "z",
+  ژ: "zh", س: "s", ش: "sh", ص: "s", ض: "z", ط: "t", ظ: "z", ع: "a",
+  غ: "gh", ف: "f", ق: "gh", ک: "k", گ: "g", ل: "l", م: "m", ن: "n",
+  و: "v", ه: "h", ی: "i", ء: "", ة: "h", "٫": "",
+};
+
+/**
+ * Converts Persian text to an ASCII slug, leaving Latin text as it is.
+ * Purely for URLs — never for anything a reader sees.
+ */
+export function transliterate(input: string): string {
+  // ZWNJ separates words visually in Persian, so it becomes a hyphen here even
+  // though `normalizePersian` strips it for matching.
+  const normalized = normalizePersian(input.replace(/\u200c/g, " "));
+  let out = "";
+
+  for (const char of normalized) {
+    if (/[a-z0-9]/.test(char)) out += char;
+    else if (char in TRANSLITERATION) out += TRANSLITERATION[char];
+    else if (/\s/.test(char)) out += "-";
+    else if (char === "-" || char === "_") out += "-";
+  }
+
+  return out.replace(/-+/g, "-").replace(/^-|-$/g, "");
+}
+
 const WORDS_PER_MINUTE = 200;
 
 /**

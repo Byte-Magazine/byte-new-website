@@ -44,7 +44,6 @@ export function Topics({ tags }: { tags: Tag[] }) {
                 <Link
                   href={tag.url}
                   style={{ fontSize: `${size}rem` }}
-                  prefetch={false}
                   className="text-muted-foreground transition-colors hover:text-accent"
                 >
                   {tag.name}

@@ -17,7 +17,7 @@ export default function MagsIntroPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
-      <header className="mb-12 max-w-2xl">
+      <header className="mb-12 max-w-3xl">
         <h1 className="text-3xl font-black md:text-4xl">آرشیو بایت</h1>
         <p className="mt-4 text-lg leading-9 text-muted-foreground">
           هر شماره با عددی دودویی نام‌گذاری می‌شود؛ از{" "}

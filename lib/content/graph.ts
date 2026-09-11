@@ -1,4 +1,4 @@
-import { normalizePersian, readingTimeMinutes } from "../persian";
+import { readingTimeMinutes, transliterate } from "../persian";
 import { pdfUrl } from "../site";
 import {
   readArticles,
@@ -21,9 +21,16 @@ import type {
   WorkshopDoc,
 } from "./schema";
 
-/** URL-safe slug for a tag, folding Persian character variants. */
+/**
+ * URL slug for a tag.
+ *
+ * Persian names are transliterated to ASCII rather than percent-encoded: an
+ * encoded segment has to be escaped in every link and sitemap entry, and Next's
+ * dev server does not resolve non-ASCII static params reliably under
+ * `output: "export"`. The readable name is still shown everywhere in the UI.
+ */
 export function tagSlug(name: string): string {
-  return encodeURIComponent(normalizePersian(name).replace(/\s+/g, "-"));
+  return transliterate(name) || "tag";
 }
 
 function buildGraph(): ContentGraph {

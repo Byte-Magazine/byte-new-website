@@ -235,7 +235,8 @@ Required secret on **this** repo (`byte-new-website`):
 | `GH_PAGES_TOKEN` | Fine-grained or classic PAT with **Contents: Read and write** on `Byte-Magazine/Byte-Magazine.github.io` |
 
 Do **not** set `NEXT_PUBLIC_BASE_PATH` for this deploy — the site is served at the
-domain root.
+domain root. Keep `public/CNAME` (`byte-mag.ir`) so GitHub Pages does not drop
+the custom domain on each publish.
 
 Override `NEXT_PUBLIC_PDF_BASE_URL` (repo variable) if the PDF CDN moves.
 

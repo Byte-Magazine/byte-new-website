@@ -50,6 +50,7 @@ jobs:
           external_repository: Byte-Magazine/Byte-Magazine.github.io
           publish_branch: main
           publish_dir: ./out
+          cname: byte-mag.ir
           force_orphan: false
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com

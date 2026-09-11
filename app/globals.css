@@ -267,6 +267,15 @@
  * and a measure tuned for Persian.
  */
 @layer components {
+  span.katex {
+    direction: rtl;
+    unicode-bidi: isolate;
+  }
+
+  .katex-html {
+    direction: initial;
+  }
+
   .prose {
     max-width: var(--measure);
     font-size: 1.0625rem;

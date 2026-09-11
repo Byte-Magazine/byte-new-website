@@ -1,10 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { Issue } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { cn } from "@/lib/utils";
 import { MetaLine } from "@/components/content/meta-line";
+
+/**
+ * Only the fields the card renders, so it can take either a resolved `Issue`
+ * from the content graph or a serialisable subset passed to a client component.
+ */
+export interface IssueCardData {
+  number: string;
+  url: string;
+  cover: string;
+  description: string;
+  date: string;
+  themeColor: string;
+  articleCount: number;
+}
 
 /**
  * Issue covers are the archive's primary visual. They render at their true aspect
@@ -15,7 +28,7 @@ export function IssueCard({
   issue,
   className,
 }: {
-  issue: Issue;
+  issue: IssueCardData;
   className?: string;
 }) {
   return (

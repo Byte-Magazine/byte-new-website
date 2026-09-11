@@ -30,8 +30,17 @@ export default function HomePage() {
       <Hero latest={latest} />
       <Stats stats={getStats()} />
       <FeaturedArticles articles={getAllArticles().slice(0, 6)} />
-      <VelocityDivider />
-      <IssueWall issues={getAllIssues()} />
+      <IssueWall
+        issues={getAllIssues().map((issue) => ({
+          number: issue.number,
+          url: issue.url,
+          cover: issue.cover,
+          description: issue.description,
+          date: issue.date,
+          themeColor: issue.themeColor,
+          articleCount: issue.articleCount,
+        }))}
+      />
       <Topics tags={getAllTags().slice(0, 28)} />
       <BlogTeaser posts={getAllBlogPosts().slice(0, 2)} />
       <VelocityDivider />

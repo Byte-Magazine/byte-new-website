@@ -7,6 +7,7 @@ import { useThemeStore } from "@/lib/stores/theme";
 import type { GrainientPalette } from "@/lib/brand";
 
 const Grainient = dynamic(() => import("./grainient"), { ssr: false });
+const DotGrid = dynamic(() => import("./dot-grid"), { ssr: false });
 
 /**
  * The hero backdrop: a slow grainy gradient in the site's own accent.
@@ -71,18 +72,30 @@ export function HeroBackdrop({ palette }: { palette: GrainientPalette }) {
         </div>
       ) : null}
 
-      {/* Scrim: keeps the headline legible over whatever the field does. */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/45 via-background/10 to-background" />
+      {/*
+        A field of dots that reacts to the pointer, replacing the flat CSS
+        grid. Rendered before the scrim so the scrim softens it rather than
+        erasing it. It reads as a substrate rather than graph paper, and the
+        interaction rewards a visitor who moves across the hero.
+      */}
+      {enabled ? (
+        <div className="pointer-events-auto absolute inset-0 [mask-image:radial-gradient(130%_100%_at_65%_5%,black,transparent_78%)]">
+          <DotGrid
+            dotSize={2.5}
+            gap={28}
+            baseColor={light ? "#c4c9d6" : "#3a4152"}
+            activeColor={palette.accent}
+            proximity={110}
+            shockRadius={190}
+            shockStrength={4}
+            returnDuration={1.3}
+            className="size-full"
+          />
+        </div>
+      ) : null}
 
-      {/* The grid stays: it is the publication's own visual vocabulary. */}
-      <div
-        className="absolute inset-0 opacity-[0.045] [mask-image:radial-gradient(120%_90%_at_70%_0%,black,transparent_70%)]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-          backgroundSize: "58px 58px",
-        }}
-      />
+      {/* Scrim last: keeps the headline legible over whatever moves beneath. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/25 via-transparent to-background" />
     </div>
   );
 }

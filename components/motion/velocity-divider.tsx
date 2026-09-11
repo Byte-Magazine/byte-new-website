@@ -53,9 +53,8 @@ export function VelocityDivider({
   }, []);
 
   const rowClass = cn(
-    "text-5xl font-black uppercase leading-[1.15] tracking-tight sm:text-6xl md:text-7xl",
-    // A 2px stroke: at this size a 1px outline disappears against the page.
-    "text-transparent [-webkit-text-stroke:2px_color-mix(in_oklch,var(--accent)_75%,transparent)]",
+    "text-2xl font-black uppercase leading-[1.3] tracking-tight sm:text-3xl md:text-4xl",
+    "text-transparent [-webkit-text-stroke:1.5px_color-mix(in_oklch,var(--accent)_70%,transparent)]",
   );
 
   return (
@@ -64,7 +63,7 @@ export function VelocityDivider({
       aria-hidden
       dir="ltr"
       className={cn(
-        "relative overflow-hidden border-y bg-muted/20 py-10 md:py-14",
+        "relative overflow-hidden border-y bg-muted/20 py-6 md:py-8",
         // Dissolve both ends so the ribbon never collides with the edge.
         "[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]",
         className,

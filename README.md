@@ -69,7 +69,7 @@ search index, and regenerates Open Graph images.
 | Variable | Default | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | CDN base for issue / codenameh PDFs |
-| `NEXT_PUBLIC_BASE_PATH` | _(empty)_ | Subpath when not hosted at domain root (GitHub Pages sets `/byte-new-website`) |
+| `NEXT_PUBLIC_BASE_PATH` | _(empty)_ | Only if the site is hosted under a subpath (not needed for `byte-mag.ir` / org `github.io`) |
 
 Expected layout on the CDN:
 
@@ -219,11 +219,21 @@ stored theme before first paint to avoid a flash.
 pnpm build   # → out/
 ```
 
-Serve `out/` from any static host. The repo’s GitHub Actions workflow publishes
-to GitHub Pages on push to `main`.
+On every push to `main`, GitHub Actions builds the site and force-pushes `out/`
+to [`Byte-Magazine/Byte-Magazine.github.io`](https://github.com/Byte-Magazine/Byte-Magazine.github.io)
+`main`. That repository is the org Pages site (`byte-magazine.github.io` /
+[byte-mag.ir](https://byte-mag.ir)) and deploys automatically from `main`.
 
-Override `NEXT_PUBLIC_PDF_BASE_URL` in the build environment if the PDF CDN
-moves.
+Required secret on **this** repo (`byte-new-website`):
+
+| Secret | Purpose |
+|---|---|
+| `GH_PAGES_TOKEN` | Fine-grained or classic PAT with **Contents: Read and write** on `Byte-Magazine/Byte-Magazine.github.io` |
+
+Do **not** set `NEXT_PUBLIC_BASE_PATH` for this deploy — the site is served at the
+domain root.
+
+Override `NEXT_PUBLIC_PDF_BASE_URL` (repo variable) if the PDF CDN moves.
 
 ---
 

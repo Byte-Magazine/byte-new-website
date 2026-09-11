@@ -5,17 +5,17 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Pushes the static export to Byte-Magazine/Byte-Magazine.github.io (org Pages /
+# byte-mag.ir). That repo publishes whatever is on its `main` branch.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: deploy-github-io
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,24 +35,23 @@ jobs:
       - run: pnpm lint
       - run: pnpm test
 
-      - id: pages
-        uses: actions/configure-pages@v5
-
+      # Root deploy (github.io / byte-mag.ir) — do NOT set NEXT_PUBLIC_BASE_PATH.
       - run: pnpm build
         env:
-          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_PDF_BASE_URL: ${{ vars.NEXT_PUBLIC_PDF_BASE_URL }}
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: out
+      # GitHub Pages runs Jekyll by default; `_next/` would be ignored without this.
+      - run: touch out/.nojekyll
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish to Byte-Magazine.github.io
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
+          external_repository: Byte-Magazine/Byte-Magazine.github.io
+          publish_branch: main
+          publish_dir: ./out
+          # Single deploy commit; the github.io repo is an artifact, not history.
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "deploy: byte-new-website@${{ github.sha }}"

@@ -40,14 +40,21 @@ export function Hero({ latest }: { latest?: Issue }) {
         />
       ) : null}
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:py-24 lg:grid-cols-[1.15fr_minmax(0,19rem)] lg:gap-14">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-8 md:py-24 lg:grid-cols-[1.15fr_minmax(0,19rem)] lg:gap-14">
         <div>
           <Reveal>
             <p className="text-sm text-muted-foreground">{SITE.tagline}</p>
           </Reveal>
 
-          <h1 className="max-w-3xl text-balance text-4xl font-black  md:text-6xl leading-25 h-fit">
-            <SplitText text="نشریه‌ی علمی فرهنگی بایت" />
+          <h1 className="mt-5 max-w-3xl text-[clamp(1.45rem,0.4rem+5vw,3.75rem)] font-black leading-[1.35] md:leading-[1.28]">
+            <span className="inline-flex max-w-full flex-wrap items-baseline gap-x-[0.3em]">
+              <span className="max-w-full whitespace-nowrap">
+                <SplitText text="نشریه‌ی علمی فرهنگی" />
+              </span>
+              <span>
+                <SplitText text="بایت" delay={165} />
+              </span>
+            </span>
           </h1>
 
           <Reveal delay={280}>

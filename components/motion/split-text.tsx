@@ -17,11 +17,14 @@ export function SplitText({
   className,
   wordClassName,
   stagger = 55,
+  delay = 0,
 }: {
   text: string;
   className?: string;
   wordClassName?: string;
   stagger?: number;
+  /** Extra ms before the first word starts revealing. */
+  delay?: number;
 }) {
   const reduced = useReducedMotion();
   const ref = useRef<HTMLSpanElement>(null);
@@ -55,16 +58,22 @@ export function SplitText({
           className="inline-block overflow-hidden align-bottom"
         >
           <span
-            style={{ transitionDelay: visible ? `${index * stagger}ms` : undefined }}
+            style={{
+              transitionDelay: visible
+                ? `${delay + index * stagger}ms`
+                : undefined,
+            }}
             className={cn(
               "inline-block transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none",
-              visible ? "translate-y-0 opacity-100" : "translate-y-[0.9em] opacity-0",
+              visible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-[0.9em] opacity-0",
               wordClassName,
             )}
           >
             {word}
           </span>
-          {index < words.length - 1 ? " " : null}
+          {index < words.length - 1 ? "\u00A0" : null}
         </span>
       ))}
     </span>

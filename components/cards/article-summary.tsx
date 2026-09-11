@@ -48,7 +48,9 @@ export function ArticleSummary({
   return (
     <article
       className={cn("group h-full", className)}
-      style={{ ["--issue-accent" as string]: issueAccentValue(article.themeColor) }}
+      style={{
+        ["--issue-accent" as string]: issueAccentValue(article.themeColor),
+      }}
     >
       <Link
         href={article.url}

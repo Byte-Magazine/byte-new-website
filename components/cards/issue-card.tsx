@@ -36,7 +36,9 @@ export function IssueCard({
     <Link
       href={issue.url}
       className={cn("group block", className)}
-      style={{ ["--issue-accent" as string]: issueAccentValue(issue.themeColor) }}
+      style={{
+        ["--issue-accent" as string]: issueAccentValue(issue.themeColor),
+      }}
     >
       <div className="relative aspect-[3/4] overflow-hidden rounded-lg border bg-muted transition-shadow duration-300 group-hover:shadow-[0_12px_40px_-12px_var(--issue-accent)]">
         <Image

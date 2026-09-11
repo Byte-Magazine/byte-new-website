@@ -501,8 +501,7 @@ export const AUTHORS: AuthorRecord[] = [
     title: "کارشناسی ۱۴۰۳",
     image: "/img/staff/arani.png",
     socials: {
-      linkedin:
-        "https://www.linkedin.com/in/mohammad-parsa-arani-397072382",
+      linkedin: "https://www.linkedin.com/in/mohammad-parsa-arani-397072382",
       github: "https://github.com/MParsa-0684",
     },
   },
@@ -531,8 +530,7 @@ export const AUTHORS: AuthorRecord[] = [
     title: "کارشناسی ۱۴۰۲",
     image: "/img/staff/nargesKari.jpg",
     socials: {
-      linkedin:
-        "https://www.linkedin.com/in/narges-kari-dolatabadi-a30348291",
+      linkedin: "https://www.linkedin.com/in/narges-kari-dolatabadi-a30348291",
       github: "https://github.com/NargesKari",
     },
   },

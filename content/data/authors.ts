@@ -225,7 +225,7 @@ export const AUTHORS: AuthorRecord[] = [
   {
     id: "ArshiaAkhavan",
     name: "عرشیا اخوان",
-    title: "کارشناسی ارشد San Diego State University",
+    title: "کارشناسی ۱۳۹۷",
     image: "/img/authors/arshiaakhavan.png",
     socials: {
       linkedin: "https://www.linkedin.com/in/arshia-akhavan",

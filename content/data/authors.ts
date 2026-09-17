@@ -243,6 +243,13 @@ export const AUTHORS: AuthorRecord[] = [
     },
   },
   {
+    id: "ArashYadegari",
+    name: "آرش یادگاری",
+    title: "کارشناسی ۱۳۹۹",
+    image: "/img/authors/ArashYadegari.png",
+    socials: {},
+  },
+  {
     id: "ArvinTaheri",
     name: "آروین طاهری",
     title: "کارشناسی ۱۴۰۲",

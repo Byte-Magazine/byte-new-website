@@ -92,11 +92,20 @@ export function mdxComponents(baseUrl?: string) {
   }
   MdxImg.displayName = "MdxImg";
 
+  function MdxTable(props: ComponentPropsWithoutRef<"table">) {
+    return (
+      <div dir="rtl" style={{ textAlign: "center", overflowX: "auto" }}>
+        <table {...props} style={{ ...props.style, marginInline: "auto" }} />
+      </div>
+    );
+  }
+
   return {
     a: MdxLink,
     p: MdxParagraph,
     pre: MdxPre,
     img: MdxImg,
+    table: MdxTable,
     Callout,
     Tooltip,
     Timeline,

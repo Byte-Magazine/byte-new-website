@@ -1,4 +1,9 @@
-import { Children, isValidElement, type ComponentPropsWithoutRef } from "react";
+import {
+  Children,
+  isValidElement,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 
 import { Callout } from "@/components/content/callout";
@@ -24,6 +29,25 @@ function componentName(
   }
   if (typeof type === "function" && type.name) return type.name;
   return "";
+}
+
+/** Flatten pretty-code / MDX children into plain text for mermaid source. */
+function textFromNode(node: ReactNode): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(textFromNode).join("");
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return textFromNode(node.props.children);
+  }
+  return "";
+}
+
+function dataLanguage(
+  props: Record<string, unknown> | null | undefined,
+): string | undefined {
+  if (!props) return undefined;
+  const value = props["data-language"] ?? props.dataLanguage;
+  return typeof value === "string" ? value : undefined;
 }
 
 /**
@@ -63,14 +87,28 @@ function MdxParagraph({ children, ...props }: ComponentPropsWithoutRef<"p">) {
   return <p {...props}>{children}</p>;
 }
 
-/** Renders ```mermaid fences as diagrams and everything else as code. */
+/**
+ * Renders ```mermaid fences as diagrams.
+ *
+ * After `rehype-pretty-code`, the language lives on `data-language` (not
+ * `language-mermaid` on <code>), and the source is split across span tokens —
+ * so we detect via data attributes and flatten text content.
+ */
 function MdxPre(props: ComponentPropsWithoutRef<"pre">) {
-  const child = props.children as
-    { props?: { className?: string; children?: string } } | undefined;
-  const className = child?.props?.className ?? "";
+  const child = Children.toArray(props.children)[0];
+  const childProps =
+    isValidElement(child) && child.props && typeof child.props === "object"
+      ? (child.props as Record<string, unknown>)
+      : undefined;
+  const className =
+    typeof childProps?.className === "string" ? childProps.className : "";
+  const lang =
+    dataLanguage(props as Record<string, unknown>) ??
+    dataLanguage(childProps) ??
+    (className.includes("language-mermaid") ? "mermaid" : undefined);
 
-  if (className.includes("language-mermaid")) {
-    return <Mermaid chart={String(child?.props?.children ?? "")} />;
+  if (lang === "mermaid") {
+    return <Mermaid chart={textFromNode(props.children).trim()} />;
   }
   return <pre {...props} />;
 }

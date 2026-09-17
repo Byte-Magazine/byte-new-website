@@ -11,8 +11,10 @@ import { Button } from "@/components/ui/button";
 import { grainientPalette, issueAccentValue } from "@/lib/brand-color";
 import type { Issue } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
+import { ISSUE_COVER_ASPECT_CLASS } from "@/lib/issue-cover";
 import { SITE } from "@/lib/site";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 /**
  * The hero pairs the publication's name with its newest cover.
@@ -89,7 +91,12 @@ export function Hero({ latest }: { latest?: Issue }) {
               }}
             >
               <Link href={latest.url} className="group block">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border transition-transform duration-500 group-hover:-translate-y-1">
+                <div
+                  className={cn(
+                    "relative overflow-hidden rounded-2xl border bg-muted transition-transform duration-500 group-hover:-translate-y-1",
+                    ISSUE_COVER_ASPECT_CLASS,
+                  )}
+                >
                   <Image
                     src={latest.cover}
                     alt={`جلد شمارهٔ ${latest.number}`}
@@ -97,7 +104,7 @@ export function Hero({ latest }: { latest?: Issue }) {
                     priority
                     unoptimized
                     sizes="(max-width: 1024px) 70vw, 20rem"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
               </Link>

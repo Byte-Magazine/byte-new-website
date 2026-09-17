@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { issueAccentValue } from "@/lib/brand-color";
+import { ISSUE_COVER_ASPECT_CLASS } from "@/lib/issue-cover";
 import { cn } from "@/lib/utils";
 import { MetaLine } from "@/components/content/meta-line";
 
@@ -21,9 +22,8 @@ export interface IssueCardData {
 }
 
 /**
- * Issue covers are the archive's primary visual. They render at their true aspect
- * ratio with the issue's own colour as a glow, so the wall of covers carries
- * the identity rather than uniform cards.
+ * Issue covers are the archive's primary visual. Framed at A4 so the full
+ * poster shows; the issue colour is a glow, not a crop.
  */
 export function IssueCard({
   issue,
@@ -40,14 +40,19 @@ export function IssueCard({
         ["--issue-accent" as string]: issueAccentValue(issue.themeColor),
       }}
     >
-      <div className="relative aspect-[3/4] overflow-hidden rounded-lg border bg-muted transition-shadow duration-300 group-hover:shadow-[0_12px_40px_-12px_var(--issue-accent)]">
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-lg border bg-muted transition-shadow duration-300 group-hover:shadow-[0_12px_40px_-12px_var(--issue-accent)]",
+          ISSUE_COVER_ASPECT_CLASS,
+        )}
+      >
         <Image
           src={issue.cover}
           alt={`جلد شمارهٔ ${issue.number}`}
           fill
           unoptimized
           sizes="(max-width: 640px) 50vw, 25vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          className="object-contain transition-transform duration-500 group-hover:scale-[1.04]"
         />
       </div>
 

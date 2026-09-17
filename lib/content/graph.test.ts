@@ -24,7 +24,7 @@ describe("content graph", () => {
   });
 
   it("loads every article", () => {
-    expect(getAllArticles()).toHaveLength(102);
+    expect(getAllArticles()).toHaveLength(105);
   });
 
   it("sorts issues newest first", () => {
@@ -133,7 +133,7 @@ describe("content graph", () => {
     expect(getAllBlogPosts()).toHaveLength(2);
     expect(getAllWorkshops()).toHaveLength(1);
     expect(getAllWorkshops()[0].docs.length).toBe(6);
-    expect(getStaffSections()).toHaveLength(5);
+    expect(getStaffSections()).toHaveLength(6);
     expect(getCodenameh()).toHaveLength(13);
   });
 
@@ -219,7 +219,7 @@ describe("content graph", () => {
     for (const section of getStaffSections()) {
       for (const member of section.members) {
         const author = getAuthor(member.authorId);
-        expect(author, member.name).toBeDefined();
+        expect(author, member.authorId).toBeDefined();
         expect(author!.url).toBe(`/authors/${member.authorId}`);
       }
     }

@@ -1,8 +1,4 @@
-import {
-  Children,
-  isValidElement,
-  type ComponentPropsWithoutRef,
-} from "react";
+import { Children, isValidElement, type ComponentPropsWithoutRef } from "react";
 import Link from "next/link";
 
 import { Callout } from "@/components/content/callout";
@@ -70,8 +66,7 @@ function MdxParagraph({ children, ...props }: ComponentPropsWithoutRef<"p">) {
 /** Renders ```mermaid fences as diagrams and everything else as code. */
 function MdxPre(props: ComponentPropsWithoutRef<"pre">) {
   const child = props.children as
-    | { props?: { className?: string; children?: string } }
-    | undefined;
+    { props?: { className?: string; children?: string } } | undefined;
   const className = child?.props?.className ?? "";
 
   if (className.includes("language-mermaid")) {

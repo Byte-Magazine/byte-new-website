@@ -14,6 +14,13 @@ export function Mermaid({ chart }: { chart: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState(false);
   const [dark, setDark] = useState(false);
+  const [prevInputs, setPrevInputs] = useState({ chart, dark });
+
+  // Reset error when the chart or theme changes (during render, not in an effect).
+  if (prevInputs.chart !== chart || prevInputs.dark !== dark) {
+    setPrevInputs({ chart, dark });
+    setError(false);
+  }
 
   useEffect(() => {
     const root = document.documentElement;
@@ -26,7 +33,6 @@ export function Mermaid({ chart }: { chart: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    setError(false);
 
     void (async () => {
       try {

@@ -128,16 +128,6 @@ export const STAFF_SECTIONS: StaffSection[] = [
     name: "صفحه‌آرایی و گرافیک",
     members: [
       {
-        authorId: "Moeein",
-        name: "معین آعلی",
-        title: "کارشناسی ۱۴۰۱",
-        image: "/img/staff/moeein.jpg",
-        socials: {
-          github: "https://github.com/moeeinaali",
-          linkedin: "https://www.linkedin.com/in/moeein",
-        },
-      },
-      {
         authorId: "AmirrezaInanloo",
         name: "امیررضا اینانلو",
         title: "کارشناسی ۱۴۰۱",
@@ -208,6 +198,29 @@ export const STAFF_SECTIONS: StaffSection[] = [
         socials: {
           github: "https://github.com/omid-hdr",
           linkedin: "https://www.linkedin.com/in/omid-hdr/",
+        },
+      },
+    ],
+  },
+  {
+    name: "فنی",
+    members: [
+      {
+        authorId: "Moeein",
+        name: "معین آعلی",
+        title: "کارشناسی ۱۴۰۱",
+        image: "/img/staff/moeein.jpg",
+        socials: {
+          github: "https://github.com/moeeinaali",
+          linkedin: "https://www.linkedin.com/in/moeein",
+        },
+      },
+      {
+        authorId: "aj",
+        name: "حسین زاهدی ادیب",
+        title: "کارشناسی ۱۴۰۳",
+        image: "/img/staff/aj.jpg",
+        socials: {
         },
       },
     ],

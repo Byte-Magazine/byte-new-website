@@ -46,13 +46,13 @@ export const STAFF_SECTIONS: StaffSection[] = [
           linkedin: "https://www.linkedin.com/in/mahdi-alinejad-ba97b6256",
         },
       },
-      {
-        authorId: "ArvinTaheri",
-        name: "آروین طاهری",
-        title: "کارشناسی ۱۴۰۲",
-        image: "/img/authors/ArvinTaheri.png",
-        socials: {},
-      },
+      // {
+      //   authorId: "ArvinTaheri",
+      //   name: "آروین طاهری",
+      //   title: "کارشناسی ۱۴۰۲",
+      //   image: "/img/authors/ArvinTaheri.png",
+      //   socials: {},
+      // },
       {
         authorId: "AHMZ",
         name: "امیرحسین محمدزاده",
@@ -106,13 +106,13 @@ export const STAFF_SECTIONS: StaffSection[] = [
           website: "https://amirmahdinamjoo.com/",
         },
       },
-      {
-        authorId: "MatinGhiasi",
-        name: "متین غیاثی",
-        title: "کارشناسی ۱۴۰۲",
-        image: "/img/authors/MatinGhiasi.png",
-        socials: {},
-      },
+      // {
+      //   authorId: "MatinGhiasi",
+      //   name: "متین غیاثی",
+      //   title: "کارشناسی ۱۴۰۲",
+      //   image: "/img/authors/MatinGhiasi.png",
+      //   socials: {},
+      // },
       {
         authorId: "SohaibSadeqi",
         name: "صهیب صادقی",
@@ -147,15 +147,15 @@ export const STAFF_SECTIONS: StaffSection[] = [
           linkedin: "https://www.linkedin.com/in/amirreza-inanloo-00576425b",
         },
       },
-      {
-        authorId: "SAhmadMousaviAvval",
-        name: "سیداحمد موسوی اول",
-        title: "کارشناسی ۱۴۰۲",
-        image: "/img/staff/seyedahmad.png",
-        socials: {
-          github: "https://github.com/seyedahmadmosaviawal",
-        },
-      },
+      // {
+      //   authorId: "SAhmadMousaviAvval",
+      //   name: "سیداحمد موسوی اول",
+      //   title: "کارشناسی ۱۴۰۲",
+      //   image: "/img/staff/seyedahmad.png",
+      //   socials: {
+      //     github: "https://github.com/seyedahmadmosaviawal",
+      //   },
+      // },
       {
         authorId: "FatemehNilforoushan",
         name: "فاطمه نیلفروشان",

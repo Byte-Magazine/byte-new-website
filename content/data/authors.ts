@@ -438,6 +438,13 @@ export const AUTHORS: AuthorRecord[] = [
     },
   },
   {
+    id: "MahdiShahmoradi",
+    name: "مهدی شاه‌مرادی",
+    title: "کارشناسی ۱۴۰۱",
+    image: "/img/authors/MahdiShahmoradi.png",
+    socials: {},
+  },
+  {
     id: "MahdyarMostashar",
     name: "مهدیار مستشار",
     title: "کارشناسی ۱۴۰۲",

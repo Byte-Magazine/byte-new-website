@@ -293,15 +293,6 @@
  * and a measure tuned for Persian.
  */
 @layer components {
-  span.katex {
-    direction: rtl;
-    unicode-bidi: isolate;
-  }
-
-  .katex-html {
-    direction: initial;
-  }
-
   .prose {
     max-width: var(--measure);
     font-size: 1.0625rem;
@@ -465,6 +456,19 @@
     overflow-y: hidden;
     padding-block: 0.35em;
   }
+}
+
+/*
+ * KaTeX must stay LTR inside RTL pages. Unlayered so it wins over inheritance
+ * from html[dir=rtl] and any leftover @layer rules.
+ */
+.katex,
+.prose .katex,
+.prose span.katex,
+.prose .katex-display,
+.prose .katex-html {
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 /* Card links defined inline by an article; hover handled in CSS so the page

@@ -30,10 +30,6 @@ export const authorSchema = z.object({
 
 export const staffMemberSchema = z.object({
   authorId: z.string().min(1),
-  name: z.string().min(1),
-  title: z.string().optional(),
-  image: z.string().optional(),
-  socials: socialsSchema,
 });
 
 export const staffSectionSchema = z.object({

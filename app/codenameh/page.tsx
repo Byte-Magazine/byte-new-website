@@ -4,9 +4,11 @@ import { Download } from "lucide-react";
 
 import { getCodenameh } from "@/lib/content";
 import { issueAccentValue } from "@/lib/brand-color";
+import { ISSUE_COVER_ASPECT_CLASS } from "@/lib/issue-cover";
 import { toPersianDigits } from "@/lib/persian";
 import { buildMetadata } from "@/lib/seo";
 import { codenamehPdfUrl } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = buildMetadata({
   title: "آرشیو کدنامه",
@@ -50,7 +52,12 @@ export default function CodenamehPage() {
                         ),
                       }}
                     >
-                      <div className="relative aspect-[3/4] overflow-hidden rounded-lg border bg-muted transition-shadow duration-300 group-hover:shadow-[0_12px_40px_-12px_var(--issue-accent)]">
+                      <div
+                        className={cn(
+                          "relative overflow-hidden rounded-lg border bg-muted transition-shadow duration-300 group-hover:shadow-[0_12px_40px_-12px_var(--issue-accent)]",
+                          ISSUE_COVER_ASPECT_CLASS,
+                        )}
+                      >
                         <Image
                           src={entry.cover}
                           alt={`جلد ${entry.description}`}

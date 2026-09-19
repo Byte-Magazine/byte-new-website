@@ -72,7 +72,7 @@ function buildGraph(): ContentGraph {
     for (const member of section.members) {
       if (!authorsById.has(member.authorId)) {
         throw new Error(
-          `staff member "${member.name}" references unknown authorId "${member.authorId}" — add them to content/data/authors.ts`,
+          `staff member references unknown authorId "${member.authorId}" — add them to content/data/authors.ts`,
         );
       }
     }

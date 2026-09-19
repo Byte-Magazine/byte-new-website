@@ -51,11 +51,11 @@ export function SplitText({
   const words = text.split(" ");
 
   return (
-    <span ref={ref} className={cn("inline", className)}>
+    <span ref={ref} className={cn("inline leading-[1.7]", className)}>
       {words.map((word, index) => (
         <span
           key={`${word}-${index}`}
-          className="inline-block overflow-hidden align-bottom"
+          className="inline-block overflow-hidden align-bottom leading-[inherit]"
         >
           <span
             style={{

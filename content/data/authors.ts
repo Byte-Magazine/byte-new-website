@@ -1,20 +1,28 @@
 import type { AuthorRecord } from "@/lib/content/schema";
 
 /**
- * People with a `/authors/[id]` profile — writers and central staff.
- * Referenced by `id` from article frontmatter and staff `authorId`;
- * article counts are derived at build time, never stored here.
+ * People with a `/authors/[id]` profile — writers and staff.
+ * Referenced by `id` from article frontmatter and staff `authorId`.
+ * Staff roster order lives in `staff.ts`; profile fields live here.
+ * Article counts are derived at build time, never stored here.
  */
 export const AUTHORS: AuthorRecord[] = [
   {
     id: "AHMZ",
     name: "امیرحسین محمدزاده",
     title: "کارشناسی ۱۴۰۲",
-    image: "/img/authors/ahmz.png",
+    image: "/img/staff/AmirHosseinMohammadZadeh.jpg",
     socials: {
       linkedin: "https://www.linkedin.com/in/ahmz1833",
       github: "https://github.com/ahmz1833",
     },
+  },
+  {
+    id: "aj",
+    name: "حسین زاهدی ادیب",
+    title: "کارشناسی ۱۴۰۳",
+    image: "/img/staff/aj.jpg",
+    socials: {},
   },
   {
     id: "aidaJabbari",
@@ -52,11 +60,11 @@ export const AUTHORS: AuthorRecord[] = [
   },
   {
     id: "Alinejad",
-    name: "مهدی علینژاد",
+    name: "مهدی علی‌نژاد",
     title: "کارشناسی ۱۴۰۱",
-    image: "/img/authors/MahdiAlinejad.png",
+    image: "/img/staff/MahdiAlinejhad.jpg",
     socials: {
-      linkedin: "https://www.linkedin.com/in/mahdi-ali-nejad",
+      linkedin: "https://www.linkedin.com/in/mahdi-alinejad-ba97b6256",
       github: "https://github.com/soilorian",
     },
   },
@@ -115,15 +123,16 @@ export const AUTHORS: AuthorRecord[] = [
     id: "AmirHosseinShayan",
     name: "امیرحسین شایان",
     title: "کارشناسی ۱۴۰۲",
-    image: "/img/authors/amirhosseinshayan.png",
+    image: "/img/staff/AmirHosseinShayan.jpg",
     socials: {},
   },
   {
     id: "AmirHosseinSouri",
     name: "امیرحسین صوری",
     title: "کارشناسی ۱۴۰۱",
-    image: "/img/authors/amirhosseinsouri.png",
+    image: "/img/staff/AmirHosseinSouri.jpg",
     socials: {
+      github: "https://github.com/Amir14Souri",
       linkedin: "https://www.linkedin.com/in/amirhossein-souri",
     },
   },
@@ -144,6 +153,7 @@ export const AUTHORS: AuthorRecord[] = [
     socials: {
       github: "https://github.com/titansarus",
       linkedin: "https://www.linkedin.com/in/amirmahdi-namjoo-23b4b9192",
+      website: "https://amirmahdinamjoo.com/",
     },
   },
   {
@@ -217,8 +227,9 @@ export const AUTHORS: AuthorRecord[] = [
     id: "ArmanTahmasebi",
     name: "آرمان طهماسبی‌زاده",
     title: "کارشناسی ۱۴۰۲",
-    image: "/img/authors/armantahmasebi.png",
+    image: "/img/staff/ArmanTahmasbi.jpg",
     socials: {
+      github: "https://github.com/OstadTahmasb",
       linkedin: "https://www.linkedin.com/in/ostadtahmasb",
     },
   },
@@ -241,6 +252,13 @@ export const AUTHORS: AuthorRecord[] = [
       github: "https://github.com/arvinasli",
       linkedin: "https://www.linkedin.com/in/arvin-baghal-asl",
     },
+  },
+  {
+    id: "ArashYadegari",
+    name: "آرش یادگاری",
+    title: "کارشناسی ۱۳۹۹",
+    image: "/img/authors/ArashYadegari.png",
+    socials: {},
   },
   {
     id: "ArvinTaheri",
@@ -420,6 +438,13 @@ export const AUTHORS: AuthorRecord[] = [
     },
   },
   {
+    id: "MahdiShahmoradi",
+    name: "مهدی شاه‌مرادی",
+    title: "کارشناسی ۱۴۰۱",
+    image: "/img/authors/MahdiShahmoradi.png",
+    socials: {},
+  },
+  {
     id: "MahdyarMostashar",
     name: "مهدیار مستشار",
     title: "کارشناسی ۱۴۰۲",
@@ -539,8 +564,9 @@ export const AUTHORS: AuthorRecord[] = [
     id: "OmidHeydari",
     name: "امید حیدری",
     title: "کارشناسی ۱۴۰۱",
-    image: "/img/authors/omidheydari.png",
+    image: "/img/staff/omidheidari.jpg",
     socials: {
+      github: "https://github.com/omid-hdr",
       linkedin: "https://www.linkedin.com/in/omid-hdr",
     },
   },

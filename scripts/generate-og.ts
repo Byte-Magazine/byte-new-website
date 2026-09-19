@@ -35,6 +35,8 @@ const COLORS = {
 };
 
 const COVER_WIDTH = 360;
+/** A4 portrait box height for the left-side issue cover on OG cards. */
+const COVER_HEIGHT = Math.round(COVER_WIDTH / (210 / 297));
 const AVATAR_SIZE = 44;
 
 /**
@@ -164,12 +166,15 @@ function card({
       props: {
         style: {
           display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           width: COVER_WIDTH,
-          height: HEIGHT - 136,
+          height: COVER_HEIGHT,
           borderRadius: 16,
           overflow: "hidden",
           border: `1px solid ${COLORS.border}`,
           flexShrink: 0,
+          backgroundColor: COLORS.background,
         },
         children: [
           {
@@ -177,11 +182,11 @@ function card({
             props: {
               src: cover,
               width: COVER_WIDTH,
-              height: HEIGHT - 136,
+              height: COVER_HEIGHT,
               style: {
                 width: COVER_WIDTH,
-                height: HEIGHT - 136,
-                objectFit: "cover",
+                height: COVER_HEIGHT,
+                objectFit: "contain",
               },
             },
           },

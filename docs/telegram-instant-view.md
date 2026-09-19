@@ -1,6 +1,7 @@
 # Telegram Instant View — byte-mag.ir
 
 ## Setup
+
 1. Open https://instantview.telegram.org/
 2. Load an article URL (e.g. `https://byte-mag.ir/mags/00000010/timebased-otp/`)
 3. Domain level: **byte-mag.ir**

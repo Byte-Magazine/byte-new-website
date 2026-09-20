@@ -9,6 +9,8 @@ import {
 } from "ogl";
 import { useEffect, useRef } from "react";
 
+import { ISSUE_COVER_PLANE } from "@/lib/issue-cover";
+
 type GL = Renderer["gl"];
 
 function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
@@ -497,10 +499,13 @@ class Media {
       }
     }
     this.scale = this.screen.height / 1500;
+    // A4 portrait (210×297); old 700×900 cropped the sides of print covers.
     this.plane.scale.y =
-      (this.viewport.height * (900 * this.scale)) / this.screen.height;
+      (this.viewport.height * (ISSUE_COVER_PLANE.height * this.scale)) /
+      this.screen.height;
     this.plane.scale.x =
-      (this.viewport.width * (700 * this.scale)) / this.screen.width;
+      (this.viewport.width * (ISSUE_COVER_PLANE.width * this.scale)) /
+      this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [
       this.plane.scale.x,
       this.plane.scale.y,

@@ -29,19 +29,16 @@ export default function StaffPage() {
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {section.members.map((member) => {
                 const author = getAuthor(member.authorId);
+                if (!author) return null;
                 return (
-                  <li key={`${section.name}-${member.name}`}>
+                  <li key={`${section.name}-${member.authorId}`}>
                     <PersonCard
-                      name={member.name}
-                      title={member.title}
-                      image={member.image ?? author?.image}
-                      href={author?.url}
-                      articleCount={author?.articleCount}
-                      socials={
-                        Object.keys(member.socials).length > 0
-                          ? member.socials
-                          : author?.socials
-                      }
+                      name={author.name}
+                      title={author.title}
+                      image={author.image}
+                      href={author.url}
+                      articleCount={author.articleCount}
+                      socials={author.socials}
                       className="h-full"
                     />
                   </li>

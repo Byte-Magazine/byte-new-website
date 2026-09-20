@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { getAllIssues, getIssue } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
 import { issueAccentVars } from "@/lib/brand";
+import { ISSUE_COVER_ASPECT_CLASS } from "@/lib/issue-cover";
+import { cn } from "@/lib/utils";
 import { buildMetadata, issueJsonLd, JsonLd, ogImage } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -67,7 +69,12 @@ export default async function IssuePage({
       <div className="grid items-start gap-10 md:grid-cols-[minmax(0,18rem)_1fr]">
         {/* Sticks while the long article list scrolls past it. */}
         <div className="md:sticky md:top-20">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-xl border shadow-[0_16px_48px_-20px_var(--issue-accent)]">
+          <div
+            className={cn(
+              "relative overflow-hidden rounded-xl border bg-muted shadow-[0_16px_48px_-20px_var(--issue-accent)]",
+              ISSUE_COVER_ASPECT_CLASS,
+            )}
+          >
             <Image
               src={issue.cover}
               alt={`جلد شمارهٔ ${issue.number}`}
@@ -75,7 +82,7 @@ export default async function IssuePage({
               priority
               unoptimized
               sizes="(max-width: 768px) 100vw, 18rem"
-              className="object-cover"
+              className="object-contain"
             />
           </div>
 

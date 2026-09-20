@@ -21,9 +21,7 @@ export const SITE = {
     "© نشریه‌ی علمی فرهنگی بایت - دانشکده مهندسی کامپیوتر - دانشگاه صنعتی شریف",
 } as const;
 
-const PDF_BASE =
-  process.env.NEXT_PUBLIC_PDF_BASE_URL ??
-  "https://byte-mag.s3.ir-thr-at1.arvanstorage.ir";
+const PDF_BASE = "https://byte-mag.s3.ir-thr-at1.arvanstorage.ir";
 
 /** Public URL of an issue's PDF on the CDN. */
 export function pdfUrl(issue: string): string {

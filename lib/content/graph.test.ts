@@ -19,12 +19,12 @@ import {
 } from "./index";
 
 describe("content graph", () => {
-  it("loads all 8 issues", () => {
-    expect(getAllIssues()).toHaveLength(8);
+  it("loads all 9 issues", () => {
+    expect(getAllIssues()).toHaveLength(9);
   });
 
   it("loads every article", () => {
-    expect(getAllArticles()).toHaveLength(94);
+    expect(getAllArticles()).toHaveLength(105);
   });
 
   it("sorts issues newest first", () => {
@@ -133,7 +133,7 @@ describe("content graph", () => {
     expect(getAllBlogPosts()).toHaveLength(2);
     expect(getAllWorkshops()).toHaveLength(1);
     expect(getAllWorkshops()[0].docs.length).toBe(6);
-    expect(getStaffSections()).toHaveLength(5);
+    expect(getStaffSections()).toHaveLength(6);
     expect(getCodenameh()).toHaveLength(13);
   });
 
@@ -151,7 +151,7 @@ describe("content graph", () => {
 
   it("computes stats from the graph", () => {
     const stats = getStats();
-    expect(stats.issues).toBe(8);
+    expect(stats.issues).toBe(9);
     expect(stats.articles).toBe(getAllArticles().length);
     expect(stats.authors).toBe(getAllAuthors().length);
     expect(stats.codenameh).toBe(13);
@@ -219,7 +219,7 @@ describe("content graph", () => {
     for (const section of getStaffSections()) {
       for (const member of section.members) {
         const author = getAuthor(member.authorId);
-        expect(author, member.name).toBeDefined();
+        expect(author, member.authorId).toBeDefined();
         expect(author!.url).toBe(`/authors/${member.authorId}`);
       }
     }

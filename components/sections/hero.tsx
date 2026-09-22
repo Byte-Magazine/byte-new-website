@@ -64,7 +64,7 @@ export function Hero({ latest }: { latest?: Issue }) {
                     size="lg"
                     render={
                       <Link href={latest.url}>
-                        خواندن شمارهٔ {latest.description}
+                        خواندن {latest.description}
                         <ArrowLeft className="size-4" />
                       </Link>
                     }

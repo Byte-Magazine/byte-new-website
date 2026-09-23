@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { PersonCard } from "@/components/cards/person-card";
+import { PROFESSOR_ORDER } from "@/content/data/authors";
 import { getAllAuthors } from "@/lib/content";
 import { toPersianDigits } from "@/lib/persian";
 import { buildMetadata } from "@/lib/seo";
@@ -12,7 +13,17 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function AuthorsPage() {
-  const authors = getAllAuthors().filter((author) => author.articleCount > 0);
+  const publishedAuthors = getAllAuthors().filter(
+    (author) => author.articleCount > 0,
+  );
+  const authors = publishedAuthors.filter(
+    (author) => author.role !== "professor",
+  );
+  const professors = publishedAuthors
+    .filter((author) => author.role === "professor")
+    .sort(
+      (a, b) => PROFESSOR_ORDER.indexOf(a.id) - PROFESSOR_ORDER.indexOf(b.id),
+    );
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
@@ -38,6 +49,29 @@ export default function AuthorsPage() {
           </li>
         ))}
       </ul>
+
+      {professors.length > 0 && (
+        <section className="mt-16">
+          <h2 className="mb-6 text-2xl font-black md:text-3xl">
+            اساتید همراه
+          </h2>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {professors.map((author) => (
+              <li key={author.id}>
+                <PersonCard
+                  name={author.name}
+                  title={author.title}
+                  image={author.image}
+                  href={author.url}
+                  articleCount={author.articleCount}
+                  socials={author.socials}
+                  className="h-full"
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </main>
   );
 }

@@ -26,6 +26,7 @@ export const authorSchema = z.object({
   image: z.string().optional(),
   bio: z.string().optional(),
   socials: socialsSchema,
+  role: z.enum(["professor"]).optional(),
 });
 
 export const staffMemberSchema = z.object({

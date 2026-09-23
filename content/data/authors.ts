@@ -6,6 +6,22 @@ import type { AuthorRecord } from "@/lib/content/schema";
  * Staff roster order lives in `staff.ts`; profile fields live here.
  * Article counts are derived at build time, never stored here.
  */
+/**
+ * Display order for the "اساتید همراه" section on /authors — by seniority,
+ * not the alphabetical/article-count sort used for regular authors.
+ */
+export const PROFESSOR_ORDER: string[] = [
+  "AmirhosseinJahangir",
+  "ShohrehKasaei",
+  "ShahinHessabi",
+  "MohammadAliAbam",
+  "SomayehKoohi",
+  "AliSharifiZarchi",
+  "MohsenAnsari",
+  "MaryamRamezani",
+  "SepidehSafari",
+];
+
 export const AUTHORS: AuthorRecord[] = [
   {
     id: "AHMZ",
@@ -684,5 +700,79 @@ export const AUTHORS: AuthorRecord[] = [
       linkedin: "https://www.linkedin.com/in/yazdanbahadori",
       github: "https://github.com/yazdanbhd",
     },
+  },
+  // اساتید همراه — role: "professor" keeps them out of the main grid and
+  // homepage marquee; they get their own section on /authors instead.
+  {
+    id: "AmirhosseinJahangir",
+    name: "دکتر امیرحسین جهانگیر",
+    title: "استاد دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/jahangir.jpg",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "ShohrehKasaei",
+    name: "دکتر شهره کسایی",
+    title: "استاد دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/kasaei.jpg",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "ShahinHessabi",
+    name: "دکتر شاهین حسابی",
+    title: "دانشیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/hessabi.jpg",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "MohammadAliAbam",
+    name: "دکتر محمدعلی آبام",
+    title: "دانشیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/abam.png",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "SomayehKoohi",
+    name: "دکتر سمیه کوهی",
+    title: "دانشیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/koohi.jpg",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "AliSharifiZarchi",
+    name: "دکتر علی شریفی زرچی",
+    title: "استادیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/zarchi.jpg",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "MohsenAnsari",
+    name: "دکتر محسن انصاری",
+    title: "استادیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/ansari.jpg",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "MaryamRamezani",
+    name: "دکتر مریم رمضانی",
+    title: "استادیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/ramezani.jpg",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "SepidehSafari",
+    name: "دکتر سپیده صفری",
+    title: "پژوهشگر پسادکتری، پژوهشکده علوم بنیادی (IPM)",
+    image: "/img/authors/professors/safari.jpg",
+    socials: {},
+    role: "professor",
   },
 ];

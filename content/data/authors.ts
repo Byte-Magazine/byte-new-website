@@ -24,7 +24,7 @@ export const PROFESSOR_ORDER: string[] = [
   "SepidehSafari",
 ];
 
-export const AUTHORS: AuthorRecord[] = [
+export const AUTHORS = [
   {
     id: "AHMZ",
     name: "امیرحسین محمدزاده",
@@ -781,6 +781,6 @@ export const AUTHORS: AuthorRecord[] = [
     socials: {},
     role: "professor",
   },
-];
+] as const satisfies readonly AuthorRecord[];
 
 export type AuthorId = (typeof AUTHORS)[number]["id"];

@@ -39,10 +39,10 @@ export const STAFF_SECTIONS: StaffSection[] = [
     members: [
       { authorId: "AmirrezaInanloo" },
       // { authorId: "SAhmadMousaviAvval" },
-      { authorId: "FatemehNilforoushan" },
-      { authorId: "NargesKari" },
       { authorId: "AmirrezaJafari" },
       { authorId: "MohammadParsaArani" },
+      { authorId: "FatemehNilforoushan" },
+      { authorId: "NargesKari" },
     ],
   },
   {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Author } from "@/lib/content";
 
 /** Byline used at the top of articles, blog posts, and workshop docs. */
-export function AuthorList({ authors }: { authors: Author[] }) {
+export function AuthorList({ authors }: { authors: readonly Author[] }) {
   if (authors.length === 0) return null;
 
   return (

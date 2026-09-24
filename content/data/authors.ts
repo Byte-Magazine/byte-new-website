@@ -6,7 +6,9 @@ import type { AuthorRecord } from "@/lib/content/schema";
  * Staff roster order lives in `staff.ts`; profile fields live here.
  * Article counts are derived at build time, never stored here.
  */
-export const AUTHORS: AuthorRecord[] = [
+type AUTHORSIDS = (typeof AUTHORS)[number]["id"];
+
+export const AUTHORS = [
   {
     id: "AHMZ",
     name: "امیرحسین محمدزاده",
@@ -689,4 +691,6 @@ export const AUTHORS: AuthorRecord[] = [
       github: "https://github.com/yazdanbhd",
     },
   },
-];
+] as const satisfies readonly AuthorRecord[];
+
+export type AuthorId = (typeof AUTHORS)[number]["id"];

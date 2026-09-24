@@ -20,7 +20,7 @@ export {
 } from "./author-profile";
 export * from "./schema";
 
-export function getAllArticles(): Article[] {
+export function getAllArticles(): readonly Article[] {
   return getGraph().articles;
 }
 
@@ -28,7 +28,7 @@ export function getArticle(issue: string, slug: string): Article | undefined {
   return getGraph().articlesByKey.get(`${issue}/${slug}`);
 }
 
-export function getAllIssues(): Issue[] {
+export function getAllIssues(): readonly Issue[] {
   return getGraph().issues;
 }
 
@@ -40,7 +40,7 @@ export function getLatestIssue(): Issue | undefined {
   return getGraph().issues[0];
 }
 
-export function getAllAuthors(): Author[] {
+export function getAllAuthors(): readonly Author[] {
   return getGraph().authors;
 }
 
@@ -48,7 +48,7 @@ export function getAuthor(id: string): Author | undefined {
   return getGraph().authorsById.get(id);
 }
 
-export function getAllTags(): Tag[] {
+export function getAllTags(): readonly Tag[] {
   return getGraph().tags;
 }
 
@@ -69,7 +69,7 @@ export function getTag(slug: string): Tag | undefined {
   }
 }
 
-export function getAllBlogPosts(): BlogPost[] {
+export function getAllBlogPosts(): readonly BlogPost[] {
   return getGraph().blogPosts;
 }
 
@@ -77,7 +77,7 @@ export function getBlogPost(slug: string): BlogPost | undefined {
   return getGraph().blogPostsBySlug.get(slug);
 }
 
-export function getAllWorkshops(): Workshop[] {
+export function getAllWorkshops(): readonly Workshop[] {
   return getGraph().workshops;
 }
 
@@ -94,11 +94,11 @@ export function getWorkshopDoc(
     ?.docs.find((doc) => doc.slug === slug);
 }
 
-export function getStaffSections(): StaffSection[] {
+export function getStaffSections(): readonly StaffSection[] {
   return getGraph().staff;
 }
 
-export function getCodenameh(): CodenamehEntry[] {
+export function getCodenameh(): readonly CodenamehEntry[] {
   return getGraph().codenameh;
 }
 

@@ -5,7 +5,7 @@ import { Reveal } from "@/components/motion/reveal";
 import type { Workshop } from "@/lib/content";
 import { toPersianDigits } from "@/lib/persian";
 
-export function WorkshopsTeaser({ workshops }: { workshops: Workshop[] }) {
+export function WorkshopsTeaser({ workshops }: { workshops: readonly Workshop[] }) {
   if (workshops.length === 0) return null;
 
   return (

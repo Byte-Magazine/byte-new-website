@@ -48,7 +48,7 @@ export function Contributors({
   authors,
   totalAuthors,
 }: {
-  authors: Author[];
+  authors: readonly Author[];
   totalAuthors: number;
 }) {
   if (authors.length === 0) return null;

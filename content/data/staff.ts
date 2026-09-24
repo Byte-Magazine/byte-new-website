@@ -22,6 +22,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
       { authorId: "AHMZ" },
       { authorId: "AmirHosseinShayan" },
       { authorId: "ArvinBaghal" },
+      { authorId: "SorenaKia" },
     ],
   },
   {

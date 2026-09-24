@@ -1,3 +1,4 @@
+import { AuthorId } from "@/content/data/authors";
 import { z } from "zod";
 
 const isoDate = z
@@ -92,8 +93,13 @@ export const codenamehSchema = z.object({
 
 export type Socials = z.infer<typeof socialsSchema>;
 export type AuthorRecord = z.infer<typeof authorSchema>;
-export type StaffMember = z.infer<typeof staffMemberSchema>;
-export type StaffSection = z.infer<typeof staffSectionSchema>;
+export type StaffMember = { authorId: AuthorId };
+export type StaffSection = {
+  name: string;
+  members: {
+    authorId: AuthorId;
+  }[];
+};
 export type IssueMeta = z.infer<typeof issueMetaSchema>;
 export type ArticleFrontmatter = z.infer<typeof articleFrontmatterSchema>;
 export type BlogFrontmatter = z.infer<typeof blogFrontmatterSchema>;
@@ -180,18 +186,18 @@ export interface Tag {
 }
 
 export interface ContentGraph {
-  articles: Article[];
+  articles: readonly Article[];
   articlesByKey: Map<string, Article>;
-  issues: Issue[];
+  issues: readonly Issue[];
   issuesByNumber: Map<string, Issue>;
-  authors: Author[];
+  authors: readonly Author[];
   authorsById: Map<string, Author>;
-  tags: Tag[];
+  tags: readonly Tag[];
   tagsBySlug: Map<string, Tag>;
-  blogPosts: BlogPost[];
+  blogPosts: readonly BlogPost[];
   blogPostsBySlug: Map<string, BlogPost>;
-  workshops: Workshop[];
+  workshops: readonly Workshop[];
   workshopsBySlug: Map<string, Workshop>;
-  staff: StaffSection[];
-  codenameh: CodenamehEntry[];
+  staff: readonly StaffSection[];
+  codenameh: readonly CodenamehEntry[];
 }

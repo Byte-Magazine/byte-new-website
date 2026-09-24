@@ -126,14 +126,14 @@ export function readWorkshopDocs(): RawDoc<WorkshopFrontmatter>[] {
   return out;
 }
 
-export function readAuthorRecords(): AuthorRecord[] {
+export function readAuthorRecords(): readonly AuthorRecord[] {
   return AUTHORS;
 }
 
-export function readStaffSections(): StaffSection[] {
+export function readStaffSections(): readonly StaffSection[] {
   return STAFF_SECTIONS;
 }
 
-export function readCodenameh(): CodenamehEntry[] {
+export function readCodenameh(): readonly CodenamehEntry[] {
   return CODENAMEH;
 }

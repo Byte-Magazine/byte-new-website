@@ -22,7 +22,10 @@ export const AUTHORS: AuthorRecord[] = [
     name: "حسین زاهدی ادیب",
     title: "کارشناسی ۱۴۰۳",
     image: "/img/staff/aj.jpg",
-    socials: {},
+    socials: {
+      github: "https://github.com/zahediadib",
+      linkedin: "https://linkedin.com/in/zahediadib",
+    },
   },
   {
     id: "aidaJabbari",
@@ -134,6 +137,7 @@ export const AUTHORS: AuthorRecord[] = [
     socials: {
       github: "https://github.com/Amir14Souri",
       linkedin: "https://www.linkedin.com/in/amirhossein-souri",
+      website: "https://souuri.ir",
     },
   },
   {

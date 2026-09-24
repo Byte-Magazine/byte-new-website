@@ -21,7 +21,9 @@ import {
 
 export default function HomePage() {
   const latest = getLatestIssue();
-  const authors = getAllAuthors().filter((author) => author.articleCount > 0);
+  const authors = getAllAuthors().filter(
+    (author) => author.articleCount > 0 && author.role !== "professor",
+  );
 
   return (
     <>

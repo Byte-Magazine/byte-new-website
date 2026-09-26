@@ -16,13 +16,15 @@ export const STAFF_SECTIONS: StaffSection[] = [
   {
     name: "تحریریه",
     members: [
-      { authorId: "ArmanTahmasebi" },
+      { authorId: "NimaShirzadi" },
+      { authorId: "FarzamKoohi" },
       { authorId: "Alinejad" },
       // { authorId: "ArvinTaheri" },
+      { authorId: "SorenaKia" },
+      { authorId: "ArvinBaghal" },
+      { authorId: "ArmanTahmasebi" },
       { authorId: "AHMZ" },
       { authorId: "AmirHosseinShayan" },
-      { authorId: "ArvinBaghal" },
-      { authorId: "SorenaKia" },
     ],
   },
   {

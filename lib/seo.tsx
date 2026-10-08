@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { SITE } from "./site";
+import { FEED_PATH, SITE } from "./site";
 
 /** Absolute URL for a site-relative path. */
 export function absoluteUrl(path: string): string {
@@ -68,7 +68,12 @@ export function buildMetadata({
   return {
     title,
     description: resolvedDescription,
-    alternates: { canonical: url },
+    // Child `alternates` replaces the layout's wholesale, so the feed link
+    // has to be repeated here to stay in every page's <head>.
+    alternates: {
+      canonical: url,
+      types: { "application/rss+xml": FEED_PATH },
+    },
     openGraph: {
       type: type === "profile" ? "profile" : type,
       locale: SITE.locale,

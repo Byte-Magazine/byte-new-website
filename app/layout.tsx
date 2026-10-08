@@ -8,7 +8,7 @@ import { getLatestIssue } from "@/lib/content";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { fontVariables } from "@/lib/fonts";
 import { ogImage, ogImageEntry } from "@/lib/seo";
-import { SITE } from "@/lib/site";
+import { FEED_PATH, SITE } from "@/lib/site";
 
 import "./globals.css";
 import "katex/dist/katex.min.css";
@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     description: SITE.description,
     images: [defaultOg.url],
   },
+  alternates: { types: { "application/rss+xml": FEED_PATH } },
   icons: { icon: "/img/favicon.ico" },
 };
 

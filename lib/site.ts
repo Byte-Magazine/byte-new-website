@@ -21,6 +21,9 @@ export const SITE = {
     "© نشریه‌ی علمی فرهنگی بایت - دانشکده مهندسی کامپیوتر - دانشگاه صنعتی شریف",
 } as const;
 
+/** Site-relative path of the RSS feed. */
+export const FEED_PATH = "/feed.xml";
+
 const PDF_BASE = "https://byte-mag.s3.ir-thr-at1.arvanstorage.ir";
 
 /** Public URL of an issue's PDF on the CDN. */

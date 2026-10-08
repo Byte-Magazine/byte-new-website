@@ -115,6 +115,7 @@ export default async function BlogPostPage({
           <div className="prose max-w-none" data-iv="body">
             <MdxContent
               source={post.body}
+              title={post.title}
               baseUrl={`/content/blog/${post.slug}`}
             />
           </div>

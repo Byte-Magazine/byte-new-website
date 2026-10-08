@@ -118,6 +118,7 @@ export default async function WorkshopDocPage({
           <div className="prose max-w-none" data-iv="body">
             <MdxContent
               source={doc.body}
+              title={doc.title}
               baseUrl={`/content/workshops/${workshop.slug}/${doc.slug}`}
             />
           </div>

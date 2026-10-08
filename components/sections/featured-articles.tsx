@@ -5,7 +5,11 @@ import { ArticleCard } from "@/components/cards/article-card";
 import { Reveal } from "@/components/motion/reveal";
 import type { Article } from "@/lib/content";
 
-export function FeaturedArticles({ articles }: { articles: readonly Article[] }) {
+export function FeaturedArticles({
+  articles,
+}: {
+  articles: readonly Article[];
+}) {
   if (articles.length === 0) return null;
 
   return (

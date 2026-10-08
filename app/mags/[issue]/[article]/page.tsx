@@ -205,6 +205,7 @@ export default async function ArticlePage({
           <div className="prose max-w-none" data-iv="body">
             <MdxContent
               source={article.body}
+              title={article.title}
               baseUrl={articleAssetBase(article)}
             />
           </div>

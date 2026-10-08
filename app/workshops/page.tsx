@@ -8,7 +8,8 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "کارگاه‌ها",
-  description: "کارگاه‌های آموزشی نشریه‌ی بایت",
+  description:
+    "کارگاه‌های آموزشی نشریه‌ی بایت؛ درس‌نامه‌های گام‌به‌گام و عملی، از جمله کارگاه گیت برای یادگیری کنترل نسخه از پایه تا شاخه‌بندی و ادغام",
   path: "/workshops",
 });
 

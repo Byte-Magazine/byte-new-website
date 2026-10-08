@@ -7,7 +7,8 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "وبلاگ",
-  description: "یادداشت‌ها و گزارش‌های نشریه‌ی بایت",
+  description:
+    "یادداشت‌ها و گزارش‌های نشریه‌ی بایت دربارهٔ رویدادها و پروژه‌های دانشکده‌ی مهندسی کامپیوتر دانشگاه صنعتی شریف، بیرون از شماره‌های چاپی",
   path: "/blog",
 });
 

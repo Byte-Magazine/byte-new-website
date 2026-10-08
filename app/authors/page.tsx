@@ -8,7 +8,8 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "نویسندگان",
-  description: "نویسندگانی که در نشریه‌ی بایت نوشته‌اند",
+  description:
+    "نویسندگان نشریه‌ی بایت؛ دانشجویان، دانش‌آموختگان و استادان دانشکده‌ی مهندسی کامپیوتر دانشگاه صنعتی شریف، همراه با همهٔ مطالبی که هر کدام نوشته‌اند",
   path: "/authors",
 });
 

@@ -12,7 +12,8 @@ import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = buildMetadata({
   title: "آرشیو کدنامه",
-  description: "کدنامه؛ پدر معنوی بایت",
+  description:
+    "آرشیو کدنامه، نشریهٔ پیشین دانشکده‌ی مهندسی کامپیوتر دانشگاه صنعتی شریف و پدر معنوی بایت؛ همهٔ شماره‌ها با نسخهٔ PDF",
   path: "/codenameh",
 });
 

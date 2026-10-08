@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/cards/article-card";
 import { getAllTags, getTag, isIndexableTag } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
+import { tagDescription } from "@/lib/description";
 import { buildMetadata } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -26,7 +27,7 @@ export async function generateMetadata({
     ...buildMetadata({
       // Prefixed so a tag never shares a title with an article ("سرمقاله").
       title: `برچسب: ${tag.name}`,
-      description: `${toPersianDigits(tag.count)} مطلب با برچسب «${tag.name}» در نشریه‌ی بایت`,
+      description: tagDescription(tag),
       path: tag.url,
     }),
     // Thin tag pages stay crawlable so their links pass, but out of the index.

@@ -7,7 +7,8 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "آرشیو بایت",
-  description: "همهٔ شماره‌های منتشرشدهٔ نشریه‌ی علمی فرهنگی بایت",
+  description:
+    "آرشیو همهٔ شماره‌های نشریه‌ی علمی فرهنگی بایت؛ هر شماره با فهرست مطالب، نسخهٔ PDF و مقاله‌هایی که در وب خوانده می‌شوند",
   path: "/mags/intro",
 });
 

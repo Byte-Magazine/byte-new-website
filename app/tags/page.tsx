@@ -8,7 +8,8 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "برچسب‌ها",
-  description: "همهٔ موضوع‌هایی که در نشریه‌ی بایت دربارهٔ آن‌ها نوشته‌ایم",
+  description:
+    "همهٔ موضوع‌هایی که در نشریه‌ی بایت دربارهٔ آن‌ها نوشته‌ایم؛ از هوش مصنوعی، امنیت و شبکه تا سخت‌افزار، الگوریتم، سیستم‌ها و تاریخچهٔ رایانش",
   path: "/tags",
 });
 

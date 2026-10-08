@@ -1,4 +1,5 @@
 import { getAllArticles, getAllBlogPosts } from "./content";
+import { metaDescription } from "./description";
 import { pageUrl } from "./seo";
 import { FEED_PATH, SITE } from "./site";
 
@@ -36,7 +37,7 @@ export function getFeedItems(limit = FEED_LIMIT): FeedItem[] {
   const items: FeedItem[] = [
     ...getAllArticles().map((article) => ({
       title: article.title,
-      description: article.description,
+      description: metaDescription(article.description, article.body),
       url: article.url,
       date: article.date,
       authors: article.authors.map((author) => author.name),
@@ -44,7 +45,7 @@ export function getFeedItems(limit = FEED_LIMIT): FeedItem[] {
     })),
     ...getAllBlogPosts().map((post) => ({
       title: post.title,
-      description: post.description,
+      description: metaDescription(post.description, post.body),
       url: post.url,
       date: post.date,
       authors: post.authors.map((author) => author.name),

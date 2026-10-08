@@ -20,6 +20,7 @@ import {
 } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
 import { issueAccentVars } from "@/lib/brand";
+import { metaDescription } from "@/lib/description";
 import {
   articleJsonLd,
   breadcrumbJsonLd,
@@ -49,7 +50,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: articlePageTitle(article),
-    description: article.description,
+    description: metaDescription(article.description, article.body),
     path: article.url,
     image: ogImage.article(article.issueNumber, article.slug),
     type: "article",
@@ -85,7 +86,7 @@ export default async function ArticlePage({
       <JsonLd
         data={articleJsonLd({
           title: article.title,
-          description: article.description,
+          description: metaDescription(article.description, article.body),
           url: article.url,
           date: article.date,
           authors: article.authors.map((a) => ({ name: a.name, url: a.url })),

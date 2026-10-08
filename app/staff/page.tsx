@@ -6,7 +6,8 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "اعضای مرکزی",
-  description: "اعضای مرکزی نشریه‌ی علمی فرهنگی بایت",
+  description:
+    "اعضای مرکزی نشریه‌ی علمی فرهنگی بایت؛ سردبیری، تحریریه، ویراستاری ادبی، صفحه‌آرایی و گرافیک، ارتباط با صنعت و تیم فنی",
   path: "/staff",
 });
 

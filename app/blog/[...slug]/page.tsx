@@ -9,6 +9,7 @@ import { TagList } from "@/components/content/tag-list";
 import MdxContent from "@/components/mdx-content";
 import { getAllBlogPosts, getBlogPost } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
+import { metaDescription } from "@/lib/description";
 import { articleJsonLd, buildMetadata, JsonLd, ogImage } from "@/lib/seo";
 import { extractHeadings } from "@/lib/mdx/headings";
 
@@ -29,7 +30,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: post.title,
-    description: post.description,
+    description: metaDescription(post.description, post.body),
     path: post.url,
     image: ogImage.blog(post.slug),
     type: "article",
@@ -55,7 +56,7 @@ export default async function BlogPostPage({
       <JsonLd
         data={articleJsonLd({
           title: post.title,
-          description: post.description,
+          description: metaDescription(post.description, post.body),
           url: post.url,
           date: post.date,
           authors: post.authors.map((a) => ({ name: a.name, url: a.url })),

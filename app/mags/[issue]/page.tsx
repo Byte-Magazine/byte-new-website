@@ -11,6 +11,7 @@ import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
 import { issueAccentVars } from "@/lib/brand";
 import { ISSUE_COVER_ASPECT_CLASS } from "@/lib/issue-cover";
 import { cn } from "@/lib/utils";
+import { issueDescription } from "@/lib/description";
 import { buildMetadata, issueJsonLd, JsonLd, ogImage } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -30,8 +31,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: `شمارهٔ ${number}`,
-    description:
-      issue.description || `${issue.description} نشریه‌ی بایت`.trim(),
+    description: issueDescription(issue),
     path: issue.url,
     image: ogImage.issue(issue.number),
   });

@@ -8,6 +8,7 @@ import { SocialLinks } from "@/components/cards/person-card";
 import { MetaLine } from "@/components/content/meta-line";
 import { getAllAuthors, getAuthor } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
+import { authorDescription } from "@/lib/description";
 import { buildMetadata, JsonLd, ogImage, personJsonLd } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -27,17 +28,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: author.name,
-    description: [
-      author.name,
-      author.title,
-      author.articleCount > 0
-        ? `${toPersianDigits(author.articleCount)} مطلب در نشریه‌ی بایت`
-        : author.isStaff
-          ? `عضو مرکزی نشریه‌ی بایت`
-          : null,
-    ]
-      .filter(Boolean)
-      .join(" — "),
+    description: authorDescription(author),
     path: author.url,
     image: ogImage.author(author.id),
     type: "profile",

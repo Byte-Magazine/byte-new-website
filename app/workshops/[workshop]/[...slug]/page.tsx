@@ -8,6 +8,7 @@ import { TableOfContents } from "@/components/content/table-of-contents";
 import MdxContent from "@/components/mdx-content";
 import { WorkshopSidebar } from "@/components/workshops/workshop-sidebar";
 import { getAllWorkshops, getWorkshop, getWorkshopDoc } from "@/lib/content";
+import { metaDescription } from "@/lib/description";
 import { buildMetadata, ogImage } from "@/lib/seo";
 import { extractHeadings } from "@/lib/mdx/headings";
 
@@ -33,7 +34,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: doc.title,
-    description: doc.description,
+    description: metaDescription(doc.description, doc.body),
     path: doc.url,
   });
 }

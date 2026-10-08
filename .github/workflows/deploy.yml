@@ -39,9 +39,21 @@ jobs:
       - run: pnpm build
         env:
           NEXT_PUBLIC_PDF_BASE_URL: ${{ vars.NEXT_PUBLIC_PDF_BASE_URL }}
+          # Optional. Unset = no analytics script / no IndexNow key file.
+          NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.NEXT_PUBLIC_UMAMI_WEBSITE_ID }}
+          NEXT_PUBLIC_UMAMI_SCRIPT_URL: ${{ vars.NEXT_PUBLIC_UMAMI_SCRIPT_URL }}
+          INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
 
       # GitHub Pages runs Jekyll by default; `_next/` would be ignored without this.
       - run: touch out/.nojekyll
+
+      # Record what is live now, so only pages changed by this deploy are
+      # submitted to IndexNow afterwards. Best-effort: never blocks a deploy.
+      - name: Snapshot live IndexNow manifest
+        continue-on-error: true
+        run: pnpm exec tsx scripts/indexnow-submit.ts snapshot
+        env:
+          INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
 
       - name: Publish to Byte-Magazine.github.io
         uses: peaceiris/actions-gh-pages@v4
@@ -55,6 +67,15 @@ jobs:
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
           commit_message: "deploy: byte-new-website@${{ github.sha }}"
+
+      # Waits for the new deployment to be live, then pings Bing/Yandex with
+      # the changed URLs. Google does not use IndexNow (it reads the sitemap).
+      - name: Submit changed pages to IndexNow
+        continue-on-error: true
+        timeout-minutes: 20
+        run: pnpm exec tsx scripts/indexnow-submit.ts submit
+        env:
+          INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
 
   # production:
   #   needs: build-and-publish

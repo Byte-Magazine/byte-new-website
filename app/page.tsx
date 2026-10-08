@@ -40,7 +40,7 @@ export default function HomePage() {
   );
 
   return (
-    <>
+    <main>
       <JsonLd data={organizationJsonLd()} />
       <JsonLd data={websiteJsonLd()} />
       <Hero latest={latest} />
@@ -65,6 +65,6 @@ export default function HomePage() {
         totalAuthors={authors.length}
       />
       <WorkshopsTeaser workshops={getAllWorkshops()} />
-    </>
+    </main>
   );
 }

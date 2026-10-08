@@ -50,6 +50,12 @@ interface MetadataInput {
   tags?: string[];
 }
 
+/**
+ * Past this many characters the " | بایت" suffix would push the title beyond
+ * what results pages show, so long titles are emitted on their own.
+ */
+const TITLE_SUFFIX_MAX = 55;
+
 /** Builds page metadata with canonical URL, OG, and Twitter cards. */
 export function buildMetadata({
   title,
@@ -66,7 +72,7 @@ export function buildMetadata({
   const images = [ogImageEntry(image ?? ogImage.default(), title)];
 
   return {
-    title,
+    title: title.length > TITLE_SUFFIX_MAX ? { absolute: title } : title,
     description: resolvedDescription,
     // Child `alternates` replaces the layout's wholesale, so the feed link
     // has to be repeated here to stay in every page's <head>.

@@ -24,7 +24,8 @@ export async function generateMetadata({
 
   return {
     ...buildMetadata({
-      title: tag.name,
+      // Prefixed so a tag never shares a title with an article ("سرمقاله").
+      title: `برچسب: ${tag.name}`,
       description: `${toPersianDigits(tag.count)} مطلب با برچسب «${tag.name}» در نشریه‌ی بایت`,
       path: tag.url,
     }),

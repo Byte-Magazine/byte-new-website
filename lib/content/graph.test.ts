@@ -248,3 +248,21 @@ describe("isIndexableTag", () => {
     expect(isIndexableTag({ count: MIN_INDEXABLE_TAG_COUNT })).toBe(true);
   });
 });
+
+describe("articlePageTitle", () => {
+  it("makes every article's page title unique", async () => {
+    const { articlePageTitle } = await import("./index");
+    const titles = getAllArticles().map(articlePageTitle);
+    expect(new Set(titles).size).toBe(titles.length);
+  });
+
+  it("leaves unique titles untouched", async () => {
+    const { articlePageTitle } = await import("./index");
+    const counts = new Map<string, number>();
+    for (const a of getAllArticles()) {
+      counts.set(a.title, (counts.get(a.title) ?? 0) + 1);
+    }
+    const unique = getAllArticles().find((a) => counts.get(a.title) === 1)!;
+    expect(articlePageTitle(unique)).toBe(unique.title);
+  });
+});

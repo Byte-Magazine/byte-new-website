@@ -1,3 +1,4 @@
+import { toPersianDigits } from "../persian";
 import { getGraph, tagSlug } from "./graph";
 import type {
   Article,
@@ -133,6 +134,30 @@ export function getRelatedArticles(article: Article, limit = 3): Article[] {
     )
     .slice(0, limit)
     .map((entry) => entry.candidate);
+}
+
+/**
+ * Title for the document `<title>`, unique across the site.
+ *
+ * Several articles share a title: recurring columns ("سرمقاله") across issues,
+ * and multi-part pieces within one issue. Identical titles read to search
+ * engines as duplicates, so cross-issue repeats name their issue and
+ * same-issue repeats name their part. The on-page heading keeps the original.
+ */
+export function articlePageTitle(article: Article): string {
+  const twins = getGraph().articles.filter(
+    (other) => other.title === article.title,
+  );
+  if (twins.length < 2) return article.title;
+
+  const sameIssue = twins
+    .filter((other) => other.issueNumber === article.issueNumber)
+    .sort((a, b) => a.order - b.order);
+  if (sameIssue.length > 1) {
+    const part = sameIssue.indexOf(article) + 1;
+    return `${article.title} (بخش ${toPersianDigits(part)})`;
+  }
+  return `${article.title} — شمارهٔ ${article.issueNumber}`;
 }
 
 /** Previous and next articles within the same issue, in reading order. */

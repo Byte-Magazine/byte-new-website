@@ -51,6 +51,19 @@ describe("buildMetadata", () => {
   });
 });
 
+describe("buildMetadata title suffix", () => {
+  it("lets short titles take the site template", () => {
+    expect(buildMetadata({ title: "کوتاه", path: "/" }).title).toBe("کوتاه");
+  });
+
+  it("drops the site suffix from long titles", () => {
+    const title = "ع".repeat(60);
+    expect(buildMetadata({ title, path: "/" }).title).toEqual({
+      absolute: title,
+    });
+  });
+});
+
 describe("articleJsonLd", () => {
   it("emits an Article node with ISO dates and authors", () => {
     const ld = articleJsonLd({

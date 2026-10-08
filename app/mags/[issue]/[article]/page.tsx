@@ -12,6 +12,7 @@ import { TagList } from "@/components/content/tag-list";
 import MdxContent from "@/components/mdx-content";
 import { Reveal } from "@/components/motion/reveal";
 import {
+  articlePageTitle,
   getAdjacentArticles,
   getAllArticles,
   getArticle,
@@ -47,7 +48,7 @@ export async function generateMetadata({
   if (!article) return {};
 
   return buildMetadata({
-    title: article.title,
+    title: articlePageTitle(article),
     description: article.description,
     path: article.url,
     image: ogImage.article(article.issueNumber, article.slug),

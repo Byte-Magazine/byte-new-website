@@ -69,6 +69,13 @@ export function getTag(slug: string): Tag | undefined {
   }
 }
 
+/** Tags with fewer entries than this are thin pages and stay out of search. */
+export const MIN_INDEXABLE_TAG_COUNT = 3;
+
+export function isIndexableTag(tag: Pick<Tag, "count">): boolean {
+  return tag.count >= MIN_INDEXABLE_TAG_COUNT;
+}
+
 export function getAllBlogPosts(): readonly BlogPost[] {
   return getGraph().blogPosts;
 }

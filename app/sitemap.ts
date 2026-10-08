@@ -7,6 +7,7 @@ import {
   getAllIssues,
   getAllTags,
   getAllWorkshops,
+  isIndexableTag,
 } from "@/lib/content";
 import { pageUrl } from "@/lib/seo";
 
@@ -83,14 +84,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
         ]),
       ),
     ),
-    ...tags.map((tag) =>
-      entry(
-        tag.url,
-        newest([
-          ...tag.articles.map((article) => article.date),
-          ...tag.blogPosts.map((post) => post.date),
-        ]),
+    ...tags
+      .filter(isIndexableTag)
+      .map((tag) =>
+        entry(
+          tag.url,
+          newest([
+            ...tag.articles.map((article) => article.date),
+            ...tag.blogPosts.map((post) => post.date),
+          ]),
+        ),
       ),
-    ),
   ];
 }

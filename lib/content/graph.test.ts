@@ -240,3 +240,11 @@ describe("content graph", () => {
     }
   });
 });
+
+describe("isIndexableTag", () => {
+  it("requires at least MIN_INDEXABLE_TAG_COUNT entries", async () => {
+    const { isIndexableTag, MIN_INDEXABLE_TAG_COUNT } = await import("./index");
+    expect(isIndexableTag({ count: MIN_INDEXABLE_TAG_COUNT - 1 })).toBe(false);
+    expect(isIndexableTag({ count: MIN_INDEXABLE_TAG_COUNT })).toBe(true);
+  });
+});

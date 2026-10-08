@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ArticleCard } from "@/components/cards/article-card";
-import { getAllTags, getTag } from "@/lib/content";
+import { getAllTags, getTag, isIndexableTag } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { buildMetadata } from "@/lib/seo";
 
@@ -22,11 +22,15 @@ export async function generateMetadata({
   const tag = getTag(slug);
   if (!tag) return {};
 
-  return buildMetadata({
-    title: tag.name,
-    description: `${toPersianDigits(tag.count)} مطلب با برچسب «${tag.name}» در نشریه‌ی بایت`,
-    path: tag.url,
-  });
+  return {
+    ...buildMetadata({
+      title: tag.name,
+      description: `${toPersianDigits(tag.count)} مطلب با برچسب «${tag.name}» در نشریه‌ی بایت`,
+      path: tag.url,
+    }),
+    // Thin tag pages stay crawlable so their links pass, but out of the index.
+    ...(isIndexableTag(tag) ? {} : { robots: { index: false, follow: true } }),
+  };
 }
 
 export default async function TagPage({

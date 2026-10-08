@@ -61,7 +61,7 @@ export function buildMetadata({
   authors,
   tags,
 }: MetadataInput): Metadata {
-  const url = absoluteUrl(path);
+  const url = pageUrl(path);
   const resolvedDescription = description?.trim() || SITE.description;
   const images = [ogImageEntry(image ?? ogImage.default(), title)];
 
@@ -110,6 +110,8 @@ export interface ArticleJsonLd {
   mainEntityOfPage: string;
   url: string;
   inLanguage: string;
+  isAccessibleForFree: true;
+  image?: string[];
   author: Array<{ "@type": "Person"; name: string; url: string }>;
   publisher: { "@type": "Organization"; name: string; url: string };
   keywords?: string;
@@ -124,6 +126,8 @@ export function articleJsonLd(input: {
   authors: JsonLdAuthor[];
   tags?: string[];
   type?: "Article" | "BlogPosting";
+  /** Site-relative preview image; required by Google for Article rich results. */
+  image?: string;
   issue?: { number: string; url: string };
 }): ArticleJsonLd {
   return {
@@ -133,13 +137,15 @@ export function articleJsonLd(input: {
     description: input.description,
     datePublished: input.date,
     dateModified: input.date,
-    mainEntityOfPage: absoluteUrl(input.url),
-    url: absoluteUrl(input.url),
+    mainEntityOfPage: pageUrl(input.url),
+    url: pageUrl(input.url),
     inLanguage: "fa-IR",
+    isAccessibleForFree: true,
+    ...(input.image ? { image: [absoluteUrl(input.image)] } : {}),
     author: input.authors.map((author) => ({
       "@type": "Person" as const,
       name: author.name,
-      url: absoluteUrl(author.url),
+      url: pageUrl(author.url),
     })),
     publisher: {
       "@type": "Organization",
@@ -152,7 +158,7 @@ export function articleJsonLd(input: {
           isPartOf: {
             "@type": "PublicationIssue" as const,
             issueNumber: input.issue.number,
-            url: absoluteUrl(input.issue.url),
+            url: pageUrl(input.issue.url),
           },
         }
       : {}),
@@ -170,7 +176,7 @@ export function personJsonLd(input: {
     "@context": "https://schema.org",
     "@type": "Person" as const,
     name: input.name,
-    url: absoluteUrl(input.url),
+    url: pageUrl(input.url),
     ...(input.image ? { image: absoluteUrl(input.image) } : {}),
     ...(input.jobTitle ? { jobTitle: input.jobTitle } : {}),
     ...(input.sameAs?.length ? { sameAs: input.sameAs } : {}),
@@ -187,14 +193,19 @@ export function issueJsonLd(input: {
   url: string;
   date: string;
   description: string;
+  image?: string;
 }) {
   return {
     "@context": "https://schema.org",
     "@type": "PublicationIssue" as const,
+    name: `${SITE.shortName}، شمارهٔ ${input.number}`,
     issueNumber: input.number,
     datePublished: input.date,
-    description: input.description,
-    url: absoluteUrl(input.url),
+    inLanguage: "fa-IR",
+    isAccessibleForFree: true,
+    ...(input.description ? { description: input.description } : {}),
+    ...(input.image ? { image: absoluteUrl(input.image) } : {}),
+    url: pageUrl(input.url),
     isPartOf: {
       "@type": "Periodical" as const,
       name: SITE.name,
@@ -243,7 +254,7 @@ export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
       "@type": "ListItem" as const,
       position: index + 1,
       name: item.name,
-      item: absoluteUrl(item.url),
+      item: pageUrl(item.url),
     })),
   };
 }

@@ -89,6 +89,7 @@ export default async function ArticlePage({
           date: article.date,
           authors: article.authors.map((a) => ({ name: a.name, url: a.url })),
           tags: article.tags,
+          image: ogImage.article(article.issueNumber, article.slug),
           issue: { number: article.issueNumber, url: article.issue.url },
         })}
       />

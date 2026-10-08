@@ -57,6 +57,7 @@ export default async function IssuePage({
           url: issue.url,
           date: issue.date,
           description: issue.description,
+          image: ogImage.issue(issue.number),
         })}
       />
 

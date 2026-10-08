@@ -60,6 +60,7 @@ export default async function BlogPostPage({
           date: post.date,
           authors: post.authors.map((a) => ({ name: a.name, url: a.url })),
           tags: post.tags,
+          image: ogImage.blog(post.slug),
           type: "BlogPosting",
         })}
       />

@@ -6,7 +6,7 @@ import { ArticleCard } from "@/components/cards/article-card";
 import { getAllTags, getTag, isIndexableTag } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { tagDescription } from "@/lib/description";
-import { buildMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, buildMetadata, JsonLd } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -46,6 +46,12 @@ export default async function TagPage({
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "برچسب‌ها", url: "/tags" },
+          { name: tag.name, url: tag.url },
+        ])}
+      />
       <header className="mb-10">
         <p className="text-sm text-muted-foreground">برچسب</p>
         <h1 className="mt-1 text-3xl font-black md:text-4xl">{tag.name}</h1>

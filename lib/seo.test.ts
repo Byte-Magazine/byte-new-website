@@ -96,6 +96,21 @@ describe("articleJsonLd", () => {
   });
 });
 
+describe("articleJsonLd without a date", () => {
+  it("omits publish dates for undated lessons", () => {
+    const ld = articleJsonLd({
+      title: "t",
+      description: "d",
+      url: "/workshops/git/x",
+      authors: [],
+      type: "TechArticle",
+    });
+    expect(ld["@type"]).toBe("TechArticle");
+    expect("datePublished" in ld).toBe(false);
+    expect("dateModified" in ld).toBe(false);
+  });
+});
+
 describe("personJsonLd", () => {
   it("emits a Person node with an absolute url", () => {
     const ld = personJsonLd({ name: "معین", url: "/authors/Moeein" });

@@ -9,7 +9,13 @@ import { MetaLine } from "@/components/content/meta-line";
 import { getAllAuthors, getAuthor } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { authorDescription } from "@/lib/description";
-import { buildMetadata, JsonLd, ogImage, personJsonLd } from "@/lib/seo";
+import {
+  breadcrumbJsonLd,
+  buildMetadata,
+  JsonLd,
+  ogImage,
+  personJsonLd,
+} from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -46,6 +52,12 @@ export default async function AuthorPage({
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "نویسندگان", url: "/authors" },
+          { name: author.name, url: author.url },
+        ])}
+      />
       <JsonLd
         data={personJsonLd({
           name: author.name,

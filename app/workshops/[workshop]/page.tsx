@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { getAllWorkshops, getWorkshop } from "@/lib/content";
 import { toPersianDigits } from "@/lib/persian";
-import { buildMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, buildMetadata, JsonLd } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -41,6 +41,12 @@ export default async function WorkshopPage({
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "کارگاه‌ها", url: "/workshops" },
+          { name: workshop.title, url: workshop.url },
+        ])}
+      />
       <nav className="mb-6 text-sm text-muted-foreground">
         <Link href="/workshops" className="hover:text-foreground">
           کارگاه‌ها

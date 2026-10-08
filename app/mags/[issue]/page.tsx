@@ -12,7 +12,13 @@ import { issueAccentVars } from "@/lib/brand";
 import { ISSUE_COVER_ASPECT_CLASS } from "@/lib/issue-cover";
 import { cn } from "@/lib/utils";
 import { issueDescription } from "@/lib/description";
-import { buildMetadata, issueJsonLd, JsonLd, ogImage } from "@/lib/seo";
+import {
+  breadcrumbJsonLd,
+  buildMetadata,
+  issueJsonLd,
+  JsonLd,
+  ogImage,
+} from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -59,6 +65,12 @@ export default async function IssuePage({
           description: issue.description,
           image: ogImage.issue(issue.number),
         })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "آرشیو بایت", url: "/mags/intro" },
+          { name: `شمارهٔ ${issue.number}`, url: issue.url },
+        ])}
       />
 
       <nav className="mb-8 text-sm text-muted-foreground">

@@ -111,8 +111,8 @@ export interface ArticleJsonLd {
   "@type": string;
   headline: string;
   description: string;
-  datePublished: string;
-  dateModified: string;
+  datePublished?: string;
+  dateModified?: string;
   mainEntityOfPage: string;
   url: string;
   inLanguage: string;
@@ -128,10 +128,11 @@ export function articleJsonLd(input: {
   title: string;
   description: string;
   url: string;
-  date: string;
+  /** Omitted for undated documents such as workshop lessons. */
+  date?: string;
   authors: JsonLdAuthor[];
   tags?: string[];
-  type?: "Article" | "BlogPosting";
+  type?: "Article" | "BlogPosting" | "TechArticle";
   /** Site-relative preview image; required by Google for Article rich results. */
   image?: string;
   issue?: { number: string; url: string };
@@ -141,8 +142,9 @@ export function articleJsonLd(input: {
     "@type": input.type ?? "Article",
     headline: input.title,
     description: input.description,
-    datePublished: input.date,
-    dateModified: input.date,
+    ...(input.date
+      ? { datePublished: input.date, dateModified: input.date }
+      : {}),
     mainEntityOfPage: pageUrl(input.url),
     url: pageUrl(input.url),
     inLanguage: "fa-IR",

@@ -10,7 +10,13 @@ import MdxContent from "@/components/mdx-content";
 import { getAllBlogPosts, getBlogPost } from "@/lib/content";
 import { formatJalaliLong, toPersianDigits } from "@/lib/persian";
 import { metaDescription } from "@/lib/description";
-import { articleJsonLd, buildMetadata, JsonLd, ogImage } from "@/lib/seo";
+import {
+  articleJsonLd,
+  breadcrumbJsonLd,
+  buildMetadata,
+  JsonLd,
+  ogImage,
+} from "@/lib/seo";
 import { extractHeadings } from "@/lib/mdx/headings";
 
 export const dynamicParams = false;
@@ -64,6 +70,12 @@ export default async function BlogPostPage({
           image: ogImage.blog(post.slug),
           type: "BlogPosting",
         })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "وبلاگ", url: "/blog" },
+          { name: post.title, url: post.url },
+        ])}
       />
 
       <nav data-iv="ignore" className="mb-6 text-sm text-muted-foreground">

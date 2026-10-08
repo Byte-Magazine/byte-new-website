@@ -9,7 +9,13 @@ import MdxContent from "@/components/mdx-content";
 import { WorkshopSidebar } from "@/components/workshops/workshop-sidebar";
 import { getAllWorkshops, getWorkshop, getWorkshopDoc } from "@/lib/content";
 import { metaDescription } from "@/lib/description";
-import { buildMetadata, ogImage } from "@/lib/seo";
+import {
+  articleJsonLd,
+  breadcrumbJsonLd,
+  buildMetadata,
+  JsonLd,
+  ogImage,
+} from "@/lib/seo";
 import { extractHeadings } from "@/lib/mdx/headings";
 
 export const dynamicParams = false;
@@ -58,6 +64,23 @@ export default async function WorkshopDocPage({
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
+      <JsonLd
+        data={articleJsonLd({
+          title: doc.title,
+          description: metaDescription(doc.description, doc.body),
+          url: doc.url,
+          authors: doc.authors.map((a) => ({ name: a.name, url: a.url })),
+          image: ogImage.default(),
+          type: "TechArticle",
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "کارگاه‌ها", url: "/workshops" },
+          { name: workshop.title, url: workshop.url },
+          { name: doc.title, url: doc.url },
+        ])}
+      />
       <nav
         data-iv="ignore"
         className="mb-6 flex items-center gap-2 text-sm text-muted-foreground"

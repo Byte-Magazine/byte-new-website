@@ -192,7 +192,7 @@ export const AUTHORS = [
     id: "AmirrezaJafari",
     name: "امیررضا جعفری",
     title: "کارشناسی ۱۴۰۲",
-    image: "/img/staff/jafar.png",
+    image: "/img/staff/jafar.jpg",
     socials: {},
   },
   {
@@ -354,7 +354,7 @@ export const AUTHORS = [
     id: "FarzamKoohi",
     name: "فرزام کوهی",
     title: "کارشناسی ۱۴۰۱",
-    image: "/img/authors/farzamKoohi.png",
+    image: "/img/authors/farzamKoohi.jpg",
     socials: {
       linkedin: "https://www.linkedin.com/in/farzam-koohi",
     },
@@ -547,7 +547,7 @@ export const AUTHORS = [
     id: "MohammadParsaArani",
     name: "محمدپارسا آرانی",
     title: "کارشناسی ۱۴۰۳",
-    image: "/img/staff/arani.png",
+    image: "/img/staff/arani.jpg",
     socials: {
       linkedin: "https://www.linkedin.com/in/mohammad-parsa-arani-397072382",
       github: "https://github.com/MParsa-0684",

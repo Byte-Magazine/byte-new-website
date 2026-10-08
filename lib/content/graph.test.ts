@@ -266,3 +266,21 @@ describe("articlePageTitle", () => {
     expect(articlePageTitle(unique)).toBe(unique.title);
   });
 });
+
+describe("topic hubs", () => {
+  it("resolve every curated reading-order entry", async () => {
+    const { getTopic } = await import("./index");
+    const { topics } = await import("@/content/data/topics");
+    for (const topic of topics) {
+      const tag = getAllTags().find((t) => t.name === topic.tag);
+      expect(tag, `tag ${topic.tag}`).toBeDefined();
+      const hub = getTopic(tag!);
+      expect(hub?.start.length).toBe(topic.start.length);
+    }
+  });
+
+  it("return nothing for an uncurated tag", async () => {
+    const { getTopic } = await import("./index");
+    expect(getTopic({ name: "__none__" })).toBeUndefined();
+  });
+});

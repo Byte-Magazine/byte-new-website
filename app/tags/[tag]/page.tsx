@@ -3,9 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ArticleCard } from "@/components/cards/article-card";
-import { getAllTags, getTag, isIndexableTag } from "@/lib/content";
+import { getAllTags, getTag, getTopic, isIndexableTag } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
-import { tagDescription } from "@/lib/description";
+import { tagDescription, truncate } from "@/lib/description";
 import { breadcrumbJsonLd, buildMetadata, JsonLd } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -23,11 +23,13 @@ export async function generateMetadata({
   const tag = getTag(slug);
   if (!tag) return {};
 
+  const topic = getTopic(tag);
   return {
     ...buildMetadata({
-      // Prefixed so a tag never shares a title with an article ("سرمقاله").
-      title: `برچسب: ${tag.name}`,
-      description: tagDescription(tag),
+      // Hubs carry a Persian title; plain tags are prefixed so they never
+      // share a title with an article ("سرمقاله").
+      title: topic?.title ?? `برچسب: ${tag.name}`,
+      description: topic ? truncate(topic.intro) : tagDescription(tag),
       path: tag.url,
     }),
     // Thin tag pages stay crawlable so their links pass, but out of the index.
@@ -44,30 +46,66 @@ export default async function TagPage({
   const tag = getTag(slug);
   if (!tag) notFound();
 
+  const topic = getTopic(tag);
+  // The guide's picks are listed first; the grid below holds the rest.
+  const picked = new Set(topic?.start.map((article) => article.url));
+  const rest = tag.articles.filter((article) => !picked.has(article.url));
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "برچسب‌ها", url: "/tags" },
-          { name: tag.name, url: tag.url },
+          { name: topic?.title ?? tag.name, url: tag.url },
         ])}
       />
       <header className="mb-10">
-        <p className="text-sm text-muted-foreground">برچسب</p>
-        <h1 className="mt-1 text-3xl font-black md:text-4xl">{tag.name}</h1>
+        <p className="text-sm text-muted-foreground">
+          {topic ? `پرونده · ${tag.name}` : "برچسب"}
+        </p>
+        <h1 className="mt-1 text-3xl font-black md:text-4xl">
+          {topic?.title ?? tag.name}
+        </h1>
+        {topic ? (
+          <p className="mt-4 max-w-3xl text-lg leading-9 text-muted-foreground">
+            {topic.intro}
+          </p>
+        ) : null}
         <p className="mt-3 text-muted-foreground">
           {toPersianDigits(tag.count)} مطلب
         </p>
       </header>
 
-      {tag.articles.length > 0 ? (
-        <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {tag.articles.map((article) => (
-            <li key={article.url}>
-              <ArticleCard article={article} />
-            </li>
-          ))}
-        </ul>
+      {topic ? (
+        <section className="mb-14" aria-labelledby="start-here">
+          <h2 id="start-here" className="mb-6 text-xl font-bold">
+            از این‌جا شروع کنید
+          </h2>
+          <ol className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {topic.start.map((article) => (
+              <li key={article.url}>
+                <ArticleCard article={article} />
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
+
+      {rest.length > 0 ? (
+        <section aria-labelledby={topic ? "more-in-topic" : undefined}>
+          {topic ? (
+            <h2 id="more-in-topic" className="mb-6 text-xl font-bold">
+              مطالب دیگر
+            </h2>
+          ) : null}
+          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {rest.map((article) => (
+              <li key={article.url}>
+                <ArticleCard article={article} />
+              </li>
+            ))}
+          </ul>
+        </section>
       ) : null}
 
       {tag.blogPosts.length > 0 ? (

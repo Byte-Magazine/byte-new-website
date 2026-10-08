@@ -1,3 +1,5 @@
+import { topics } from "@/content/data/topics";
+
 import { toPersianDigits } from "../persian";
 import { getGraph, tagSlug } from "./graph";
 import type {
@@ -75,6 +77,37 @@ export const MIN_INDEXABLE_TAG_COUNT = 3;
 
 export function isIndexableTag(tag: Pick<Tag, "count">): boolean {
   return tag.count >= MIN_INDEXABLE_TAG_COUNT;
+}
+
+/** A tag curated into a guide: intro plus a suggested reading order. */
+export interface TopicHub {
+  title: string;
+  intro: string;
+  start: Article[];
+}
+
+/**
+ * The hub for a tag, if one is curated in content/data/topics.ts. Throws on a
+ * reading-order URL that does not resolve to an article carrying the tag, so
+ * the build fails instead of rendering a broken guide.
+ */
+export function getTopic(tag: Pick<Tag, "name">): TopicHub | undefined {
+  const topic = topics.find((item) => item.tag === tag.name);
+  if (!topic) return undefined;
+
+  const byUrl = new Map(getGraph().articles.map((a) => [a.url, a]));
+  const start = topic.start.map((url) => {
+    const article = byUrl.get(url);
+    if (!article) {
+      throw new Error(`topic "${topic.tag}": no article at ${url}`);
+    }
+    if (!article.tags.includes(topic.tag)) {
+      throw new Error(`topic "${topic.tag}": ${url} is not tagged with it`);
+    }
+    return article;
+  });
+
+  return { title: topic.title, intro: topic.intro, start };
 }
 
 export function getAllBlogPosts(): readonly BlogPost[] {

@@ -7,6 +7,16 @@ export function absoluteUrl(path: string): string {
   return `${SITE.url}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+/**
+ * Absolute URL of a page as it is actually served. The site exports with
+ * `trailingSlash: true`, so canonical tags and sitemap entries must agree on
+ * the slashed form or crawlers see two URLs for every page.
+ */
+export function pageUrl(path: string): string {
+  const clean = path.startsWith("/") ? path : `/${path}`;
+  return `${SITE.url}${clean.endsWith("/") ? clean : `${clean}/`}`;
+}
+
 /** Build-time Open Graph image paths, produced by scripts/generate-og.ts. */
 export const ogImage = {
   /** Same asset Docusaurus used (`themeConfig.image`) for link previews. */

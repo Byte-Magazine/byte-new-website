@@ -8,119 +8,89 @@ import {
   getAllTags,
   getAllWorkshops,
 } from "@/lib/content";
-import { SITE } from "@/lib/site";
+import { pageUrl } from "@/lib/seo";
 
 // Required for output: "export" — the route is generated once at build time.
 export const dynamic = "force-static";
 
-/** Enumerates every route from the content graph. */
+type Entry = MetadataRoute.Sitemap[number];
+
+/** Newest ISO date (YYYY-MM-DD) in the list, or undefined when empty. */
+function newest(dates: readonly string[]): string | undefined {
+  return dates.reduce<string | undefined>(
+    (max, date) => (max === undefined || date > max ? date : max),
+    undefined,
+  );
+}
+
+/**
+ * Enumerates every route from the content graph.
+ *
+ * `lastModified` is only emitted when it is real: Google discards the field
+ * for sites whose dates change on every build. Pages without a trustworthy
+ * date omit it rather than claim "today". `changeFrequency` and `priority`
+ * are ignored by Google and Bing, so they are not emitted.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const url = (path: string) => `${SITE.url}${path}`;
-  const today = new Date();
+  const articles = getAllArticles();
+  const issues = getAllIssues();
+  const posts = getAllBlogPosts();
+  const authors = getAllAuthors();
+  const tags = getAllTags();
 
-  const staticRoutes: MetadataRoute.Sitemap = [
-    {
-      url: url("/"),
-      priority: 1,
-      changeFrequency: "weekly",
-      lastModified: today,
-    },
-    {
-      url: url("/articles"),
-      priority: 0.9,
-      changeFrequency: "weekly",
-      lastModified: today,
-    },
-    {
-      url: url("/mags/intro"),
-      priority: 0.9,
-      changeFrequency: "monthly",
-      lastModified: today,
-    },
-    {
-      url: url("/blog"),
-      priority: 0.7,
-      changeFrequency: "monthly",
-      lastModified: today,
-    },
-    {
-      url: url("/workshops"),
-      priority: 0.7,
-      changeFrequency: "monthly",
-      lastModified: today,
-    },
-    {
-      url: url("/codenameh"),
-      priority: 0.6,
-      changeFrequency: "yearly",
-      lastModified: today,
-    },
-    {
-      url: url("/staff"),
-      priority: 0.6,
-      changeFrequency: "monthly",
-      lastModified: today,
-    },
-    {
-      url: url("/authors"),
-      priority: 0.7,
-      changeFrequency: "monthly",
-      lastModified: today,
-    },
-  ];
-
-  const articles: MetadataRoute.Sitemap = getAllArticles().map((article) => ({
-    url: url(article.url),
-    lastModified: new Date(article.date),
-    changeFrequency: "yearly",
-    priority: 0.8,
-  }));
-
-  const issues: MetadataRoute.Sitemap = getAllIssues().map((issue) => ({
-    url: url(issue.url),
-    lastModified: new Date(issue.date),
-    changeFrequency: "yearly",
-    priority: 0.8,
-  }));
-
-  const posts: MetadataRoute.Sitemap = getAllBlogPosts().map((post) => ({
-    url: url(post.url),
-    lastModified: new Date(post.date),
-    changeFrequency: "yearly",
-    priority: 0.6,
-  }));
-
-  const workshopDocs: MetadataRoute.Sitemap = getAllWorkshops().flatMap(
-    (workshop) =>
-      workshop.docs.map((doc) => ({
-        url: url(doc.url),
-        lastModified: today,
-        changeFrequency: "yearly" as const,
-        priority: 0.6,
-      })),
+  const lastArticle = newest(articles.map((article) => article.date));
+  const lastIssue = newest(issues.map((issue) => issue.date));
+  const lastPost = newest(posts.map((post) => post.date));
+  const lastContent = newest(
+    [lastArticle, lastIssue, lastPost].filter(
+      (date): date is string => date !== undefined,
+    ),
   );
 
-  const authors: MetadataRoute.Sitemap = getAllAuthors().map((author) => ({
-    url: url(author.url),
-    lastModified: today,
-    changeFrequency: "monthly",
-    priority: 0.5,
-  }));
+  const entry = (path: string, lastModified?: string): Entry => ({
+    url: pageUrl(path),
+    ...(lastModified ? { lastModified: new Date(lastModified) } : {}),
+  });
 
-  const tags: MetadataRoute.Sitemap = getAllTags().map((tag) => ({
-    url: url(tag.url),
-    lastModified: today,
-    changeFrequency: "monthly",
-    priority: 0.4,
-  }));
+  const staticRoutes: Entry[] = [
+    entry("/", lastContent),
+    entry("/articles", lastArticle),
+    entry("/mags/intro", lastIssue),
+    entry("/blog", lastPost),
+    entry("/workshops"),
+    entry("/codenameh"),
+    entry("/staff"),
+    entry("/authors"),
+    entry("/tags"),
+  ];
 
   return [
     ...staticRoutes,
-    ...issues,
-    ...articles,
-    ...posts,
-    ...workshopDocs,
-    ...authors,
-    ...tags,
+    ...issues.map((issue) => entry(issue.url, issue.date)),
+    ...articles.map((article) => entry(article.url, article.date)),
+    ...posts.map((post) => entry(post.url, post.date)),
+    ...getAllWorkshops().flatMap((workshop) => [
+      entry(workshop.url),
+      ...workshop.docs.map((doc) => entry(doc.url)),
+    ]),
+    // Author pages change whenever they publish, so track their newest piece.
+    ...authors.map((author) =>
+      entry(
+        author.url,
+        newest([
+          ...author.articles.map((article) => article.date),
+          ...author.blogPosts.map((post) => post.date),
+        ]),
+      ),
+    ),
+    ...tags.map((tag) =>
+      entry(
+        tag.url,
+        newest([
+          ...tag.articles.map((article) => article.date),
+          ...tag.blogPosts.map((post) => post.date),
+        ]),
+      ),
+    ),
   ];
 }

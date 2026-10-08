@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildMetadata, articleJsonLd, personJsonLd } from "./seo";
+import { buildMetadata, articleJsonLd, pageUrl, personJsonLd } from "./seo";
 import { SITE } from "./site";
 
 describe("buildMetadata", () => {
@@ -65,5 +65,17 @@ describe("personJsonLd", () => {
     const ld = personJsonLd({ name: "معین", url: "/authors/Moeein" });
     expect(ld["@type"]).toBe("Person");
     expect(ld.url).toBe(`${SITE.url}/authors/Moeein`);
+  });
+});
+
+describe("pageUrl", () => {
+  it("always ends with a trailing slash to match the exported routes", () => {
+    expect(pageUrl("/articles")).toBe(`${SITE.url}/articles/`);
+    expect(pageUrl("/articles/")).toBe(`${SITE.url}/articles/`);
+    expect(pageUrl("mags/00000001")).toBe(`${SITE.url}/mags/00000001/`);
+  });
+
+  it("maps the home page to the site root", () => {
+    expect(pageUrl("/")).toBe(`${SITE.url}/`);
   });
 });

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { AuthorList } from "@/components/content/author-list";
 import { MetaLine } from "@/components/content/meta-line";
 import { TableOfContents } from "@/components/content/table-of-contents";
+import { SubscribeCta } from "@/components/content/subscribe-cta";
 import { TagList } from "@/components/content/tag-list";
 import MdxContent from "@/components/mdx-content";
 import { getAllBlogPosts, getBlogPost } from "@/lib/content";
@@ -157,6 +158,8 @@ export default async function BlogPostPage({
           <div data-iv="ignore">
             <TagList tags={post.tags} className="mt-10" />
           </div>
+
+          <SubscribeCta className="mt-10" />
         </article>
 
         {headings.length >= 2 ? (

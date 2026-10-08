@@ -8,6 +8,7 @@ import { AuthorList } from "@/components/content/author-list";
 import { IssueNav } from "@/components/content/issue-nav";
 import { MetaLine } from "@/components/content/meta-line";
 import { TableOfContents } from "@/components/content/table-of-contents";
+import { SubscribeCta } from "@/components/content/subscribe-cta";
 import { TagList } from "@/components/content/tag-list";
 import MdxContent from "@/components/mdx-content";
 import { Reveal } from "@/components/motion/reveal";
@@ -223,6 +224,8 @@ export default async function ArticlePage({
           <div data-iv="ignore">
             <TagList tags={article.tags} className="mt-10" />
           </div>
+
+          <SubscribeCta className="mt-10" />
 
           {prev || next ? (
             <nav

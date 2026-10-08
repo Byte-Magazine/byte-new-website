@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
+import { Analytics } from "@/components/layout/analytics";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { ThemeScript } from "@/components/layout/theme-script";
@@ -82,6 +83,7 @@ export default function RootLayout({
           <div id="main">{children}</div>
           <Footer />
         </TooltipProvider>
+        <Analytics />
       </body>
     </html>
   );

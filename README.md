@@ -66,10 +66,13 @@ search index, and regenerates Open Graph images.
 
 ### Environment
 
-| Variable                   | Default                                          | Purpose                                                                                     |
-| -------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_PDF_BASE_URL` | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | CDN base for issue / codenameh PDFs                                                         |
-| `NEXT_PUBLIC_BASE_PATH`    | _(empty)_                                        | Only if the site is hosted under a subpath (not needed for `byte-mag.ir` / org `github.io`) |
+| Variable                       | Default                                          | Purpose                                                                                     |
+| ------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_PDF_BASE_URL`     | `https://byte-mag.s3.ir-thr-at1.arvanstorage.ir` | CDN base for issue / codenameh PDFs                                                         |
+| `NEXT_PUBLIC_BASE_PATH`        | _(empty)_                                        | Only if the site is hosted under a subpath (not needed for `byte-mag.ir` / org `github.io`) |
+| `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | _(empty)_                                        | Umami website id; unset = no analytics script                                               |
+| `NEXT_PUBLIC_UMAMI_SCRIPT_URL` | `https://cloud.umami.is/script.js`               | Umami script, for a self-hosted instance                                                    |
+| `INDEXNOW_KEY`                 | _(empty)_                                        | IndexNow key (8–128 of `[a-zA-Z0-9-]`); unset = no IndexNow                                 |
 
 Expected layout on the CDN:
 
@@ -244,6 +247,17 @@ domain root. Keep `public/CNAME` (`byte-mag.ir`) so GitHub Pages does not drop
 the custom domain on each publish.
 
 Override `NEXT_PUBLIC_PDF_BASE_URL` (repo variable) if the PDF CDN moves.
+
+Optional repository **variables** (Settings → Secrets and variables → Actions →
+Variables), each inert until set:
+
+- `NEXT_PUBLIC_UMAMI_WEBSITE_ID` (and `NEXT_PUBLIC_UMAMI_SCRIPT_URL` for a
+  self-hosted Umami) enables cookieless page analytics.
+- `INDEXNOW_KEY` enables IndexNow. The build publishes `/<key>.txt` and
+  `indexnow-manifest.json`; after each publish the workflow waits for the new
+  version to be live and submits only the pages whose content changed. Pick any
+  32 random hex characters, e.g. `openssl rand -hex 16`. The key is public by
+  design (search engines fetch it), so a variable rather than a secret is fine.
 
 ### Telegram Instant View
 

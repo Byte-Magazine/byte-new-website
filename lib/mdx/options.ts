@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
 import { remarkAdmonition } from "./remark-admonition";
+import { remarkDemoteHeadings } from "./remark-demote-headings";
 
 /**
  * Shared MDX plugin chain. Used by every content route so articles, blog
@@ -15,7 +16,12 @@ import { remarkAdmonition } from "./remark-admonition";
  * build the table of contents, so its anchors always match the rendered ids.
  */
 export const mdxOptions = {
-  remarkPlugins: [remarkGfm, remarkMath, remarkAdmonition],
+  remarkPlugins: [
+    remarkGfm,
+    remarkMath,
+    remarkAdmonition,
+    remarkDemoteHeadings,
+  ],
   rehypePlugins: [
     rehypeSlug,
     [

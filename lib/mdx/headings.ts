@@ -8,6 +8,7 @@ import type { Root } from "hast";
 import { visit } from "unist-util-visit";
 
 import { remarkAdmonition } from "./remark-admonition";
+import { remarkDemoteHeadings } from "./remark-demote-headings";
 
 export interface Heading {
   id: string;
@@ -28,6 +29,7 @@ export const extractHeadings = cache((source: string): Heading[] => {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkAdmonition)
+    .use(remarkDemoteHeadings)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeSlug);
 

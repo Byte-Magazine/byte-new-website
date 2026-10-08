@@ -37,6 +37,18 @@ describe("articleFrontmatterSchema", () => {
     const { title: _title, ...rest } = valid;
     expect(() => articleFrontmatterSchema.parse(rest)).toThrow();
   });
+
+  it("accepts an updated date on or after the publish date", () => {
+    expect(
+      articleFrontmatterSchema.parse({ ...valid, updated: valid.date }).updated,
+    ).toBe(valid.date);
+  });
+
+  it("rejects an updated date before the publish date", () => {
+    expect(() =>
+      articleFrontmatterSchema.parse({ ...valid, updated: "2000-01-01" }),
+    ).toThrow(/updated/);
+  });
 });
 
 describe("issueMetaSchema", () => {

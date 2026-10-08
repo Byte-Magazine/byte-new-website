@@ -39,9 +39,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const authors = getAllAuthors();
   const tags = getAllTags();
 
-  const lastArticle = newest(articles.map((article) => article.date));
+  /** Last time a piece changed: its edit date when it has one. */
+  const changed = (item: { date: string; updated?: string }) =>
+    item.updated ?? item.date;
+
+  const lastArticle = newest(articles.map(changed));
   const lastIssue = newest(issues.map((issue) => issue.date));
-  const lastPost = newest(posts.map((post) => post.date));
+  const lastPost = newest(posts.map(changed));
   const lastContent = newest(
     [lastArticle, lastIssue, lastPost].filter(
       (date): date is string => date !== undefined,
@@ -68,8 +72,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticRoutes,
     ...issues.map((issue) => entry(issue.url, issue.date)),
-    ...articles.map((article) => entry(article.url, article.date)),
-    ...posts.map((post) => entry(post.url, post.date)),
+    ...articles.map((article) => entry(article.url, changed(article))),
+    ...posts.map((post) => entry(post.url, changed(post))),
     ...getAllWorkshops().flatMap((workshop) => [
       entry(workshop.url),
       ...workshop.docs.map((doc) => entry(doc.url)),
@@ -79,8 +83,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       entry(
         author.url,
         newest([
-          ...author.articles.map((article) => article.date),
-          ...author.blogPosts.map((post) => post.date),
+          ...author.articles.map(changed),
+          ...author.blogPosts.map(changed),
         ]),
       ),
     ),
@@ -89,10 +93,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       .map((tag) =>
         entry(
           tag.url,
-          newest([
-            ...tag.articles.map((article) => article.date),
-            ...tag.blogPosts.map((post) => post.date),
-          ]),
+          newest([...tag.articles.map(changed), ...tag.blogPosts.map(changed)]),
         ),
       ),
   ];

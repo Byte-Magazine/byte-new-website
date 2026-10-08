@@ -96,6 +96,21 @@ describe("articleJsonLd", () => {
   });
 });
 
+describe("articleJsonLd dateModified", () => {
+  it("uses the updated date when given", () => {
+    const ld = articleJsonLd({
+      title: "t",
+      description: "d",
+      url: "/x",
+      date: "2025-01-01",
+      updated: "2025-06-01",
+      authors: [],
+    });
+    expect(ld.datePublished).toBe("2025-01-01");
+    expect(ld.dateModified).toBe("2025-06-01");
+  });
+});
+
 describe("articleJsonLd without a date", () => {
   it("omits publish dates for undated lessons", () => {
     const ld = articleJsonLd({

@@ -5,6 +5,22 @@ const isoDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, "date must be ISO format YYYY-MM-DD");
 
+/**
+ * Optional "last substantively edited" date. Kept explicit rather than read
+ * from git: every document was re-committed in the 2026 migration, so commit
+ * dates would claim all of them changed that day.
+ */
+const updatedDate = isoDate.optional();
+
+/** `updated` cannot precede `date`. */
+function updatedNotBeforeDate(fm: { date: string; updated?: string }) {
+  return !fm.updated || fm.updated >= fm.date;
+}
+const UPDATED_MESSAGE = {
+  message: "updated must not be earlier than date",
+  path: ["updated"],
+};
+
 const issueNumber = z
   .string()
   .regex(/^[01]{8}$/, "issue number must be 8 binary digits");
@@ -48,25 +64,31 @@ export const issueMetaSchema = z.object({
   themeColor: z.string().min(1),
 });
 
-export const articleFrontmatterSchema = z.object({
-  title: z.string().min(1),
-  description: z.string().default(""),
-  authors: z.array(z.string()).default([]),
-  tags: z.array(z.string()).default([]),
-  date: isoDate,
-  issue: issueNumber,
-  order: z.number().int().nonnegative().default(0),
-  cover: z.string().optional(),
-});
+export const articleFrontmatterSchema = z
+  .object({
+    title: z.string().min(1),
+    description: z.string().default(""),
+    authors: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    date: isoDate,
+    updated: updatedDate,
+    issue: issueNumber,
+    order: z.number().int().nonnegative().default(0),
+    cover: z.string().optional(),
+  })
+  .refine(updatedNotBeforeDate, UPDATED_MESSAGE);
 
-export const blogFrontmatterSchema = z.object({
-  title: z.string().min(1),
-  description: z.string().default(""),
-  authors: z.array(z.string()).default([]),
-  tags: z.array(z.string()).default([]),
-  date: isoDate,
-  cover: z.string().optional(),
-});
+export const blogFrontmatterSchema = z
+  .object({
+    title: z.string().min(1),
+    description: z.string().default(""),
+    authors: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    date: isoDate,
+    updated: updatedDate,
+    cover: z.string().optional(),
+  })
+  .refine(updatedNotBeforeDate, UPDATED_MESSAGE);
 
 export const workshopFrontmatterSchema = z.object({
   title: z.string().min(1),
@@ -129,6 +151,8 @@ export interface Article {
   title: string;
   description: string;
   date: string;
+  /** Last substantive edit, when it differs from `date`. */
+  updated?: string;
   tags: string[];
   cover?: string;
   body: string;
@@ -150,6 +174,8 @@ export interface BlogPost {
   title: string;
   description: string;
   date: string;
+  /** Last substantive edit, when it differs from `date`. */
+  updated?: string;
   tags: string[];
   cover?: string;
   body: string;

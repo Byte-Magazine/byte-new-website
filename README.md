@@ -133,6 +133,7 @@ description: One-line summary
 authors: [AuthorId]
 tags: [برچسب]
 date: "2025-09-22" # ISO; UI renders Jalali
+updated: "2025-10-01" # optional; set only after a substantive edit
 issue: "00000101"
 order: 1 # position within the issue
 cover: ./img/1.png # optional
@@ -141,6 +142,10 @@ cover: ./img/1.png # optional
 
 Blog posts omit `issue` / `order`. Workshop docs use `title`, `description`,
 `order`, and `workshop`.
+
+`updated` drives `dateModified`, the sitemap `lastmod`, and a visible
+"به‌روزرسانی" date. Leave it out for typo fixes; search engines discount
+dates that move without real changes.
 
 Dates stay ISO in source (sitemaps, sorting, JSON-LD). Readers see Jalali via
 `Intl.DateTimeFormat` with the `persian` calendar — no date library.

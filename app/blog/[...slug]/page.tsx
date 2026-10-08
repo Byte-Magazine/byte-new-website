@@ -41,6 +41,7 @@ export async function generateMetadata({
     image: ogImage.blog(post.slug),
     type: "article",
     publishedTime: post.date,
+    modifiedTime: post.updated,
     authors: post.authors.map((a) => a.name),
     tags: post.tags,
   });
@@ -65,6 +66,7 @@ export default async function BlogPostPage({
           description: metaDescription(post.description, post.body),
           url: post.url,
           date: post.date,
+          updated: post.updated,
           authors: post.authors.map((a) => ({ name: a.name, url: a.url })),
           tags: post.tags,
           image: ogImage.blog(post.slug),
@@ -118,6 +120,14 @@ export default async function BlogPostPage({
                   <time key="date" dateTime={post.date} data-iv="date">
                     {formatJalaliLong(post.date)}
                   </time>,
+                  post.updated ? (
+                    <span key="updated">
+                      به‌روزرسانی:{" "}
+                      <time dateTime={post.updated}>
+                        {formatJalaliLong(post.updated)}
+                      </time>
+                    </span>
+                  ) : null,
                   `${toPersianDigits(post.readingTime)} دقیقه مطالعه`,
                 ]}
               />

@@ -46,6 +46,7 @@ interface MetadataInput {
   image?: string;
   type?: "website" | "article" | "profile";
   publishedTime?: string;
+  modifiedTime?: string;
   authors?: string[];
   tags?: string[];
 }
@@ -64,6 +65,7 @@ export function buildMetadata({
   image,
   type = "website",
   publishedTime,
+  modifiedTime,
   authors,
   tags,
 }: MetadataInput): Metadata {
@@ -89,6 +91,7 @@ export function buildMetadata({
       url,
       images,
       ...(publishedTime ? { publishedTime } : {}),
+      ...(modifiedTime ? { modifiedTime } : {}),
       ...(authors ? { authors } : {}),
       ...(tags ? { tags } : {}),
     },
@@ -130,6 +133,8 @@ export function articleJsonLd(input: {
   url: string;
   /** Omitted for undated documents such as workshop lessons. */
   date?: string;
+  /** Last substantive edit; defaults to `date`. */
+  updated?: string;
   authors: JsonLdAuthor[];
   tags?: string[];
   type?: "Article" | "BlogPosting" | "TechArticle";
@@ -143,7 +148,10 @@ export function articleJsonLd(input: {
     headline: input.title,
     description: input.description,
     ...(input.date
-      ? { datePublished: input.date, dateModified: input.date }
+      ? {
+          datePublished: input.date,
+          dateModified: input.updated ?? input.date,
+        }
       : {}),
     mainEntityOfPage: pageUrl(input.url),
     url: pageUrl(input.url),

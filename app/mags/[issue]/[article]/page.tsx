@@ -55,6 +55,7 @@ export async function generateMetadata({
     image: ogImage.article(article.issueNumber, article.slug),
     type: "article",
     publishedTime: article.date,
+    modifiedTime: article.updated,
     authors: article.authors.map((a) => a.name),
     tags: article.tags,
   });
@@ -89,6 +90,7 @@ export default async function ArticlePage({
           description: metaDescription(article.description, article.body),
           url: article.url,
           date: article.date,
+          updated: article.updated,
           authors: article.authors.map((a) => ({ name: a.name, url: a.url })),
           tags: article.tags,
           image: ogImage.article(article.issueNumber, article.slug),
@@ -168,6 +170,14 @@ export default async function ArticlePage({
                   <time key="date" dateTime={article.date} data-iv="date">
                     {formatJalaliLong(article.date)}
                   </time>,
+                  article.updated ? (
+                    <span key="updated">
+                      به‌روزرسانی:{" "}
+                      <time dateTime={article.updated}>
+                        {formatJalaliLong(article.updated)}
+                      </time>
+                    </span>
+                  ) : null,
                   `${toPersianDigits(article.readingTime)} دقیقه مطالعه`,
                 ]}
               />

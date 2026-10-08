@@ -1,4 +1,12 @@
-import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import type { Metadata } from "next";
+
+import {
+  buildMetadata,
+  JsonLd,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
+import { SITE } from "@/lib/site";
 import { VelocityDivider } from "@/components/motion/velocity-divider";
 import { BlogTeaser } from "@/components/sections/blog-teaser";
 import { Contributors } from "@/components/sections/contributors";
@@ -18,6 +26,12 @@ import {
   getLatestIssue,
   getStats,
 } from "@/lib/content";
+
+// `absolute` skips the "%s | بایت" title template, which would repeat the name.
+export const metadata: Metadata = {
+  ...buildMetadata({ title: SITE.name, path: "/" }),
+  title: { absolute: SITE.name },
+};
 
 export default function HomePage() {
   const latest = getLatestIssue();

@@ -24,7 +24,7 @@ describe("content graph", () => {
   });
 
   it("loads every article", () => {
-    expect(getAllArticles()).toHaveLength(110);
+    expect(getAllArticles()).toHaveLength(111);
   });
 
   it("sorts issues newest first", () => {

@@ -22,7 +22,7 @@ export const PROFESSOR_ORDER: string[] = [
   "MohsenAnsari",
   "MaryamRamezani",
   "SepidehSafari",
-  "solmazSalimi"
+  "solmazSalimi",
 ];
 
 export const AUTHORS = [
@@ -720,7 +720,10 @@ export const AUTHORS = [
     name: "سپهر کلانکی",
     title: "کارشناسی ۱۴۰۳",
     image: "/img/authors/sepehrKalanaki.webp",
-    socials: {},
+    socials: {
+      github: "https://github.com/OverShifted",
+      website: "https://overshifted.com/",
+    },
   },
   {
     id: "maniEbrahimi",

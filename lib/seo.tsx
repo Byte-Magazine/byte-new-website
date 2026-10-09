@@ -261,6 +261,25 @@ export function websiteJsonLd() {
   };
 }
 
+/**
+ * Names the site's key pages so search engines can pick meaningful sitelinks
+ * (Google chooses sitelinks itself; this and the nav are the signals we control).
+ */
+export function siteNavigationJsonLd(
+  items: Array<{ name: string; url: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList" as const,
+    itemListElement: items.map((item, index) => ({
+      "@type": "SiteNavigationElement" as const,
+      position: index + 1,
+      name: item.name,
+      url: pageUrl(item.url),
+    })),
+  };
+}
+
 /** Breadcrumb trail; helps search results show the section a page sits in. */
 export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
   return {

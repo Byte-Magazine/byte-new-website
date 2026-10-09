@@ -85,7 +85,10 @@ export default function RootLayout({
           >
             رفتن به محتوا
           </a>
-          <Header binary={getLatestIssue()?.number} />
+          <Header
+            binary={getLatestIssue()?.number}
+            latestUrl={getLatestIssue()?.url}
+          />
           <div id="main">{children}</div>
           <Footer />
         </TooltipProvider>

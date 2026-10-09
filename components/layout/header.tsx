@@ -59,8 +59,18 @@ function NavLink({
   );
 }
 
-export function Header({ binary }: { binary?: string }) {
+export function Header({
+  binary,
+  latestUrl,
+}: {
+  binary?: string;
+  /** URL of the newest issue; shown first so it is the site's top internal link. */
+  latestUrl?: string;
+}) {
   const pathname = usePathname();
+  const mainNav = latestUrl
+    ? [{ href: latestUrl, label: "آخرین شماره" }, ...NAV_ITEMS]
+    : NAV_ITEMS;
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -72,7 +82,7 @@ export function Header({ binary }: { binary?: string }) {
           className="hidden items-center gap-0.5 lg:flex"
           aria-label="ناوبری اصلی"
         >
-          {NAV_ITEMS.map((item) => (
+          {mainNav.map((item) => (
             <NavLink key={item.href} {...item} pathname={pathname} />
           ))}
         </nav>
@@ -110,7 +120,7 @@ export function Header({ binary }: { binary?: string }) {
             <SheetContent side="left" className="w-72">
               <SheetTitle className="sr-only">{SITE.name}</SheetTitle>
               <nav className="flex flex-col gap-1 p-4 pt-12" aria-label="منو">
-                {[...NAV_ITEMS, ...SECONDARY_NAV_ITEMS].map((item) => (
+                {[...mainNav, ...SECONDARY_NAV_ITEMS].map((item) => (
                   <NavLink
                     key={item.href}
                     {...item}

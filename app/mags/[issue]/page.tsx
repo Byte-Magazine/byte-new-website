@@ -36,7 +36,7 @@ export async function generateMetadata({
   if (!issue) return {};
 
   return buildMetadata({
-    title: `شمارهٔ ${number}`,
+    title: `${issue.description} بایت (${number})`,
     description: issueDescription(issue),
     path: issue.url,
     image: ogImage.issue(issue.number),

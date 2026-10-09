@@ -153,7 +153,9 @@ describe("content graph", () => {
     const stats = getStats();
     expect(stats.issues).toBe(10);
     expect(stats.articles).toBe(getAllArticles().length);
-    expect(stats.authors).toBe(getAllAuthors().length);
+    expect(stats.authors).toBe(
+      getAllAuthors().filter((author) => author.articles.length > 0).length,
+    );
     expect(stats.codenameh).toBe(13);
   });
 

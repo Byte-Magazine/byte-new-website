@@ -712,15 +712,25 @@ export const AUTHORS = [
     id: "solmazSalimi",
     name: "دکتر سولماز سلیمی",
     title: "ورودی ۱۳۹۴ دکتری",
-    image: "/img/authors/solmazSalimi.jpg",
+    image: "/img/authors/solmazSalimi.webp",
     socials: {},
   },
   {
     id: "sepehrKalanaki",
     name: "سپهر کلانکی",
     title: "کارشناسی ۱۴۰۳",
-    image: "/img/authors/sepehrKalanaki.jpg",
+    image: "/img/authors/sepehrKalanaki.webp",
     socials: {},
+  },
+  {
+    id: "maniEbrahimi",
+    name: "مانی ابراهیمی",
+    image: "/img/authors/maniEbrahimi.webp",
+    socials: {
+      linkedin: "https://www.linkedin.com/in/mani-ebrahimi/",
+      github: "https://github.com/maniebra",
+      website: "https://maniebra.github.io",
+    },
   },
   // اساتید همراه — role: "professor" keeps them out of the main grid and
   // homepage marquee; they get their own section on /authors instead.

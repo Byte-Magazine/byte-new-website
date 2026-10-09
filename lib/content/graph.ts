@@ -144,7 +144,13 @@ function buildGraph(): ContentGraph {
     b.date.localeCompare(a.date),
   );
 
-  articles.sort((a, b) => b.date.localeCompare(a.date) || a.order - b.order);
+  // Newest first; within one issue (same date) the last article comes first.
+  articles.sort(
+    (a, b) =>
+      b.date.localeCompare(a.date) ||
+      b.issueNumber.localeCompare(a.issueNumber) ||
+      b.order - a.order,
+  );
 
   // ---- Blog ---------------------------------------------------------------
   const blogPosts: BlogPost[] = [];

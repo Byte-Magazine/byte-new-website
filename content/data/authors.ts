@@ -732,6 +732,13 @@ export const AUTHORS = [
       website: "https://maniebra.github.io",
     },
   },
+  {
+    id: "loganKugler",
+    name: "Logan Kugler",
+    title: "Contributor to CACM",
+    image: "/img/authors/loganKugler.webp",
+    socials: {},
+  },
   // اساتید همراه — role: "professor" keeps them out of the main grid and
   // homepage marquee; they get their own section on /authors instead.
   {

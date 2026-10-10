@@ -19,12 +19,12 @@ import {
 } from "./index";
 
 describe("content graph", () => {
-  it("loads all 9 issues", () => {
-    expect(getAllIssues()).toHaveLength(9);
+  it("loads all 10 issues", () => {
+    expect(getAllIssues()).toHaveLength(10);
   });
 
   it("loads every article", () => {
-    expect(getAllArticles()).toHaveLength(106);
+    expect(getAllArticles()).toHaveLength(113);
   });
 
   it("sorts issues newest first", () => {
@@ -151,9 +151,11 @@ describe("content graph", () => {
 
   it("computes stats from the graph", () => {
     const stats = getStats();
-    expect(stats.issues).toBe(9);
+    expect(stats.issues).toBe(10);
     expect(stats.articles).toBe(getAllArticles().length);
-    expect(stats.authors).toBe(getAllAuthors().length);
+    expect(stats.authors).toBe(
+      getAllAuthors().filter((author) => author.articles.length > 0).length,
+    );
     expect(stats.codenameh).toBe(13);
   });
 

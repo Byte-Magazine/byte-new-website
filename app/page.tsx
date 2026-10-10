@@ -4,9 +4,10 @@ import {
   buildMetadata,
   JsonLd,
   organizationJsonLd,
+  siteNavigationJsonLd,
   websiteJsonLd,
 } from "@/lib/seo";
-import { SITE } from "@/lib/site";
+import { NAV_ITEMS, SITE } from "@/lib/site";
 import { VelocityDivider } from "@/components/motion/velocity-divider";
 import { BlogTeaser } from "@/components/sections/blog-teaser";
 import { Contributors } from "@/components/sections/contributors";
@@ -43,6 +44,14 @@ export default function HomePage() {
     <main>
       <JsonLd data={organizationJsonLd()} />
       <JsonLd data={websiteJsonLd()} />
+      <JsonLd
+        data={siteNavigationJsonLd([
+          ...(latest
+            ? [{ name: `آخرین شماره: ${latest.description}`, url: latest.url }]
+            : []),
+          ...NAV_ITEMS.map((item) => ({ name: item.label, url: item.href })),
+        ])}
+      />
       <Hero latest={latest} />
       <Stats stats={getStats()} />
       <FeaturedArticles articles={getAllArticles().slice(0, 6)} />

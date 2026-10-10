@@ -4,6 +4,7 @@ import { Analytics } from "@/components/layout/analytics";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { ThemeScript } from "@/components/layout/theme-script";
+import { DynamicFavicon } from "@/components/layout/dynamic-favicon";
 import { accentStyleTag, siteAccent } from "@/lib/brand";
 import { getLatestIssue } from "@/lib/content";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,7 +41,12 @@ export const metadata: Metadata = {
     images: [defaultOg.url],
   },
   alternates: { types: { "application/rss+xml": FEED_PATH } },
-  icons: { icon: "/img/favicon.ico" },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/img/favicon.ico", sizes: "any" },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
@@ -79,10 +85,14 @@ export default function RootLayout({
           >
             رفتن به محتوا
           </a>
-          <Header binary={getLatestIssue()?.number} />
+          <Header
+            binary={getLatestIssue()?.number}
+            latestUrl={getLatestIssue()?.url}
+          />
           <div id="main">{children}</div>
           <Footer />
         </TooltipProvider>
+        <DynamicFavicon />
         <Analytics />
       </body>
     </html>

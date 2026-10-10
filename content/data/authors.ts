@@ -22,6 +22,7 @@ export const PROFESSOR_ORDER: string[] = [
   "MohsenAnsari",
   "MaryamRamezani",
   "SepidehSafari",
+  "solmazSalimi",
 ];
 
 export const AUTHORS = [
@@ -706,6 +707,40 @@ export const AUTHORS = [
       linkedin: "https://www.linkedin.com/in/yazdanbahadori",
       github: "https://github.com/yazdanbhd",
     },
+  },
+  {
+    id: "solmazSalimi",
+    name: "دکتر سولماز سلیمی",
+    title: "ورودی ۱۳۹۴ دکتری",
+    image: "/img/authors/solmazSalimi.webp",
+    socials: {},
+  },
+  {
+    id: "sepehrKalanaki",
+    name: "سپهر کلانکی",
+    title: "کارشناسی ۱۴۰۳",
+    image: "/img/authors/sepehrKalanaki.webp",
+    socials: {
+      github: "https://github.com/OverShifted",
+      website: "https://overshifted.com/",
+    },
+  },
+  {
+    id: "maniEbrahimi",
+    name: "مانی ابراهیمی",
+    image: "/img/authors/maniEbrahimi.webp",
+    socials: {
+      linkedin: "https://www.linkedin.com/in/mani-ebrahimi/",
+      github: "https://github.com/maniebra",
+      website: "https://maniebra.github.io",
+    },
+  },
+  {
+    id: "loganKugler",
+    name: "Logan Kugler",
+    title: "Contributor to CACM",
+    image: "/img/authors/loganKugler.webp",
+    socials: {},
   },
   // اساتید همراه — role: "professor" keeps them out of the main grid and
   // homepage marquee; they get their own section on /authors instead.

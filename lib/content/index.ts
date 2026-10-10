@@ -222,7 +222,8 @@ export function getStats(): SiteStats {
   const graph = getGraph();
   return {
     articles: graph.articles.length,
-    authors: graph.authors.length,
+    authors: graph.authors.filter((author) => author.articles.length > 0)
+      .length,
     issues: graph.issues.length,
     codenameh: graph.codenameh.length,
     workshops: graph.workshops.length,

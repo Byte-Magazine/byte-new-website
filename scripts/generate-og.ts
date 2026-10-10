@@ -4,12 +4,13 @@
  * Static export cannot run dynamic `opengraph-image` routes, so the images are
  * produced at build time with Satori and written to public/og/.
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Resvg } from "@resvg/resvg-js";
 import satori from "satori";
+import sharp from "sharp";
 
 import {
   getAllArticles,
@@ -48,11 +49,36 @@ function loadFont(weight: 400 | 700): Buffer {
   return readFileSync(join(ROOT, "assets", "fonts", `Pinar-${weight}.ttf`));
 }
 
+/**
+ * Satori cannot decode WebP, so `.webp` assets are converted to PNG up front
+ * (sharp is async, the card builders are not) and served from this cache.
+ */
+const webpAsPng = new Map<string, ArrayBuffer>();
+
+async function preloadWebp(dir = join(PUBLIC_DIR, "img")) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) await preloadWebp(full);
+    else if (/\.webp$/i.test(entry.name)) {
+      const png = await sharp(full).png().toBuffer();
+      webpAsPng.set(
+        full,
+        png.buffer.slice(
+          png.byteOffset,
+          png.byteOffset + png.byteLength,
+        ) as ArrayBuffer,
+      );
+    }
+  }
+}
+
 /** Load a public/ asset as an ArrayBuffer for Satori `<img src>`. */
 function loadPublicImage(publicPath?: string): ArrayBuffer | undefined {
   if (!publicPath?.startsWith("/")) return undefined;
-  // Satori rasterises JPEG/PNG/GIF/WebP — skip SVG placeholders.
+  // Satori rasterises JPEG/PNG/GIF — skip SVG placeholders.
   if (/\.svg$/i.test(publicPath)) return undefined;
+  const cached = webpAsPng.get(join(PUBLIC_DIR, publicPath.slice(1)));
+  if (cached) return cached;
   try {
     const buf = readFileSync(join(PUBLIC_DIR, publicPath.slice(1)));
     return buf.buffer.slice(
@@ -546,6 +572,7 @@ function toOgAuthors(
 
 async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
+  await preloadWebp();
   const fonts: Fonts = { regular: loadFont(400), bold: loadFont(700) };
   let count = 0;
 

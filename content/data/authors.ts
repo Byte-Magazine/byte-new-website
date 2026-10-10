@@ -711,8 +711,9 @@ export const AUTHORS = [
   {
     id: "solmazSalimi",
     name: "دکتر سولماز سلیمی",
-    title: "ورودی ۱۳۹۴ دکتری",
+    title: "استاد مدعو دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
     image: "/img/authors/solmazSalimi.webp",
+    role: "professor",
     socials: {},
   },
   {

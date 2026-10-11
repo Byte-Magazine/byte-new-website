@@ -13,6 +13,7 @@ type AUTHORSIDS = (typeof AUTHORS)[number]["id"];
  * not the alphabetical/article-count sort used for regular authors.
  */
 export const PROFESSOR_ORDER: string[] = [
+  "SolmazSalimi",
   "AmirhosseinJahangir",
   "ShohrehKasaei",
   "ShahinHessabi",
@@ -22,7 +23,6 @@ export const PROFESSOR_ORDER: string[] = [
   "MohsenAnsari",
   "MaryamRamezani",
   "SepidehSafari",
-  "solmazSalimi",
 ];
 
 export const AUTHORS = [
@@ -709,7 +709,7 @@ export const AUTHORS = [
     },
   },
   {
-    id: "solmazSalimi",
+    id: "SolmazSalimi",
     name: "دکتر سولماز سلیمی",
     title: "استاد مدعو دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
     image: "/img/authors/solmazSalimi.webp",

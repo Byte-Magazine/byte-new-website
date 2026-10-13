@@ -24,7 +24,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
       { authorId: "ArvinBaghal" },
       { authorId: "ArmanTahmasebi" },
       { authorId: "AHMZ" },
-      { authorId: "AmirHosseinShayan" },
+      // { authorId: "AmirHosseinShayan" },
     ],
   },
   {
@@ -48,11 +48,19 @@ export const STAFF_SECTIONS: StaffSection[] = [
     ],
   },
   {
-    name: "ارتباط با صنعت",
-    members: [{ authorId: "OmidHeydari" }],
+    name: "پادکست",
+    members: [
+      { authorId: "nilaKeshavarz" },
+      { authorId: "melikaAlizadeh" },
+      { authorId: "sepehrKalanaki" },
+    ],
   },
   {
     name: "فنی",
     members: [{ authorId: "Moeein" }, { authorId: "aj" }],
+  },
+  {
+    name: "ارتباط با صنعت",
+    members: [{ authorId: "OmidHeydari" }],
   },
 ];

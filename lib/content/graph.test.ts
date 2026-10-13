@@ -133,7 +133,7 @@ describe("content graph", () => {
     expect(getAllBlogPosts()).toHaveLength(2);
     expect(getAllWorkshops()).toHaveLength(1);
     expect(getAllWorkshops()[0].docs.length).toBe(6);
-    expect(getStaffSections()).toHaveLength(6);
+    expect(getStaffSections()).toHaveLength(7);
     expect(getCodenameh()).toHaveLength(13);
   });
 

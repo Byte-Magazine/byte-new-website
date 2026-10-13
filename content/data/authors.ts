@@ -727,6 +727,26 @@ export const AUTHORS = [
     },
   },
   {
+    id: "melikaAlizadeh",
+    name: "ملیکا علی‌زاده",
+    image: "/img/staff/melikaAlizadeh.webp",
+    socials: {
+      github: "https://github.com/melikaalizade",
+      linkedin: "https://www.linkedin.com/in/melika-alizadeh",
+      email: "melikaalizadeh7@gmail.com",
+    },
+  },
+  {
+    id: "nilaKeshavarz",
+    name: "نیلا کشاورز",
+    image: "/img/staff/nilaKeshavarz.webp",
+    socials: {
+      github: "https://github.com/Nila84",
+      linkedin: "https://www.linkedin.com/in/nila-keshavarz",
+      email: "nilabaahaghighat@gmail.com",
+    },
+  },
+  {
     id: "maniEbrahimi",
     name: "مانی ابراهیمی",
     image: "/img/authors/maniEbrahimi.webp",

@@ -729,6 +729,7 @@ export const AUTHORS = [
   {
     id: "melikaAlizadeh",
     name: "ملیکا علی‌زاده",
+    title: "کارشناسی ۱۴۰۱",
     image: "/img/staff/melikaAlizadeh.webp",
     socials: {
       github: "https://github.com/melikaalizade",
@@ -739,6 +740,7 @@ export const AUTHORS = [
   {
     id: "nilaKeshavarz",
     name: "نیلا کشاورز",
+    title: "کارشناسی ۱۴۰۳",
     image: "/img/staff/nilaKeshavarz.webp",
     socials: {
       github: "https://github.com/Nila84",

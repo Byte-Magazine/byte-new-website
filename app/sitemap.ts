@@ -9,6 +9,7 @@ import {
   getAllWorkshops,
   isIndexableTag,
 } from "@/lib/content";
+import { getAllEpisodes } from "@/lib/bytecast";
 import { pageUrl } from "@/lib/seo";
 
 // Required for output: "export" — the route is generated once at build time.
@@ -64,6 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/blog", lastPost),
     entry("/workshops"),
     entry("/codenameh"),
+    entry("/bytecast", newest(getAllEpisodes().map((episode) => episode.date))),
     entry("/staff"),
     entry("/authors"),
     entry("/tags"),
@@ -72,6 +74,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticRoutes,
     ...issues.map((issue) => entry(issue.url, issue.date)),
+    ...getAllEpisodes().map((episode) => entry(episode.url, episode.date)),
     ...articles.map((article) => entry(article.url, changed(article))),
     ...posts.map((post) => entry(post.url, changed(post))),
     ...getAllWorkshops().flatMap((workshop) => [

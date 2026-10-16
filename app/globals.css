@@ -590,3 +590,91 @@ pre code > [data-highlighted-line] {
 .debug {
   border: 1px solid red !important;
 }
+
+/*
+ * ByteCast motion. Everything animates transform or opacity only, so it stays
+ * on the compositor and is cheap on old phones.
+ */
+
+/* Wordmark: each glyph is traced once (stroke-dash), then fills in. */
+.bc-logo path {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+}
+.bc-logo-animated path {
+  fill-opacity: 0;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    bc-draw 1.2s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--i) * 0.16s) forwards,
+    bc-fill 0.6s ease-out calc(var(--i) * 0.16s + 0.9s) forwards;
+}
+@keyframes bc-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes bc-fill {
+  to {
+    fill-opacity: 1;
+    stroke-opacity: 0;
+  }
+}
+
+/* Bars between the portraits and in the chapter list. */
+@keyframes bc-eq {
+  0%,
+  100% {
+    transform: scaleY(0.18);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.bc-bar {
+  animation: bc-eq 1s ease-in-out infinite;
+}
+
+/* Ring that expands from the speaker's portrait. */
+.bc-pulse {
+  animation: bc-pulse 1.8s ease-out infinite;
+}
+@keyframes bc-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+.bc-fade {
+  animation: bc-fade 0.35s ease-out both;
+}
+@keyframes bc-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bc-logo-animated path {
+    animation: none;
+    fill-opacity: 1;
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+  }
+  .bc-bar {
+    animation: none;
+    transform: scaleY(0.5);
+  }
+  .bc-pulse,
+  .bc-fade {
+    animation: none;
+  }
+}

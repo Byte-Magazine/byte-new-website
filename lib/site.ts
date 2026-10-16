@@ -31,6 +31,20 @@ export function pdfUrl(issue: string): string {
   return `${PDF_BASE}/mags/${issue}.pdf`;
 }
 
+/**
+ * Where ByteCast audio is stored. Override with NEXT_PUBLIC_PODCAST_BASE_URL
+ * (no trailing slash) to point at a different bucket or CDN.
+ */
+const PODCAST_BASE = (
+  process.env.NEXT_PUBLIC_PODCAST_BASE_URL?.trim() ||
+  "https://s3.byte-mag.ir/podcast"
+).replace(/\/$/, "");
+
+/** Public URL of a ByteCast episode's audio file. */
+export function podcastAudioUrl(file: string): string {
+  return `${PODCAST_BASE}/${file}`;
+}
+
 /** Public URL of a codenameh issue's PDF on the CDN. */
 export function codenamehPdfUrl(id: string): string {
   return `${PDF_BASE}/codenameh/${id}.pdf`;
@@ -39,6 +53,7 @@ export function codenamehPdfUrl(id: string): string {
 export const NAV_ITEMS = [
   { href: "/mags/intro", label: "آرشیو بایت" },
   { href: "/articles", label: "مقاله‌ها" },
+  { href: "/bytecast", label: "بایت‌کست" },
   { href: "/codenameh", label: "آرشیو کدنامه" },
   { href: "/workshops", label: "کارگاه‌ها" },
   { href: "/blog", label: "وبلاگ" },

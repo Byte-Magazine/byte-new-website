@@ -1,6 +1,7 @@
 import { normalizePersian } from "./persian";
 
-export type SearchKind = "article" | "blog" | "workshop" | "author" | "issue";
+export type SearchKind =
+  "article" | "blog" | "workshop" | "author" | "issue" | "episode";
 
 export interface SearchDoc {
   url: string;

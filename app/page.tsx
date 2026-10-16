@@ -9,6 +9,7 @@ import {
 } from "@/lib/seo";
 import { NAV_ITEMS, SITE } from "@/lib/site";
 import { VelocityDivider } from "@/components/motion/velocity-divider";
+import { BytecastTeaser } from "@/components/sections/bytecast-teaser";
 import { BlogTeaser } from "@/components/sections/blog-teaser";
 import { Contributors } from "@/components/sections/contributors";
 import { FeaturedArticles } from "@/components/sections/featured-articles";
@@ -17,6 +18,7 @@ import { IssueWall } from "@/components/sections/issue-wall";
 import { Stats } from "@/components/sections/stats";
 import { Topics } from "@/components/sections/topics";
 import { WorkshopsTeaser } from "@/components/sections/workshops-teaser";
+import { getLatestEpisode } from "@/lib/bytecast";
 import {
   getAllArticles,
   getAllAuthors,
@@ -36,6 +38,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const latest = getLatestIssue();
+  const latestEpisode = getLatestEpisode();
   const authors = getAllAuthors().filter(
     (author) => author.articleCount > 0 && author.role !== "professor",
   );
@@ -55,6 +58,7 @@ export default function HomePage() {
       <Hero latest={latest} />
       <Stats stats={getStats()} />
       <FeaturedArticles articles={getAllArticles().slice(0, 6)} />
+      {latestEpisode ? <BytecastTeaser episode={latestEpisode} /> : null}
       <IssueWall
         issues={getAllIssues().map((issue) => ({
           number: issue.number,

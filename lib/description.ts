@@ -157,13 +157,14 @@ export function tagDescription(tag: {
   );
 }
 
-/** Who an author is and what they have written for Byte. */
+/** Who an author is and what they have written (and spoken) for Byte. */
 export function authorDescription(author: {
   name: string;
   title?: string;
   articleCount: number;
   articles: readonly Titled[];
   blogPosts: readonly Titled[];
+  episodes?: readonly Titled[];
   staffSections: readonly string[];
 }): string {
   const parts = [author.name, author.title].filter(Boolean).join(" — ");
@@ -182,12 +183,20 @@ export function authorDescription(author: {
   if (pieces > 0) {
     roles.push(`نویسندهٔ ${toPersianDigits(pieces)} مطلب`);
   }
+  const episodes = author.episodes ?? [];
+  if (episodes.length > 0) {
+    roles.push(`مهمان یا میزبان ${toPersianDigits(episodes.length)} قسمت بایت‌کست`);
+  }
   const lead = roles.length
     ? `${parts}؛ ${roles.join("، ")} در نشریه‌ی بایت`
     : parts;
   return withTitles(
     lead,
     ": ",
-    [...author.articles, ...author.blogPosts].map((item) => item.title),
+    [
+      ...author.articles,
+      ...author.blogPosts,
+      ...episodes,
+    ].map((item) => item.title),
   );
 }

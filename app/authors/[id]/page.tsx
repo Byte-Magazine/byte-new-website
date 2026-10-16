@@ -3,9 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { EpisodeCard } from "@/components/bytecast/episode-card";
 import { ArticleCard } from "@/components/cards/article-card";
 import { SocialLinks } from "@/components/cards/person-card";
 import { MetaLine } from "@/components/content/meta-line";
+import { getEpisodesForAuthor } from "@/lib/bytecast";
 import { getAllAuthors, getAuthor } from "@/lib/content";
 import { formatJalali, toPersianDigits } from "@/lib/persian";
 import { authorDescription } from "@/lib/description";
@@ -32,9 +34,11 @@ export async function generateMetadata({
   const author = getAuthor(id);
   if (!author) return {};
 
+  const episodes = getEpisodesForAuthor(author.id);
+
   return buildMetadata({
     title: author.name,
-    description: authorDescription(author),
+    description: authorDescription({ ...author, episodes }),
     path: author.url,
     image: ogImage.author(author.id),
     type: "profile",
@@ -49,6 +53,12 @@ export default async function AuthorPage({
   const { id } = await params;
   const author = getAuthor(id);
   if (!author) notFound();
+
+  const episodes = getEpisodesForAuthor(author.id);
+  const hasContent =
+    author.articles.length > 0 ||
+    author.blogPosts.length > 0 ||
+    episodes.length > 0;
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
@@ -101,6 +111,9 @@ export default async function AuthorPage({
               author.articleCount > 0
                 ? `${toPersianDigits(author.articleCount)} مطلب`
                 : null,
+              episodes.length > 0
+                ? `${toPersianDigits(episodes.length)} قسمت بایت‌کست`
+                : null,
               author.isStaff ? author.staffSections.join("، ") : null,
             ]}
           />
@@ -144,7 +157,20 @@ export default async function AuthorPage({
         </section>
       ) : null}
 
-      {author.articles.length === 0 && author.blogPosts.length === 0 ? (
+      {episodes.length > 0 ? (
+        <section className="mt-14">
+          <h2 className="mb-6 text-xl font-bold">بایت‌کست</h2>
+          <ul className="grid gap-6">
+            {episodes.map((episode) => (
+              <li key={episode.slug}>
+                <EpisodeCard episode={episode} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {!hasContent ? (
         <p className="rounded-lg border border-dashed p-10 text-center text-muted-foreground">
           هنوز مطلبی از این نویسنده منتشر نشده است.
         </p>

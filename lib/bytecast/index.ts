@@ -69,6 +69,14 @@ export function getEpisodeBySeasonAndNumber(
   );
 }
 
+/** Episodes where this author is host or guest, newest first. */
+export function getEpisodesForAuthor(authorId: string): Episode[] {
+  return getAllEpisodes().filter(
+    (episode) =>
+      episode.hostId === authorId || episode.guestId === authorId,
+  );
+}
+
 export function getLatestEpisode(): Episode | undefined {
   return getAllEpisodes()[0];
 }

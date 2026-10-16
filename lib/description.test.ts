@@ -183,4 +183,18 @@ describe("authorDescription", () => {
       }),
     ).toBe("سارا");
   });
+
+  it("mentions bytecast episodes", () => {
+    const out = authorDescription({
+      name: "نیلا",
+      articleCount: 0,
+      articles: [],
+      blogPosts: [],
+      episodes: [{ title: "گفت‌وگو با دکتر شاهین حسابی" }],
+      staffSections: [],
+    });
+    expect(out).toBe(
+      "نیلا؛ مهمان یا میزبان ۱ قسمت بایت‌کست در نشریه‌ی بایت: «گفت‌وگو با دکتر شاهین حسابی»",
+    );
+  });
 });

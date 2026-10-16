@@ -68,7 +68,7 @@ export function BytecastHero({ feedUrl }: { feedUrl: string }) {
         </p>
 
         <Reveal delay={350}>
-          <p className="mt-3 max-w-2xl text-base leading-9 text-muted-foreground md:text-lg md:leading-10">
+          <p className="mt-3 max-w-3xl text-base leading-9 text-muted-foreground md:text-lg md:leading-10">
             دربارهٔ مسیر پژوهش، آموزش، صنعت و تجربهٔ دانشجویی؛ هر قسمت با یک
             استاد و یک مصاحبه‌کننده.
           </p>

@@ -208,6 +208,9 @@ export function EpisodePlayer({ episode }: { episode: PlayerEpisode }) {
       <p
         className="flex items-center justify-end gap-2.5 font-mono text-xs text-muted-foreground"
       >
+        <span>{episode.code}</span>
+        <span>·</span>
+        <span className="font-semibold text-foreground">BYTECAST</span>
         <span
           className={cn(
             "size-2 rounded-full bg-accent",
@@ -215,9 +218,6 @@ export function EpisodePlayer({ episode }: { episode: PlayerEpisode }) {
           )}
           aria-hidden
         />
-        <span className="font-semibold text-foreground">BYTECAST</span>
-        <span>·</span>
-        <span>{episode.code}</span>
       </p>
 
       {/* the two voices, facing each other */}

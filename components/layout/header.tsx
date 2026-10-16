@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ComponentType, type SVGProps } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { Headphones, Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,9 +24,20 @@ import { Logo } from "./logo";
 import { SearchDialog } from "./search-dialog";
 import { ThemeToggle } from "./theme-toggle";
 
+type NavIcon = ComponentType<SVGProps<SVGSVGElement> & { className?: string }>;
+
+/** Icons are per-route, not a side effect of `featured`. */
+const NAV_ICONS: Partial<Record<string, NavIcon>> = {
+  "/bytecast": Headphones,
+};
+
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function isFeatured(item: object): boolean {
+  return "featured" in item && item.featured === true;
 }
 
 function NavLink({
@@ -35,14 +46,19 @@ function NavLink({
   pathname,
   onNavigate,
   className,
+  featured = false,
+  icon: Icon,
 }: {
   href: string;
   label: string;
   pathname: string;
   onNavigate?: () => void;
   className?: string;
+  featured?: boolean;
+  icon?: NavIcon;
 }) {
   const active = isActive(pathname, href);
+
   return (
     <Link
       href={href}
@@ -50,14 +66,22 @@ function NavLink({
       aria-current={active ? "page" : undefined}
       className={cn(
         "relative rounded-md px-2.5 py-1.5 text-sm transition-colors",
-        active
-          ? "font-semibold text-foreground"
-          : "text-muted-foreground hover:text-foreground",
+        featured
+          ? cn(
+              "inline-flex items-center gap-1.5 font-semibold",
+              active
+                ? "bg-accent text-accent-foreground"
+                : "bg-accent/15 text-accent hover:bg-accent/25",
+            )
+          : active
+            ? "font-semibold text-foreground"
+            : "text-muted-foreground hover:text-foreground",
         className,
       )}
     >
+      {Icon ? <Icon className="size-3.5 shrink-0" aria-hidden /> : null}
       {label}
-      {active ? (
+      {!featured && active ? (
         <span className="absolute inset-x-2.5 -bottom-0.5 hidden h-px bg-accent lg:block" />
       ) : null}
     </Link>
@@ -78,7 +102,14 @@ export function Header({ binary }: { binary?: string }) {
           aria-label="ناوبری اصلی"
         >
           {NAV_ITEMS.map((item) => (
-            <NavLink key={item.href} {...item} pathname={pathname} />
+            <NavLink
+              key={item.href}
+              href={item.href}
+              label={item.label}
+              featured={isFeatured(item)}
+              icon={NAV_ICONS[item.href]}
+              pathname={pathname}
+            />
           ))}
         </nav>
 
@@ -88,7 +119,12 @@ export function Header({ binary }: { binary?: string }) {
             aria-label="ناوبری فرعی"
           >
             {SECONDARY_NAV_ITEMS.map((item) => (
-              <NavLink key={item.href} {...item} pathname={pathname} />
+              <NavLink
+                key={item.href}
+                href={item.href}
+                label={item.label}
+                pathname={pathname}
+              />
             ))}
           </nav>
 
@@ -118,10 +154,16 @@ export function Header({ binary }: { binary?: string }) {
                 {ALL_NAV_ITEMS.map((item) => (
                   <NavLink
                     key={item.href}
-                    {...item}
+                    href={item.href}
+                    label={item.label}
+                    featured={isFeatured(item)}
+                    icon={NAV_ICONS[item.href]}
                     pathname={pathname}
                     onNavigate={() => setMenuOpen(false)}
-                    className="py-2.5 text-base"
+                    className={cn(
+                      "py-2.5 text-base",
+                      isFeatured(item) && "justify-start",
+                    )}
                   />
                 ))}
               </nav>

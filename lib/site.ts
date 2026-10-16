@@ -53,10 +53,10 @@ export function codenamehPdfUrl(id: string): string {
 export const NAV_ITEMS = [
   { href: "/mags/intro", label: "آرشیو بایت" },
   { href: "/articles", label: "مقاله‌ها" },
-  { href: "/bytecast", label: "بایت‌کست" },
   { href: "/codenameh", label: "آرشیو کدنامه" },
   { href: "/workshops", label: "کارگاه‌ها" },
   { href: "/blog", label: "وبلاگ" },
+  { href: "/bytecast", label: "بایت‌کست", featured: true },
 ] as const;
 
 export const SECONDARY_NAV_ITEMS = [

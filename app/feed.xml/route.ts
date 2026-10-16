@@ -5,6 +5,6 @@ export const dynamic = "force-static";
 
 export function GET() {
   return new Response(renderFeed(getFeedItems()), {
-    headers: { "Content-Type": "application/rss+xml; charset=utf-8" },
+    headers: { "Content-Type": "text/xml; charset=utf-8" },
   });
 }

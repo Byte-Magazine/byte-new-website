@@ -12,7 +12,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NAV_ITEMS, SECONDARY_NAV_ITEMS, SITE } from "@/lib/site";
+import {
+  ALL_NAV_ITEMS,
+  NAV_ITEMS,
+  SECONDARY_NAV_ITEMS,
+  SITE,
+} from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 import { Logo } from "./logo";
@@ -59,18 +64,8 @@ function NavLink({
   );
 }
 
-export function Header({
-  binary,
-  latestUrl,
-}: {
-  binary?: string;
-  /** URL of the newest issue; shown first so it is the site's top internal link. */
-  latestUrl?: string;
-}) {
+export function Header({ binary }: { binary?: string }) {
   const pathname = usePathname();
-  const mainNav = latestUrl
-    ? [{ href: latestUrl, label: "آخرین شماره" }, ...NAV_ITEMS]
-    : NAV_ITEMS;
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -82,7 +77,7 @@ export function Header({
           className="hidden items-center gap-0.5 lg:flex"
           aria-label="ناوبری اصلی"
         >
-          {mainNav.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <NavLink key={item.href} {...item} pathname={pathname} />
           ))}
         </nav>
@@ -120,7 +115,7 @@ export function Header({
             <SheetContent side="left" className="w-72">
               <SheetTitle className="sr-only">{SITE.name}</SheetTitle>
               <nav className="flex flex-col gap-1 p-4 pt-12" aria-label="منو">
-                {[...mainNav, ...SECONDARY_NAV_ITEMS].map((item) => (
+                {ALL_NAV_ITEMS.map((item) => (
                   <NavLink
                     key={item.href}
                     {...item}

@@ -23,7 +23,11 @@ export function HeroBackdrop({ palette }: { palette: GrainientPalette }) {
   useEffect(() => {
     const wide = window.matchMedia("(min-width: 768px)");
     const still = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setEnabled(wide.matches && !still.matches);
+    // WebGL backdrops are the first thing to hang an old phone or laptop.
+    const { hardwareConcurrency = 8, deviceMemory = 8 } =
+      navigator as Navigator & { deviceMemory?: number };
+    const capable = hardwareConcurrency > 4 && deviceMemory > 4;
+    const sync = () => setEnabled(capable && wide.matches && !still.matches);
 
     sync();
     wide.addEventListener("change", sync);

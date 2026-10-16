@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { ClipboardList, Mail, Send } from "lucide-react";
+import { ClipboardList, Mail, Rss, Send } from "lucide-react";
 import { SiGithub, SiMedium, SiX } from "@icons-pack/react-simple-icons";
 
 import { LinkedInIcon } from "@/components/icons/linkedin";
 import { LogoMark } from "@/components/layout/logo";
 import { getStats } from "@/lib/content";
 import { toPersianDigits } from "@/lib/persian";
-import { NAV_ITEMS, SECONDARY_NAV_ITEMS, SITE } from "@/lib/site";
+import { FEED_PATH, NAV_ITEMS, SECONDARY_NAV_ITEMS, SITE } from "@/lib/site";
 
 const SOCIALS = [
   { href: SITE.socials.telegram, label: "تلگرام", Icon: Send },
@@ -14,6 +14,7 @@ const SOCIALS = [
   { href: SITE.socials.linkedin, label: "لینکدین", Icon: LinkedInIcon },
   { href: SITE.socials.x, label: "ایکس", Icon: SiX },
   { href: SITE.socials.medium, label: "مدیوم", Icon: SiMedium },
+  { href: FEED_PATH, label: "فید RSS", Icon: Rss },
 ];
 
 export function Footer() {

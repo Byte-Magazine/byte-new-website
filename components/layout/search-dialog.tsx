@@ -22,11 +22,13 @@ const GROUP_LABELS: Record<SearchKind, string> = {
   workshop: "کارگاه‌ها",
   author: "نویسندگان",
   issue: "شماره‌ها",
+  episode: "بایت‌کست",
 };
 
 const GROUP_ORDER: SearchKind[] = [
   "article",
   "blog",
+  "episode",
   "workshop",
   "issue",
   "author",

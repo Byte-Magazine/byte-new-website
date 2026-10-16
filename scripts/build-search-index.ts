@@ -7,6 +7,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { getAllEpisodes } from "../lib/bytecast";
 import {
   getAllArticles,
   getAllAuthors,
@@ -53,6 +54,14 @@ const docs: SearchDoc[] = [
     tags: [],
     authors: [author.name],
     kind: "author" as const,
+  })),
+  ...getAllEpisodes().map((episode) => ({
+    url: episode.url,
+    title: `بایت‌کست، ${episode.title}`,
+    description: episode.description,
+    tags: ["بایت‌کست", "پادکست"],
+    authors: [episode.guest.name, episode.host.name],
+    kind: "episode" as const,
   })),
   ...getAllIssues().map((issue) => ({
     url: issue.url,

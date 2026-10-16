@@ -303,3 +303,86 @@ export function JsonLd({ data }: { data: object }) {
     />
   );
 }
+
+/** The ByteCast show, for its landing page. */
+export function podcastSeriesJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  image: string;
+  feedUrl: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "PodcastSeries" as const,
+    name: input.name,
+    description: input.description,
+    url: pageUrl(input.url),
+    image: absoluteUrl(input.image),
+    webFeed: absoluteUrl(input.feedUrl),
+    inLanguage: "fa-IR",
+    publisher: {
+      "@type": "Organization" as const,
+      name: SITE.name,
+      url: SITE.url,
+    },
+  };
+}
+
+/** One ByteCast episode, with its audio file, for the episode page. */
+export function podcastEpisodeJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  date: string;
+  episodeNumber: number;
+  seasonNumber: number;
+  /** ISO 8601, e.g. `PT21M41S`. */
+  duration: string;
+  image: string;
+  audioUrl: string;
+  audioMime: string;
+  audioBytes: number;
+  series: { name: string; url: string };
+  people: Array<{ name: string; url: string }>;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "PodcastEpisode" as const,
+    name: input.name,
+    description: input.description,
+    url: pageUrl(input.url),
+    datePublished: input.date,
+    episodeNumber: input.episodeNumber,
+    timeRequired: input.duration,
+    inLanguage: "fa-IR",
+    isAccessibleForFree: true,
+    image: absoluteUrl(input.image),
+    associatedMedia: {
+      "@type": "AudioObject" as const,
+      contentUrl: input.audioUrl,
+      encodingFormat: input.audioMime,
+      contentSize: String(input.audioBytes),
+      duration: input.duration,
+    },
+    partOfSeason: {
+      "@type": "PodcastSeason" as const,
+      seasonNumber: input.seasonNumber,
+    },
+    partOfSeries: {
+      "@type": "PodcastSeries" as const,
+      name: input.series.name,
+      url: pageUrl(input.series.url),
+    },
+    contributor: input.people.map((person) => ({
+      "@type": "Person" as const,
+      name: person.name,
+      url: pageUrl(person.url),
+    })),
+    publisher: {
+      "@type": "Organization" as const,
+      name: SITE.name,
+      url: SITE.url,
+    },
+  };
+}

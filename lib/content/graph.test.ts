@@ -157,6 +157,7 @@ describe("content graph", () => {
       getAllAuthors().filter((author) => author.articles.length > 0).length,
     );
     expect(stats.codenameh).toBe(13);
+    expect(stats.episodes).toBeGreaterThan(0);
   });
 
   it("sorts authors by article count, then photo, then entry year", () => {

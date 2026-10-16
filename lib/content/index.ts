@@ -1,5 +1,6 @@
 import { topics } from "@/content/data/topics";
 
+import { getAllEpisodes } from "../bytecast";
 import { toPersianDigits } from "../persian";
 import { getGraph, tagSlug } from "./graph";
 import type {
@@ -212,6 +213,7 @@ export interface SiteStats {
   authors: number;
   issues: number;
   codenameh: number;
+  episodes: number;
   workshops: number;
   blogPosts: number;
   tags: number;
@@ -226,6 +228,7 @@ export function getStats(): SiteStats {
       .length,
     issues: graph.issues.length,
     codenameh: graph.codenameh.length,
+    episodes: getAllEpisodes().length,
     workshops: graph.workshops.length,
     blogPosts: graph.blogPosts.length,
     tags: graph.tags.length,

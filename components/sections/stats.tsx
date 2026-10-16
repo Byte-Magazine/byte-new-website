@@ -7,13 +7,14 @@ const LABELS: Array<{ key: keyof SiteStats; label: string }> = [
   { key: "authors", label: "نویسنده" },
   { key: "issues", label: "شماره بایت" },
   { key: "codenameh", label: "شماره کدنامه" },
+  { key: "episodes", label: "بایت‌کست" },
 ];
 
 /** Every number here is counted at build time from the content graph. */
 export function Stats({ stats }: { stats: SiteStats }) {
   return (
     <section className="border-y bg-muted/30">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-10 px-4 py-14 md:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-10 px-4 py-14 sm:grid-cols-3 md:grid-cols-5">
         {LABELS.map((item, index) => (
           <Reveal key={item.key} delay={index * 90} className="text-center">
             <PersianCount

@@ -57,8 +57,8 @@ export default function HomePage() {
       />
       <Hero latest={latest} />
       <Stats stats={getStats()} />
-      <FeaturedArticles articles={getAllArticles().slice(0, 6)} />
       {latestEpisode ? <BytecastTeaser episode={latestEpisode} /> : null}
+      <FeaturedArticles articles={getAllArticles().slice(0, 6)} />
       <IssueWall
         issues={getAllIssues().map((issue) => ({
           number: issue.number,

@@ -5,7 +5,7 @@ import { renderPodcastFeed, type PodcastFeedEpisode } from "./rss";
 const episode: PodcastFeedEpisode = {
   title: "گفت‌وگو با <دکتر> & «همکار»",
   description: "توضیح",
-  url: "https://byte-mag.ir/bytecast/s01e01/",
+  url: "https://byte-mag.ir/bytecast/season/1/episode/1/",
   date: "2026-10-16",
   season: 1,
   number: 1,

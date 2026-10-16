@@ -4,7 +4,12 @@ import { notFound } from "next/navigation";
 
 import { EpisodePeople } from "@/components/bytecast/episode-people";
 import { EpisodePlayer } from "@/components/bytecast/episode-player";
-import { getAllEpisodes, getEpisode, SEASONS, SHOW } from "@/lib/bytecast";
+import {
+  getAllEpisodes,
+  getEpisodeBySeasonAndNumber,
+  SEASONS,
+  SHOW,
+} from "@/lib/bytecast";
 import {
   durationLabel,
   episodeLabel,
@@ -22,16 +27,29 @@ import {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return getAllEpisodes().map((episode) => ({ slug: episode.slug }));
+  return getAllEpisodes().map((episode) => ({
+    season: String(episode.season),
+    episode: String(episode.number),
+  }));
+}
+
+function parseParam(value: string): number | undefined {
+  if (!/^\d+$/.test(value)) return undefined;
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : undefined;
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ season: string; episode: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const episode = getEpisode(slug);
+  const { season: seasonParam, episode: episodeParam } = await params;
+  const season = parseParam(seasonParam);
+  const number = parseParam(episodeParam);
+  if (season === undefined || number === undefined) return {};
+
+  const episode = getEpisodeBySeasonAndNumber(season, number);
   if (!episode) return {};
 
   const base = buildMetadata({
@@ -52,10 +70,14 @@ export async function generateMetadata({
 export default async function EpisodePage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ season: string; episode: string }>;
 }) {
-  const { slug } = await params;
-  const episode = getEpisode(slug);
+  const { season: seasonParam, episode: episodeParam } = await params;
+  const seasonNumber = parseParam(seasonParam);
+  const episodeNumber = parseParam(episodeParam);
+  if (seasonNumber === undefined || episodeNumber === undefined) notFound();
+
+  const episode = getEpisodeBySeasonAndNumber(seasonNumber, episodeNumber);
   if (!episode) notFound();
 
   const season = SEASONS.find((s) => s.number === episode.season);

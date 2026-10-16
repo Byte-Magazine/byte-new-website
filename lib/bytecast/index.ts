@@ -36,13 +36,18 @@ function person(id: string): EpisodePerson {
 
 let cache: readonly Episode[] | undefined;
 
+/** Canonical page path: `/bytecast/season/1/episode/1`. */
+export function episodeUrl(season: number, number: number): string {
+  return `/bytecast/season/${season}/episode/${number}`;
+}
+
 /** Every episode, validated, newest first. Throws on malformed data at build time. */
 export function getAllEpisodes(): readonly Episode[] {
   cache ??= EPISODES.map((record) => {
     const parsed = episodeRecordSchema.parse(record);
     return {
       ...parsed,
-      url: `/bytecast/${parsed.slug}`,
+      url: episodeUrl(parsed.season, parsed.number),
       audioUrl: podcastAudioUrl(parsed.audio.file),
       host: person(parsed.hostId),
       guest: person(parsed.guestId),
@@ -53,6 +58,15 @@ export function getAllEpisodes(): readonly Episode[] {
 
 export function getEpisode(slug: string): Episode | undefined {
   return getAllEpisodes().find((episode) => episode.slug === slug);
+}
+
+export function getEpisodeBySeasonAndNumber(
+  season: number,
+  number: number,
+): Episode | undefined {
+  return getAllEpisodes().find(
+    (episode) => episode.season === season && episode.number === number,
+  );
 }
 
 export function getLatestEpisode(): Episode | undefined {

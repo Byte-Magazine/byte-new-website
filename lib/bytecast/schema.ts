@@ -12,7 +12,7 @@ const turn = z.tuple([
 
 export const episodeRecordSchema = z
   .object({
-    /** URL segment, `s01e01`. */
+    /** Stable id for storage/media (`s01e01`); page URL uses season + number. */
     slug: z.string().regex(/^s\d{2}e\d{2}$/),
     season: z.number().int().positive(),
     number: z.number().int().positive(),

@@ -16,7 +16,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
   {
     name: "تحریریه",
     members: [
-      { authorId: "NimaShirzadi" },
+      // { authorId: "NimaShirzadi" },
       { authorId: "FarzamKoohi" },
       { authorId: "Alinejad" },
       // { authorId: "ArvinTaheri" },

@@ -22,9 +22,9 @@ export function EpisodePeople({
     { person: host, role: "مصاحبه‌کننده" },
   ];
   return (
-    <ul className={cn("flex flex-wrap gap-x-6 gap-y-3", className)}>
+    <ul className={cn("grid grid-cols-2 gap-x-4 gap-y-3", className)}>
       {people.map(({ person, role }) => (
-        <li key={person.id}>
+        <li key={person.id} className="min-w-0">
           <Link href={person.url} className="group flex items-center gap-3">
             <span className="relative block size-10 shrink-0 overflow-hidden rounded-full bg-muted ring-1 ring-border">
               {person.image ? (
@@ -39,10 +39,8 @@ export function EpisodePeople({
               ) : null}
             </span>
             <span className="min-w-0 leading-6">
-              <span className="block text-xs text-muted-foreground">
-                {role}
-              </span>
-              <span className="block text-sm font-bold transition-colors group-hover:text-accent">
+              <span className="block text-xs text-muted-foreground">{role}</span>
+              <span className="block truncate text-sm font-bold transition-colors group-hover:text-accent">
                 {person.name}
               </span>
             </span>

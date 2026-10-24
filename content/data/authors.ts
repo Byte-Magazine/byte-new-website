@@ -827,7 +827,7 @@ export const AUTHORS = [
     id: "MaryamRamezani",
     name: "دکتر مریم رمضانی",
     title: "استادیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
-    image: "/img/authors/professors/ramezani.jpg",
+    image: "/img/authors/professors/ramezani.webp",
     socials: {},
     role: "professor",
   },

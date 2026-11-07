@@ -22,6 +22,7 @@ export const PROFESSOR_ORDER: string[] = [
   "AliSharifiZarchi",
   "MohsenAnsari",
   "MaryamRamezani",
+  "HosseinAsadi",
   "SepidehSafari",
 ];
 
@@ -349,6 +350,13 @@ export const AUTHORS = [
     name: "مرحوم عرفان اسدی",
     title: "کارشناسی ۱۳۹۹",
     image: "/img/authors/ErfanAsadi.jpg",
+    socials: {},
+  },
+  {
+    id: "ErfanTeymouri",
+    name: "عرفان تیموری",
+    title: "کارشناسی ۱۴۰۲",
+    image: "/img/authors/ErfanTeymouri.jpg",
     socials: {},
   },
   {
@@ -828,6 +836,14 @@ export const AUTHORS = [
     name: "دکتر مریم رمضانی",
     title: "استادیار دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
     image: "/img/authors/professors/ramezani.webp",
+    socials: {},
+    role: "professor",
+  },
+  {
+    id: "HosseinAsadi",
+    name: "دکتر حسین اسدی",
+    title: "عضو هیئت علمی دانشکده مهندسی کامپیوتر دانشگاه صنعتی شریف",
+    image: "/img/authors/professors/asadi.jpg",
     socials: {},
     role: "professor",
   },

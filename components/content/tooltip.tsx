@@ -12,19 +12,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface TooltipProps {
   tip: string;
   children: ReactNode;
+  href?: string;
 }
 
 const TRIGGER_CLASS =
   "cursor-help underline decoration-dotted decoration-from-font underline-offset-4 decoration-issue";
 
 function TipText({ tip }: { tip: string }) {
-  // Tips are Latin technical terms; keep them LTR inside RTL prose.
+  const hasPersianText = /(?=\p{L})\p{Script=Arabic}/u.test(tip);
+
   return (
-    <span dir="ltr" className="font-mono text-xs">
+    <span
+      dir={hasPersianText ? "rtl" : "ltr"}
+      className={cn(
+        "block text-start text-xs",
+        hasPersianText ? "font-sans" : "font-mono",
+      )}
+    >
       {tip}
     </span>
   );
@@ -34,10 +43,10 @@ function TipText({ tip }: { tip: string }) {
  * Glossary tooltip used throughout the articles for Latin technical terms.
  *
  * The legacy implementation was hover-only, which made all 438 of its uses
- * unreachable on touch devices. This renders a tap-to-open popover when the
- * device has no fine pointer, and a hover tooltip when it does.
+ * unreachable on touch devices. Linked notes use a popover so the link can
+ * receive focus, with hover enabled on devices that support it.
  */
-export function Tooltip({ tip, children }: TooltipProps) {
+export function Tooltip({ tip, children, href }: TooltipProps) {
   const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
@@ -48,14 +57,29 @@ export function Tooltip({ tip, children }: TooltipProps) {
     return () => query.removeEventListener("change", update);
   }, []);
 
-  if (isTouch) {
+  if (isTouch || href) {
     return (
       <Popover>
-        <PopoverTrigger className={TRIGGER_CLASS} aria-label={`توضیح: ${tip}`}>
+        <PopoverTrigger
+          className={TRIGGER_CLASS}
+          aria-label={`توضیح: ${tip}`}
+          openOnHover={!isTouch}
+        >
           {children}
         </PopoverTrigger>
         <PopoverContent className="w-auto max-w-[16rem] px-3 py-1.5">
-          <TipText tip={tip} />
+          {href ? (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2"
+            >
+              <TipText tip={tip} />
+            </a>
+          ) : (
+            <TipText tip={tip} />
+          )}
         </PopoverContent>
       </Popover>
     );

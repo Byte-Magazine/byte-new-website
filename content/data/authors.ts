@@ -268,6 +268,13 @@ export const AUTHORS = [
     },
   },
   {
+    id: "AryanAfzalzadeh",
+    name: "آریان افضل‌زاده",
+    title: "کارشناسی ۱۴۰۱",
+    image: "/img/authors/AryanAfzalzadeh.webp",
+    socials: {},
+  },
+  {
     id: "ArvinBaghal",
     name: "آروین بقال اصل",
     title: "کارشناسی ۱۴۰۳",
@@ -544,6 +551,13 @@ export const AUTHORS = [
     socials: {
       linkedin: "https://www.linkedin.com/in/abbasfar",
     },
+  },
+  {
+    id: "MohammadAminKoohi",
+    name: "محمدامین کوهی",
+    title: "کارشناسی ۱۴۰۲",
+    image: "/img/authors/MohammadAminKoohi.webp",
+    socials: {},
   },
   {
     id: "MohammadMosayebi",

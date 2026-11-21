@@ -8,10 +8,7 @@ import type { StaffSection } from "@/lib/content/schema";
 export const STAFF_SECTIONS: StaffSection[] = [
   {
     name: "مدیر مسئول و سردبیر",
-    members: [
-      { authorId: "AmirHosseinShahidi" },
-      { authorId: "ArashShahhosseini" },
-    ],
+    members: [{ authorId: "Moeein" }, { authorId: "SorenaKia" }],
   },
   {
     name: "تحریریه",
@@ -20,7 +17,6 @@ export const STAFF_SECTIONS: StaffSection[] = [
       { authorId: "FarzamKoohi" },
       { authorId: "Alinejad" },
       // { authorId: "ArvinTaheri" },
-      { authorId: "SorenaKia" },
       { authorId: "ArvinBaghal" },
       { authorId: "ArmanTahmasebi" },
       { authorId: "AHMZ" },
@@ -31,6 +27,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
     name: "ویراستاری ادبی",
     members: [
       { authorId: "AmirHosseinSouri" },
+      { authorId: "AmirHosseinShahidi" },
       { authorId: "AmirmahdiNamjoo" },
       // { authorId: "MatinGhiasi" },
       { authorId: "SohaibSadeqi" },
@@ -39,6 +36,7 @@ export const STAFF_SECTIONS: StaffSection[] = [
   {
     name: "صفحه‌آرایی و گرافیک",
     members: [
+      { authorId: "ArashShahhosseini" },
       { authorId: "AmirrezaInanloo" },
       // { authorId: "SAhmadMousaviAvval" },
       { authorId: "AmirrezaJafari" },

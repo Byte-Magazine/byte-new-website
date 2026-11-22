@@ -4,6 +4,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import type { Element } from "hast";
 
 import { remarkAdmonition } from "./remark-admonition";
 import { remarkDemoteHeadings } from "./remark-demote-headings";
@@ -29,6 +30,11 @@ export const mdxOptions = {
       {
         behavior: "wrap",
         properties: { className: "heading-anchor" },
+        // Tooltip triggers are interactive, so keep them outside heading links.
+        test: (heading: Element) =>
+          !heading.children.some(
+            (child) => "name" in child && child.name === "Tooltip",
+          ),
       },
     ],
     [
